@@ -1,0 +1,295 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" aria-hidden="true">
+  <defs>
+    <style>
+      .line { stroke: rgba(240, 230, 208, 0.9); stroke-width: 2.2; stroke-linecap: round; }
+      .nut { stroke: #f0e6d0; stroke-width: 5; stroke-linecap: round; }
+      .marker { fill: rgba(240, 230, 208, 0.97); stroke: rgba(34, 28, 22, 0.75); stroke-width: 1.2; }
+      .open { fill: transparent; stroke: rgba(240, 230, 208, 0.95); stroke-width: 2; }
+      .fret-label {
+        fill: #9a8870;
+        font-family: Georgia, serif;
+        font-size: 13px;
+        font-weight: 600;
+      }
+    </style>
+
+    <g id="grid-open">
+      <line class="line" x1="14" y1="18" x2="14" y2="146" />
+      <line class="line" x1="36" y1="18" x2="36" y2="146" />
+      <line class="line" x1="58" y1="18" x2="58" y2="146" />
+      <line class="line" x1="80" y1="18" x2="80" y2="146" />
+      <line class="nut" x1="14" y1="18" x2="80" y2="18" />
+      <line class="line" x1="14" y1="50" x2="80" y2="50" />
+      <line class="line" x1="14" y1="82" x2="80" y2="82" />
+      <line class="line" x1="14" y1="114" x2="80" y2="114" />
+      <line class="line" x1="14" y1="146" x2="80" y2="146" />
+    </g>
+
+    <g id="grid-shifted">
+      <line class="line" x1="14" y1="18" x2="14" y2="146" />
+      <line class="line" x1="36" y1="18" x2="36" y2="146" />
+      <line class="line" x1="58" y1="18" x2="58" y2="146" />
+      <line class="line" x1="80" y1="18" x2="80" y2="146" />
+      <line class="line" x1="14" y1="18" x2="80" y2="18" />
+      <line class="line" x1="14" y1="50" x2="80" y2="50" />
+      <line class="line" x1="14" y1="82" x2="80" y2="82" />
+      <line class="line" x1="14" y1="114" x2="80" y2="114" />
+      <line class="line" x1="14" y1="146" x2="80" y2="146" />
+    </g>
+
+    <symbol id="chord-c" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="66" r="11" />
+      <circle class="open" cx="14" cy="160" r="5.5" />
+      <circle class="open" cx="58" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-g7" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="open" cx="14" cy="160" r="5.5" />
+      <circle class="open" cx="58" cy="160" r="5.5" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-dm7" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-am7" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="open" cx="14" cy="160" r="5.5" />
+      <circle class="open" cx="58" cy="160" r="5.5" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-c-sharp-dim7" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-g" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="98" r="11" />
+      <circle class="open" cx="58" cy="160" r="5.5" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-d7" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-em7" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="36" cy="98" r="11" />
+      <circle class="marker" cx="80" cy="66" r="11" />
+      <circle class="open" cx="14" cy="160" r="5.5" />
+      <circle class="open" cx="58" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-bm7b5" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+      <circle class="open" cx="58" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-f" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-c7" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="98" r="11" />
+      <circle class="open" cx="14" cy="160" r="5.5" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-gm7" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="98" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+      <circle class="open" cx="58" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-dm" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="98" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-am" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-e7" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="open" cx="36" cy="160" r="5.5" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-e7b9" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="66" r="11" />
+      <circle class="open" cx="14" cy="160" r="5.5" />
+      <circle class="open" cx="36" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-a7" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="open" cx="14" cy="160" r="5.5" />
+      <circle class="open" cx="80" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-em7b5" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="36" cy="98" r="11" />
+      <circle class="marker" cx="58" cy="98" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+      <circle class="open" cx="14" cy="160" r="5.5" />
+    </symbol>
+
+    <symbol id="chord-gm" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="98" r="11" />
+      <circle class="marker" cx="58" cy="98" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-f-sharp" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="130" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="98" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-c-sharp" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="98" r="11" />
+    </symbol>
+
+    <symbol id="chord-d-sharp-minor" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="130" r="11" />
+      <circle class="marker" cx="58" cy="98" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-a-sharp-minor" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="98" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-b" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">4ª</text>
+      <circle class="marker" cx="14" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="130" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-g-sharp-minor" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">2ª</text>
+      <circle class="marker" cx="14" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="98" r="11" />
+      <circle class="marker" cx="58" cy="98" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-c-sharp-minor" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">4ª</text>
+      <circle class="marker" cx="14" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="98" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-a" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">2ª</text>
+      <circle class="marker" cx="14" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="130" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-e" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">4ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="98" r="11" />
+    </symbol>
+
+    <symbol id="chord-g-sharp" viewBox="0 0 94 168">
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="130" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-em" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">2ª</text>
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="130" r="11" />
+      <circle class="marker" cx="58" cy="98" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
+    <symbol id="chord-bb" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">5ª</text>
+      <circle class="marker" cx="14" cy="130" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="98" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+  </defs>
+</svg>

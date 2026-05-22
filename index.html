@@ -347,6 +347,49 @@
     }
     .song-card h3 { margin-top: 0; color: var(--gold-lt); }
 
+    /* ── CHORD GALLERY ── */
+    .song-card-intro {
+      margin-bottom: 18px;
+      color: #d8ccb7;
+    }
+    .chord-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 18px;
+      margin: 20px 0 8px;
+    }
+    .chord-card {
+      background: rgba(15, 11, 8, 0.28);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 12px 14px;
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+    .chord-card strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--gold-lt);
+      margin-bottom: 10px;
+    }
+    .chord-caption {
+      margin-top: 10px;
+      font-size: .8rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+    .chord-diagram {
+      display: flex;
+      justify-content: center;
+      min-height: 170px;
+    }
+    .chord-diagram svg {
+      width: 88px;
+      height: 168px;
+      overflow: visible;
+    }
+
     /* ── CHECKLIST ── */
     .checklist { list-style: none; padding: 0; }
     .checklist li {
@@ -821,6 +864,12 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
       <h4>Trio — La minore (variante)</h4>
       <pre>| Am   | E7   | Am   | Dm   | E7 | Am |</pre>
     </div>
+
+    <div class="song-card">
+      <h3>Diteggiario Visivo del Sito</h3>
+      <p class="song-card-intro">Questa raccolta unisce gli accordi già spiegati nel percorso con un'estensione presa dalle tonalità ricorrenti nelle pagine di Falamansa su Cifra Club. In questo modo il sito copre meglio giri in <strong>G</strong>, <strong>F#</strong>, <strong>C#m</strong>, <strong>E</strong>, <strong>Dm</strong>, <strong>Am</strong>, <strong>C</strong> ed <strong>Em</strong>, che sono le aree più ricorrenti nella raccolta dell'artista.</p>
+      <div class="chord-gallery" id="project-chords" aria-label="Diteggiature visive del cavaquinho usate nel sito"></div>
+    </div>
   </section>
 
   <!-- SECTION 11 -->
@@ -943,6 +992,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     const tocToggle = document.getElementById('toc-toggle');
     const tocSummary = document.getElementById('toc-summary');
     const backToTop = document.getElementById('back-to-top');
+    const projectChords = document.getElementById('project-chords');
     const mobileQuery = window.matchMedia('(max-width: 900px)');
     const sections = Array.from(document.querySelectorAll('main section[id]'));
     const linksBySection = new Map();
@@ -1050,6 +1100,194 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     setTocOpen(false);
     syncBackToTop();
     syncTocForViewport();
+
+    if (projectChords) {
+      const chordSet = [
+        {
+          name: 'C',
+          symbolId: 'chord-c',
+          caption: 'Do maggiore'
+        },
+        {
+          name: 'G7',
+          symbolId: 'chord-g7',
+          caption: 'Sol settima'
+        },
+        {
+          name: 'Dm7',
+          symbolId: 'chord-dm7',
+          caption: 'Re minore settima'
+        },
+        {
+          name: 'Am7',
+          symbolId: 'chord-am7',
+          caption: 'La minore settima'
+        },
+        {
+          name: 'C#dim7',
+          symbolId: 'chord-c-sharp-dim7',
+          caption: 'Diminuito di passaggio'
+        },
+        {
+          name: 'G',
+          symbolId: 'chord-g',
+          caption: 'Sol maggiore'
+        },
+        {
+          name: 'D7',
+          symbolId: 'chord-d7',
+          caption: 'Re settima'
+        },
+        {
+          name: 'Em7',
+          symbolId: 'chord-em7',
+          caption: 'Mi minore settima'
+        },
+        {
+          name: 'Bm7b5',
+          symbolId: 'chord-bm7b5',
+          caption: 'Si semidiminuito'
+        },
+        {
+          name: 'F',
+          symbolId: 'chord-f',
+          caption: 'Fa maggiore'
+        },
+        {
+          name: 'C7',
+          symbolId: 'chord-c7',
+          caption: 'Do settima'
+        },
+        {
+          name: 'Gm7',
+          symbolId: 'chord-gm7',
+          caption: 'Sol minore settima'
+        },
+        {
+          name: 'Dm',
+          symbolId: 'chord-dm',
+          caption: 'Re minore'
+        },
+        {
+          name: 'Am',
+          symbolId: 'chord-am',
+          caption: 'La minore'
+        },
+        {
+          name: 'E7',
+          symbolId: 'chord-e7',
+          caption: 'Mi settima'
+        },
+        {
+          name: 'E7b9',
+          symbolId: 'chord-e7b9',
+          caption: 'Dominante alterata'
+        },
+        {
+          name: 'A7',
+          symbolId: 'chord-a7',
+          caption: 'La settima'
+        },
+        {
+          name: 'Em7b5',
+          symbolId: 'chord-em7b5',
+          caption: 'Mi semidiminuito'
+        },
+        {
+          name: 'Gm',
+          symbolId: 'chord-gm',
+          caption: 'Sol minore'
+        },
+        {
+          name: 'F#',
+          symbolId: 'chord-f-sharp',
+          caption: 'Fa diesis maggiore'
+        },
+        {
+          name: 'C#',
+          symbolId: 'chord-c-sharp',
+          caption: 'Do diesis maggiore'
+        },
+        {
+          name: 'D#m',
+          symbolId: 'chord-d-sharp-minor',
+          caption: 'Re diesis minore'
+        },
+        {
+          name: 'A#m',
+          symbolId: 'chord-a-sharp-minor',
+          caption: 'La diesis minore'
+        },
+        {
+          name: 'B',
+          symbolId: 'chord-b',
+          caption: 'Si maggiore'
+        },
+        {
+          name: 'G#m',
+          symbolId: 'chord-g-sharp-minor',
+          caption: 'Sol diesis minore'
+        },
+        {
+          name: 'C#m',
+          symbolId: 'chord-c-sharp-minor',
+          caption: 'Do diesis minore'
+        },
+        {
+          name: 'A',
+          symbolId: 'chord-a',
+          caption: 'La maggiore'
+        },
+        {
+          name: 'E',
+          symbolId: 'chord-e',
+          caption: 'Mi maggiore'
+        },
+        {
+          name: 'G#',
+          symbolId: 'chord-g-sharp',
+          caption: 'Sol diesis maggiore'
+        },
+        {
+          name: 'Em',
+          symbolId: 'chord-em',
+          caption: 'Mi minore'
+        },
+        {
+          name: 'Bb',
+          symbolId: 'chord-bb',
+          caption: 'Si bemolle maggiore'
+        }
+      ];
+
+      chordSet.forEach((chord) => {
+        const card = document.createElement('article');
+        const title = document.createElement('strong');
+        const diagram = document.createElement('div');
+        const caption = document.createElement('p');
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+
+        card.className = 'chord-card';
+        title.textContent = chord.name;
+        diagram.className = 'chord-diagram';
+        caption.className = 'chord-caption';
+        caption.textContent = chord.caption;
+
+        svg.setAttribute('viewBox', '0 0 94 168');
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chord.name} per cavaquinho`);
+        use.setAttribute('href', `assets/chords/cavaco-diagrams.svg#${chord.symbolId}`);
+        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `assets/chords/cavaco-diagrams.svg#${chord.symbolId}`);
+        svg.append(use);
+
+        diagram.append(svg);
+        card.append(title, diagram);
+
+        card.append(caption);
+        projectChords.append(card);
+      });
+    }
   });
 </script>
 
