@@ -379,6 +379,26 @@
       line-height: 1.45;
       color: var(--muted);
     }
+    .chord-diagram-stack {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+    }
+    .chord-diagram-variant {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .chord-diagram-variant-label {
+      font-size: .68rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
     .chord-diagram {
       display: flex;
       justify-content: center;
@@ -404,7 +424,8 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 188px;
+      min-width: 188px;
+      max-width: 348px;
       padding: 0 0 16px;
       border: 1px solid rgba(240, 230, 208, 0.08);
       border-radius: 18px;
@@ -442,12 +463,18 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 4px 0 2px;
+      padding: 4px 12px 2px;
     }
     .chord-hover-diagram svg {
       width: 100px;
       height: 182px;
       overflow: visible;
+    }
+    .chord-hover-diagram .chord-diagram-stack {
+      gap: 12px;
+    }
+    .chord-hover-diagram .chord-diagram-variant-label {
+      font-size: .66rem;
     }
     .chord-hover-caption {
       padding: 8px 16px 0;
@@ -570,6 +597,16 @@
       fill: rgba(240, 230, 208, 0.97);
       stroke: rgba(34, 28, 22, 0.75);
       stroke-width: 1.2;
+    }
+    .diagram-role-root {
+      fill: none;
+      stroke: #e8b84b;
+      stroke-width: 2.6;
+    }
+    .diagram-role-third {
+      fill: none;
+      stroke: #78c39c;
+      stroke-width: 2.6;
     }
     .diagram-fret-label {
       fill: var(--muted);
@@ -1000,7 +1037,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
   <section id="s10-inversions" data-toc-description="Diteggiature chiuse organizzate per categorie armoniche, con inversioni essenziali per il cavaquinho.">
     <span class="section-num">Modulo H</span>
     <h2 class="section-title">Inversioni Essenziali degli Accordi</h2>
-    <p class="inversion-intro">Qui trovi un riferimento rapido organizzato per <strong>famiglia armonica</strong>, non per singola nota. Ho raccolto forme <strong>chiuse</strong> e pratiche per <strong>maggiori</strong>, <strong>minori</strong>, <strong>7</strong>, <strong>Maj7</strong>, <strong>m7</strong> e <strong>diminuiti</strong>, così puoi confrontare subito accordi simili e studiare le inversioni più utili sul cavaquinho.</p>
+    <p class="inversion-intro">Qui trovi un riferimento rapido organizzato per <strong>famiglia armonica</strong>, non per singola nota. Ho raccolto forme <strong>chiuse</strong> e pratiche per <strong>maggiori</strong>, <strong>minori</strong>, <strong>7</strong>, <strong>Maj7</strong>, <strong>m7</strong> e <strong>diminuiti</strong>, così puoi confrontare subito accordi simili e studiare le inversioni più utili sul cavaquinho. Nei diagrammi, l'<strong>anello oro</strong> segna la <strong>root</strong> e l'<strong>anello verde</strong> indica la <strong>terza</strong>.</p>
     <div class="inversion-note-list" id="inversion-groups" aria-label="Inversioni essenziali del cavaquinho"></div>
   </section>
 
@@ -1298,11 +1335,73 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     syncBackToTop();
     syncTocForViewport();
 
-    const createFretDiagramSvg = (frets, chordName) => {
+    const notePitchClasses = {
+      C: 0, 'C#': 1, Db: 1, D: 2, 'D#': 3, Eb: 3, E: 4, F: 5,
+      'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11
+    };
+    const inversionOpenPitches = [5, 9, 2, 7];
+    const referenceOpenPitches = [2, 7, 11, 2];
+
+    const getChordDescriptor = (chordName) => {
+      const match = chordName.match(/^([A-G](?:#|b)?)(.*)$/);
+      if (!match) {
+        return null;
+      }
+
+      const [, root, suffix] = match;
+      let thirdInterval = 4;
+
+      if (/^m(?!aj)/i.test(suffix) || /dim/i.test(suffix)) {
+        thirdInterval = 3;
+      }
+
+      return {
+        root,
+        rootPc: notePitchClasses[root],
+        thirdPc: (notePitchClasses[root] + thirdInterval) % 12
+      };
+    };
+
+    const getRoleMarkers = (frets, chordName, openPitches) => {
+      const descriptor = getChordDescriptor(chordName);
+      if (!descriptor) {
+        return { root: new Set(), third: new Set() };
+      }
+
+      const root = new Set();
+      const third = new Set();
+
+      frets.forEach((fret, index) => {
+        if (typeof fret !== 'number' || fret < 0) {
+          return;
+        }
+        const pitchClass = (openPitches[index] + fret) % 12;
+        if (pitchClass === descriptor.rootPc) {
+          root.add(index);
+        } else if (pitchClass === descriptor.thirdPc) {
+          third.add(index);
+        }
+      });
+
+      return { root, third };
+    };
+
+    const appendRoleRing = (svg, x, y, role) => {
+      const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      ring.setAttribute('cx', x);
+      ring.setAttribute('cy', y);
+      ring.setAttribute('r', '12.9');
+      ring.setAttribute('class', role === 'root' ? 'diagram-role-root' : 'diagram-role-third');
+      svg.append(ring);
+    };
+
+    const createFretDiagramSvg = (frets, chordName, options = {}) => {
       const fretted = frets.filter((fret) => fret > 0);
       const minFret = Math.min(...fretted);
       const maxFret = Math.max(...fretted);
       const baseFret = maxFret > 4 || minFret > 3 ? minFret : 1;
+      const openPitches = options.openPitches || inversionOpenPitches;
+      const markers = getRoleMarkers(frets, chordName, openPitches);
       const stringsX = [28, 50, 72, 94];
       const fretsY = [18, 50, 82, 114, 146];
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -1339,8 +1438,16 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
       }
 
       frets.forEach((fret, index) => {
+        if (fret <= 0) {
+          return;
+        }
         const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
         const cy = (fretsY[relativeFret - 1] + fretsY[relativeFret]) / 2;
+        if (markers.root.has(index)) {
+          appendRoleRing(svg, stringsX[index], cy, 'root');
+        } else if (markers.third.has(index)) {
+          appendRoleRing(svg, stringsX[index], cy, 'third');
+        }
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.setAttribute('cx', stringsX[index]);
         circle.setAttribute('cy', cy);
@@ -1493,7 +1600,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
 
             voicingTitle.textContent = voicing.label;
             caption.textContent = describeVoicing(voicing.label);
-            diagramWrap.append(createFretDiagramSvg(voicing.frets, `${chord.name} ${voicing.label}`));
+            diagramWrap.append(createFretDiagramSvg(voicing.frets, chord.name));
 
             voicingCard.append(voicingTitle, diagramWrap, caption);
             voicingGrid.append(voicingCard);
@@ -1511,6 +1618,27 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
 
     if (projectChords) {
       const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260522c';
+      const referenceChordOptions = {
+        Am: [{ frets: [2, 2, 1, 2], fingers: [2, 3, 1, 4] }],
+        C: [{ frets: [2, 0, 1, 2], fingers: [2, 0, 1, 3] }],
+        Dm: [{ frets: [3, 2, 3, 3], fingers: [2, 1, 3, 4] }],
+        F: [{ frets: [3, 2, 1, 3], fingers: [3, 2, 1, 4] }],
+        G: [{ frets: [5, 4, 3, 5], fingers: [3, 2, 1, 4] }],
+        'A#m': [{ frets: [3, 3, 2, 3], fingers: [2, 3, 1, 4] }],
+        B: [{ frets: [2, 2, 2, 2], barre: { fret: 2, from: 1, to: 4 } }],
+        'C#': [{ frets: [6, 6, 6, 6], barre: { fret: 6, from: 1, to: 4 }, baseFret: 6 }],
+        'D#m': [{ frets: [3, 2, 3, 3], fingers: [2, 1, 3, 4] }],
+        'F#': [{ frets: [4, 3, 2, 4], fingers: [3, 2, 1, 4] }],
+        'G#m': [{ frets: [5, 4, 4, 5], fingers: [3, 1, 2, 4], baseFret: 4 }],
+        A7: [{ frets: [2, 0, 2, 2], fingers: [1, 0, 2, 3] }],
+        D7: [{ frets: [4, 2, 1, 4], fingers: [3, 2, 1, 4] }],
+        Db7: [{ frets: [3, 4, 2, 3], fingers: [2, 4, 1, 3] }],
+        Em: [{ frets: [5, 4, 5, 5], fingers: [2, 1, 3, 4] }],
+        'G#': [{ frets: [6, 5, 4, 6], fingers: [3, 2, 1, 4], baseFret: 4 }],
+        A: [{ frets: [2, 2, 2, 2], barre: { fret: 2, from: 1, to: 4 } }],
+        C7: [{ frets: [2, 3, 1, 2], fingers: [2, 4, 1, 3] }],
+        Gm: [{ frets: [3, 2, 2, 3], fingers: [3, 1, 2, 4] }]
+      };
       const chordSet = [
         {
           name: 'C',
@@ -1715,6 +1843,11 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
           gallery: false
         }
       ];
+      chordSet.forEach((chord) => {
+        if (referenceChordOptions[chord.name]) {
+          chord.options = referenceChordOptions[chord.name];
+        }
+      });
       const chordLookup = new Map(chordSet.map((chord) => [chord.name, chord]));
       const hoverableChordNames = Array.from(chordLookup.keys()).sort((left, right) => right.length - left.length);
       const chordPattern = new RegExp(`(^|[^A-Za-z0-9#/])(${hoverableChordNames.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?=$|[^A-Za-z0-9#/])`, 'g');
@@ -1722,8 +1855,6 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
       const hoverBanner = document.createElement('div');
       const hoverTitle = document.createElement('div');
       const hoverDiagram = document.createElement('div');
-      const hoverDiagramSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      const hoverDiagramUse = document.createElementNS('http://www.w3.org/2000/svg', 'use');
       const hoverCaption = document.createElement('div');
 
       hoverCard.className = 'chord-hover-card';
@@ -1731,12 +1862,176 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
       hoverTitle.className = 'chord-hover-title';
       hoverDiagram.className = 'chord-hover-diagram';
       hoverCaption.className = 'chord-hover-caption';
-      hoverDiagramSvg.setAttribute('viewBox', '0 0 94 168');
-      hoverDiagramSvg.setAttribute('role', 'img');
-      hoverDiagramSvg.append(hoverDiagramUse);
-      hoverDiagram.append(hoverDiagramSvg);
       hoverCard.append(hoverBanner, hoverTitle, hoverDiagram, hoverCaption);
       document.body.append(hoverCard);
+
+      const createReferenceChordSvg = (shape, chordName) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const stringsX = [18, 36, 54, 72];
+        const lineY = [20, 46, 72, 98, 124];
+        const frets = shape.frets || [];
+        const markers = getRoleMarkers(frets, chordName, referenceOpenPitches);
+        const positiveFrets = frets.filter((fret) => fret > 0);
+        const minFret = positiveFrets.length ? Math.min(...positiveFrets) : 1;
+        const maxFret = positiveFrets.length ? Math.max(...positiveFrets) : 1;
+        const baseFret = shape.baseFret || ((maxFret > 4 || minFret > 3) ? minFret : 1);
+
+        svg.setAttribute('viewBox', '0 0 94 186');
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chordName} per cavaquinho`);
+
+        const append = (node) => {
+          svg.append(node);
+          return node;
+        };
+        const line = (x1, y1, x2, y2, stroke, width) => {
+          const element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          element.setAttribute('x1', x1);
+          element.setAttribute('y1', y1);
+          element.setAttribute('x2', x2);
+          element.setAttribute('y2', y2);
+          element.setAttribute('stroke', stroke);
+          element.setAttribute('stroke-width', width);
+          element.setAttribute('stroke-linecap', 'round');
+          append(element);
+        };
+
+        stringsX.forEach((x) => {
+          line(x, lineY[0], x, lineY[4], 'rgba(240, 230, 208, 0.92)', 2.2);
+        });
+
+        lineY.forEach((y, index) => {
+          line(stringsX[0], y, stringsX[3], y, 'rgba(240, 230, 208, 0.92)', index === 0 && baseFret === 1 ? 5 : 2.2);
+        });
+
+        if (baseFret > 1) {
+          const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          label.setAttribute('x', '0');
+          label.setAttribute('y', '34');
+          label.setAttribute('fill', 'rgba(240, 230, 208, 0.82)');
+          label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+          label.setAttribute('font-size', '11');
+          label.setAttribute('font-weight', '700');
+          label.textContent = `${baseFret}ª`;
+          append(label);
+        }
+
+        if (shape.barre) {
+          const relativeBarreFret = baseFret === 1 ? shape.barre.fret : shape.barre.fret - baseFret + 1;
+          if (relativeBarreFret > 0 && relativeBarreFret < lineY.length) {
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            const y = (lineY[relativeBarreFret - 1] + lineY[relativeBarreFret]) / 2 - 6;
+            rect.setAttribute('x', stringsX[shape.barre.from - 1] - 6);
+            rect.setAttribute('y', y);
+            rect.setAttribute('width', stringsX[shape.barre.to - 1] - stringsX[shape.barre.from - 1] + 12);
+            rect.setAttribute('height', '12');
+            rect.setAttribute('rx', '6');
+            rect.setAttribute('fill', '#3c4040');
+            append(rect);
+          }
+        }
+
+        frets.forEach((fret, index) => {
+          if (!fret) {
+            return;
+          }
+          const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
+          if (relativeFret <= 0 || relativeFret >= lineY.length) {
+            return;
+          }
+
+          const cy = (lineY[relativeFret - 1] + lineY[relativeFret]) / 2;
+          if (markers.root.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'root');
+          } else if (markers.third.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'third');
+          }
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', stringsX[index]);
+          circle.setAttribute('cy', cy);
+          circle.setAttribute('r', '8.5');
+          circle.setAttribute('fill', 'rgba(255,255,255,0.96)');
+          circle.setAttribute('stroke', 'rgba(34, 28, 22, 0.78)');
+          circle.setAttribute('stroke-width', '1.1');
+          append(circle);
+
+          const finger = shape.fingers && shape.fingers[index];
+          if (finger) {
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', stringsX[index]);
+            label.setAttribute('y', cy + 3.4);
+            label.setAttribute('fill', '#6a6a6a');
+            label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+            label.setAttribute('font-size', '9.5');
+            label.setAttribute('font-weight', '700');
+            label.setAttribute('text-anchor', 'middle');
+            label.textContent = `${finger}`;
+            append(label);
+          }
+        });
+
+        [18, 36, 54, 72].forEach((x, index) => {
+          if (frets[index] === 0) {
+            if (markers.root.has(index)) {
+              appendRoleRing(svg, x, 168, 'root');
+            } else if (markers.third.has(index)) {
+              appendRoleRing(svg, x, 168, 'third');
+            }
+          }
+          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          dot.setAttribute('cx', x);
+          dot.setAttribute('cy', '168');
+          dot.setAttribute('r', '5.4');
+          dot.setAttribute('stroke', 'rgba(240, 230, 208, 0.92)');
+          dot.setAttribute('stroke-width', '1.5');
+          dot.setAttribute('fill', index === 0 ? 'rgba(200, 200, 200, 0.92)' : 'transparent');
+          append(dot);
+        });
+
+        return svg;
+      };
+
+      const createSpriteChordSvg = (chord) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        svg.setAttribute('viewBox', '0 0 94 168');
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chord.name} per cavaquinho`);
+        use.setAttribute('href', `${chordSpritePath}#${chord.symbolId}`);
+        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `${chordSpritePath}#${chord.symbolId}`);
+        svg.append(use);
+        return svg;
+      };
+
+      const renderChordDiagram = (container, chord) => {
+        container.replaceChildren();
+
+        if (!chord.options || chord.options.length === 0) {
+          container.append(createSpriteChordSvg(chord));
+          return;
+        }
+
+        const stack = document.createElement('div');
+        stack.className = 'chord-diagram-stack';
+
+        chord.options.forEach((option, index) => {
+          const variant = document.createElement('div');
+          const diagram = createReferenceChordSvg(option, chord.name);
+          variant.className = 'chord-diagram-variant';
+
+          if (chord.options.length > 1) {
+            const variantLabel = document.createElement('span');
+            variantLabel.className = 'chord-diagram-variant-label';
+            variantLabel.textContent = option.label || `Opzione ${index + 1}`;
+            variant.append(variantLabel);
+          }
+
+          variant.append(diagram);
+          stack.append(variant);
+        });
+
+        container.append(stack);
+      };
 
       const positionHoverCard = (x, y) => {
         const margin = 18;
@@ -1764,9 +2059,8 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
       const showHoverCard = (trigger, chord, position) => {
         hoverTitle.textContent = chord.name;
         hoverCaption.textContent = chord.caption;
-        hoverDiagramSvg.setAttribute('aria-label', `Diagramma dell'accordo ${chord.name} per cavaquinho`);
-        hoverDiagramUse.setAttribute('href', `${chordSpritePath}#${chord.symbolId}`);
-        hoverDiagramUse.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `${chordSpritePath}#${chord.symbolId}`);
+        hoverCard.classList.toggle('has-multiple-options', Boolean(chord.options && chord.options.length > 1));
+        renderChordDiagram(hoverDiagram, chord);
         hoverCard.classList.add('is-visible');
 
         if (position) {
@@ -1858,23 +2152,13 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
         const title = document.createElement('strong');
         const diagram = document.createElement('div');
         const caption = document.createElement('p');
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
 
         card.className = 'chord-card';
         title.textContent = chord.name;
         diagram.className = 'chord-diagram';
         caption.className = 'chord-caption';
         caption.textContent = chord.caption;
-
-        svg.setAttribute('viewBox', '0 0 94 168');
-        svg.setAttribute('role', 'img');
-        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chord.name} per cavaquinho`);
-        use.setAttribute('href', `${chordSpritePath}#${chord.symbolId}`);
-        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `${chordSpritePath}#${chord.symbolId}`);
-        svg.append(use);
-
-        diagram.append(svg);
+        renderChordDiagram(diagram, chord);
         card.append(title, diagram);
 
         card.append(caption);
