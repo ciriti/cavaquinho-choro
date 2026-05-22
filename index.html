@@ -389,6 +389,73 @@
       height: 168px;
       overflow: visible;
     }
+    .chord-token {
+      color: var(--gold-lt);
+      font-weight: 600;
+      cursor: pointer;
+      transition: color .18s ease;
+    }
+    .chord-token:hover,
+    .chord-token:focus-visible {
+      color: #ffd27a;
+      outline: none;
+    }
+    .chord-hover-card {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 188px;
+      padding: 0 0 16px;
+      border: 1px solid rgba(240, 230, 208, 0.08);
+      border-radius: 18px;
+      background: rgba(22, 24, 24, 0.96);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.38);
+      color: var(--cream);
+      opacity: 0;
+      transform: translate3d(0, 8px, 0) scale(.98);
+      pointer-events: none;
+      z-index: 1200;
+      transition: opacity .14s ease, transform .14s ease;
+    }
+    .chord-hover-card.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    .chord-hover-banner {
+      height: 14px;
+      border-radius: 18px 18px 0 0;
+      background:
+        linear-gradient(90deg, transparent 0 4px, rgba(255,255,255,.7) 4px 8px, transparent 8px 12px),
+        linear-gradient(rgba(0,0,0,.08), rgba(0,0,0,.08));
+      background-size: 12px 12px, auto;
+      background-color: #1b1b1a;
+      border-bottom: 1px solid rgba(240, 230, 208, 0.08);
+    }
+    .chord-hover-title {
+      padding: 14px 20px 8px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--cream);
+    }
+    .chord-hover-diagram {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4px 0 2px;
+    }
+    .chord-hover-diagram svg {
+      width: 100px;
+      height: 182px;
+      overflow: visible;
+    }
+    .chord-hover-caption {
+      padding: 8px 16px 0;
+      text-align: center;
+      font-size: .76rem;
+      line-height: 1.4;
+      color: var(--muted);
+    }
 
     /* ── CHECKLIST ── */
     .checklist { list-style: none; padding: 0; }
@@ -1257,10 +1324,195 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
           name: 'Bb',
           symbolId: 'chord-bb',
           caption: 'Si bemolle maggiore'
+        },
+        {
+          name: 'Cmaj7',
+          symbolId: 'chord-c',
+          caption: 'Do maggiore settima',
+          gallery: false
+        },
+        {
+          name: 'Gmaj7',
+          symbolId: 'chord-g',
+          caption: 'Sol maggiore settima',
+          gallery: false
+        },
+        {
+          name: 'Fmaj7',
+          symbolId: 'chord-f',
+          caption: 'Fa maggiore settima',
+          gallery: false
+        },
+        {
+          name: 'B7',
+          symbolId: 'chord-b',
+          caption: 'Si settima',
+          gallery: false
+        },
+        {
+          name: 'D',
+          symbolId: 'chord-d',
+          caption: 'Re maggiore',
+          gallery: false
+        },
+        {
+          name: 'F#dim7',
+          symbolId: 'chord-c-sharp-dim7',
+          caption: 'Fa diesis diminuito',
+          gallery: false
+        },
+        {
+          name: 'F#m7b5',
+          symbolId: 'chord-bm7b5',
+          caption: 'Fa diesis semidiminuito',
+          gallery: false
+        },
+        {
+          name: 'F/C',
+          symbolId: 'chord-f',
+          caption: 'Fa con Do al basso',
+          gallery: false
         }
       ];
+      const chordLookup = new Map(chordSet.map((chord) => [chord.name, chord]));
+      const hoverableChordNames = Array.from(chordLookup.keys()).sort((left, right) => right.length - left.length);
+      const chordPattern = new RegExp(`(^|[^A-Za-z0-9#/])(${hoverableChordNames.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?=$|[^A-Za-z0-9#/])`, 'g');
+      const hoverCard = document.createElement('div');
+      const hoverBanner = document.createElement('div');
+      const hoverTitle = document.createElement('div');
+      const hoverDiagram = document.createElement('div');
+      const hoverDiagramSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      const hoverDiagramUse = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+      const hoverCaption = document.createElement('div');
 
-      chordSet.forEach((chord) => {
+      hoverCard.className = 'chord-hover-card';
+      hoverBanner.className = 'chord-hover-banner';
+      hoverTitle.className = 'chord-hover-title';
+      hoverDiagram.className = 'chord-hover-diagram';
+      hoverCaption.className = 'chord-hover-caption';
+      hoverDiagramSvg.setAttribute('viewBox', '0 0 94 168');
+      hoverDiagramSvg.setAttribute('role', 'img');
+      hoverDiagramSvg.append(hoverDiagramUse);
+      hoverDiagram.append(hoverDiagramSvg);
+      hoverCard.append(hoverBanner, hoverTitle, hoverDiagram, hoverCaption);
+      document.body.append(hoverCard);
+
+      const positionHoverCard = (x, y) => {
+        const margin = 18;
+        const rect = hoverCard.getBoundingClientRect();
+        let left = x + 26;
+        let top = y - 22;
+
+        if (left + rect.width > window.innerWidth - margin) {
+          left = x - rect.width - 26;
+        }
+        if (top + rect.height > window.innerHeight - margin) {
+          top = window.innerHeight - rect.height - margin;
+        }
+        if (top < margin) {
+          top = margin;
+        }
+        if (left < margin) {
+          left = margin;
+        }
+
+        hoverCard.style.left = `${left}px`;
+        hoverCard.style.top = `${top}px`;
+      };
+
+      const showHoverCard = (trigger, chord, position) => {
+        hoverTitle.textContent = chord.name;
+        hoverCaption.textContent = chord.caption;
+        hoverDiagramSvg.setAttribute('aria-label', `Diagramma dell'accordo ${chord.name} per cavaquinho`);
+        hoverDiagramUse.setAttribute('href', `assets/chords/cavaco-diagrams.svg#${chord.symbolId}`);
+        hoverDiagramUse.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `assets/chords/cavaco-diagrams.svg#${chord.symbolId}`);
+        hoverCard.classList.add('is-visible');
+
+        if (position) {
+          positionHoverCard(position.x, position.y);
+          return;
+        }
+
+        const rect = trigger.getBoundingClientRect();
+        positionHoverCard(rect.right, rect.top + rect.height / 2);
+      };
+
+      const hideHoverCard = () => {
+        hoverCard.classList.remove('is-visible');
+      };
+
+      const enhanceChordText = (root) => {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node) {
+            if (!node.textContent || !node.textContent.trim()) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            if (!node.parentElement || node.parentElement.closest('#project-chords, .chord-hover-card')) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return node.parentElement.closest('pre') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }
+        });
+        const textNodes = [];
+
+        while (walker.nextNode()) {
+          textNodes.push(walker.currentNode);
+        }
+
+        textNodes.forEach((node) => {
+          const source = node.textContent;
+          const matches = Array.from(source.matchAll(chordPattern));
+
+          if (matches.length === 0) {
+            return;
+          }
+
+          const fragment = document.createDocumentFragment();
+          let lastIndex = 0;
+
+          matches.forEach((match) => {
+            const boundary = match[1] || '';
+            const chordName = match[2];
+            const chordStart = match.index + boundary.length;
+            const chord = chordLookup.get(chordName);
+
+            fragment.append(source.slice(lastIndex, chordStart));
+
+            if (!chord) {
+              fragment.append(chordName);
+            } else {
+              const token = document.createElement('span');
+              token.className = 'chord-token';
+              token.textContent = chordName;
+              token.tabIndex = 0;
+              token.dataset.chordName = chord.name;
+
+              token.addEventListener('mouseenter', (event) => {
+                showHoverCard(token, chord, { x: event.clientX, y: event.clientY });
+              });
+              token.addEventListener('mousemove', (event) => {
+                positionHoverCard(event.clientX, event.clientY);
+              });
+              token.addEventListener('mouseleave', hideHoverCard);
+              token.addEventListener('focus', () => {
+                showHoverCard(token, chord);
+              });
+              token.addEventListener('blur', hideHoverCard);
+
+              fragment.append(token);
+            }
+
+            lastIndex = chordStart + chordName.length;
+          });
+
+          fragment.append(source.slice(lastIndex));
+          node.parentNode.replaceChild(fragment, node);
+        });
+      };
+
+      chordSet
+        .filter((chord) => chord.gallery !== false)
+        .forEach((chord) => {
         const card = document.createElement('article');
         const title = document.createElement('strong');
         const diagram = document.createElement('div');
@@ -1286,6 +1538,10 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
 
         card.append(caption);
         projectChords.append(card);
+      });
+
+      document.querySelectorAll('main section').forEach((section) => {
+        enhanceChordText(section);
       });
     }
   });
