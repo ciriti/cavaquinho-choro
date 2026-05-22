@@ -38,35 +38,39 @@
     </g>
 
     <symbol id="chord-c" viewBox="0 0 94 168">
-      <use href="#grid-open" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">5ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
       <circle class="marker" cx="36" cy="34" r="11" />
-      <circle class="marker" cx="80" cy="66" r="11" />
-      <circle class="open" cx="14" cy="160" r="5.5" />
-      <circle class="open" cx="58" cy="160" r="5.5" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
     </symbol>
 
     <symbol id="chord-g7" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="36" cy="34" r="11" />
-      <circle class="open" cx="14" cy="160" r="5.5" />
-      <circle class="open" cx="58" cy="160" r="5.5" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
-    </symbol>
-
-    <symbol id="chord-dm7" viewBox="0 0 94 168">
-      <use href="#grid-open" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">3ª</text>
       <circle class="marker" cx="14" cy="34" r="11" />
       <circle class="marker" cx="36" cy="34" r="11" />
       <circle class="marker" cx="58" cy="66" r="11" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
+      <circle class="marker" cx="80" cy="98" r="11" />
+    </symbol>
+
+    <symbol id="chord-dm7" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">10ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="98" r="11" />
     </symbol>
 
     <symbol id="chord-am7" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="36" cy="66" r="11" />
-      <circle class="open" cx="14" cy="160" r="5.5" />
-      <circle class="open" cx="58" cy="160" r="5.5" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">5ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="98" r="11" />
     </symbol>
 
     <symbol id="chord-c-sharp-dim7" viewBox="0 0 94 168">
@@ -78,43 +82,48 @@
     </symbol>
 
     <symbol id="chord-g" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="66" r="11" />
-      <circle class="marker" cx="36" cy="98" r="11" />
-      <circle class="open" cx="58" cy="160" r="5.5" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">3ª</text>
+      <circle class="marker" cx="14" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="marker" cx="80" cy="98" r="11" />
     </symbol>
 
     <symbol id="chord-d7" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="66" r="11" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">7ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
       <circle class="marker" cx="36" cy="34" r="11" />
-      <circle class="marker" cx="58" cy="66" r="11" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
-    </symbol>
-
-    <symbol id="chord-d" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="66" r="11" />
-      <circle class="marker" cx="36" cy="98" r="11" />
-      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
       <circle class="marker" cx="80" cy="130" r="11" />
     </symbol>
 
+    <symbol id="chord-d" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">7ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="34" r="11" />
+    </symbol>
+
     <symbol id="chord-em7" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="36" cy="98" r="11" />
-      <circle class="marker" cx="80" cy="66" r="11" />
-      <circle class="open" cx="14" cy="160" r="5.5" />
-      <circle class="open" cx="58" cy="160" r="5.5" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">2ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="98" r="11" />
+      <circle class="marker" cx="80" cy="130" r="11" />
     </symbol>
 
     <symbol id="chord-bm7b5" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="34" r="11" />
-      <circle class="marker" cx="36" cy="66" r="11" />
-      <circle class="marker" cx="80" cy="34" r="11" />
-      <circle class="open" cx="58" cy="160" r="5.5" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">6ª</text>
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="marker" cx="80" cy="130" r="11" />
     </symbol>
 
     <symbol id="chord-f" viewBox="0 0 94 168">
@@ -122,145 +131,155 @@
       <circle class="marker" cx="14" cy="98" r="11" />
       <circle class="marker" cx="36" cy="34" r="11" />
       <circle class="marker" cx="58" cy="66" r="11" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
+      <circle class="marker" cx="80" cy="98" r="11" />
     </symbol>
 
     <symbol id="chord-c7" viewBox="0 0 94 168">
-      <use href="#grid-open" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">5ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
       <circle class="marker" cx="36" cy="34" r="11" />
-      <circle class="marker" cx="58" cy="98" r="11" />
-      <circle class="open" cx="14" cy="160" r="5.5" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="130" r="11" />
     </symbol>
 
     <symbol id="chord-gm7" viewBox="0 0 94 168">
-      <use href="#grid-open" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">3ª</text>
       <circle class="marker" cx="14" cy="34" r="11" />
-      <circle class="marker" cx="36" cy="98" r="11" />
-      <circle class="marker" cx="80" cy="34" r="11" />
-      <circle class="open" cx="58" cy="160" r="5.5" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="98" r="11" />
     </symbol>
 
     <symbol id="chord-dm" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="34" r="11" />
-      <circle class="marker" cx="36" cy="98" r="11" />
-      <circle class="marker" cx="58" cy="66" r="11" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">2ª</text>
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="66" r="11" />
     </symbol>
 
     <symbol id="chord-am" viewBox="0 0 94 168">
       <use href="#grid-open" />
       <circle class="marker" cx="14" cy="66" r="11" />
-      <circle class="marker" cx="36" cy="66" r="11" />
-      <circle class="marker" cx="58" cy="34" r="11" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="marker" cx="80" cy="66" r="11" />
     </symbol>
 
     <symbol id="chord-e7" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="66" r="11" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">9ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
       <circle class="marker" cx="58" cy="34" r="11" />
-      <circle class="open" cx="36" cy="160" r="5.5" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
+      <circle class="marker" cx="80" cy="130" r="11" />
     </symbol>
 
     <symbol id="chord-e7b9" viewBox="0 0 94 168">
       <use href="#grid-open" />
-      <circle class="marker" cx="58" cy="34" r="11" />
-      <circle class="marker" cx="80" cy="66" r="11" />
-      <circle class="open" cx="14" cy="160" r="5.5" />
-      <circle class="open" cx="36" cy="160" r="5.5" />
-    </symbol>
-
-    <symbol id="chord-a7" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="36" cy="66" r="11" />
-      <circle class="marker" cx="58" cy="34" r="11" />
-      <circle class="open" cx="14" cy="160" r="5.5" />
-      <circle class="open" cx="80" cy="160" r="5.5" />
-    </symbol>
-
-    <symbol id="chord-em7b5" viewBox="0 0 94 168">
-      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="66" r="11" />
       <circle class="marker" cx="36" cy="98" r="11" />
-      <circle class="marker" cx="58" cy="98" r="11" />
-      <circle class="marker" cx="80" cy="34" r="11" />
-      <circle class="open" cx="14" cy="160" r="5.5" />
-    </symbol>
-
-    <symbol id="chord-gm" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="98" r="11" />
-      <circle class="marker" cx="36" cy="98" r="11" />
-      <circle class="marker" cx="58" cy="98" r="11" />
-      <circle class="marker" cx="80" cy="34" r="11" />
-    </symbol>
-
-    <symbol id="chord-f-sharp" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="130" r="11" />
-      <circle class="marker" cx="36" cy="66" r="11" />
-      <circle class="marker" cx="58" cy="98" r="11" />
-      <circle class="marker" cx="80" cy="34" r="11" />
-    </symbol>
-
-    <symbol id="chord-c-sharp" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="34" r="11" />
-      <circle class="marker" cx="36" cy="66" r="11" />
       <circle class="marker" cx="58" cy="34" r="11" />
       <circle class="marker" cx="80" cy="98" r="11" />
     </symbol>
 
-    <symbol id="chord-d-sharp-minor" viewBox="0 0 94 168">
-      <use href="#grid-open" />
+    <symbol id="chord-a7" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">5ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="marker" cx="80" cy="98" r="11" />
+    </symbol>
+
+    <symbol id="chord-em7b5" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">2ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="marker" cx="80" cy="130" r="11" />
+    </symbol>
+
+    <symbol id="chord-gm" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">7ª</text>
       <circle class="marker" cx="14" cy="66" r="11" />
-      <circle class="marker" cx="36" cy="130" r="11" />
-      <circle class="marker" cx="58" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="66" r="11" />
+    </symbol>
+
+    <symbol id="chord-f-sharp" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">2ª</text>
+      <circle class="marker" cx="14" cy="98" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="66" r="11" />
+      <circle class="marker" cx="80" cy="98" r="11" />
+    </symbol>
+
+    <symbol id="chord-c-sharp" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">6ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
       <circle class="marker" cx="80" cy="34" r="11" />
     </symbol>
 
+    <symbol id="chord-d-sharp-minor" viewBox="0 0 94 168">
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">3ª</text>
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="66" r="11" />
+    </symbol>
+
     <symbol id="chord-a-sharp-minor" viewBox="0 0 94 168">
-      <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="98" r="11" />
-      <circle class="marker" cx="36" cy="98" r="11" />
+      <use href="#grid-shifted" />
+      <text class="fret-label" x="2" y="26">2ª</text>
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
       <circle class="marker" cx="58" cy="66" r="11" />
-      <circle class="marker" cx="80" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="66" r="11" />
     </symbol>
 
     <symbol id="chord-b" viewBox="0 0 94 168">
       <use href="#grid-shifted" />
       <text class="fret-label" x="2" y="26">4ª</text>
-      <circle class="marker" cx="14" cy="98" r="11" />
-      <circle class="marker" cx="36" cy="130" r="11" />
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
       <circle class="marker" cx="58" cy="34" r="11" />
       <circle class="marker" cx="80" cy="34" r="11" />
     </symbol>
 
     <symbol id="chord-g-sharp-minor" viewBox="0 0 94 168">
       <use href="#grid-shifted" />
-      <text class="fret-label" x="2" y="26">2ª</text>
+      <text class="fret-label" x="2" y="26">4ª</text>
       <circle class="marker" cx="14" cy="98" r="11" />
-      <circle class="marker" cx="36" cy="98" r="11" />
-      <circle class="marker" cx="58" cy="98" r="11" />
-      <circle class="marker" cx="80" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="98" r="11" />
     </symbol>
 
     <symbol id="chord-c-sharp-minor" viewBox="0 0 94 168">
-      <use href="#grid-shifted" />
-      <text class="fret-label" x="2" y="26">4ª</text>
-      <circle class="marker" cx="14" cy="98" r="11" />
-      <circle class="marker" cx="36" cy="98" r="11" />
-      <circle class="marker" cx="58" cy="66" r="11" />
-      <circle class="marker" cx="80" cy="34" r="11" />
+      <use href="#grid-open" />
+      <circle class="marker" cx="14" cy="66" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="66" r="11" />
     </symbol>
 
     <symbol id="chord-a" viewBox="0 0 94 168">
       <use href="#grid-shifted" />
       <text class="fret-label" x="2" y="26">2ª</text>
-      <circle class="marker" cx="14" cy="98" r="11" />
-      <circle class="marker" cx="36" cy="130" r="11" />
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
       <circle class="marker" cx="58" cy="34" r="11" />
       <circle class="marker" cx="80" cy="34" r="11" />
     </symbol>
@@ -268,7 +287,7 @@
     <symbol id="chord-e" viewBox="0 0 94 168">
       <use href="#grid-shifted" />
       <text class="fret-label" x="2" y="26">4ª</text>
-      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="14" cy="98" r="11" />
       <circle class="marker" cx="36" cy="66" r="11" />
       <circle class="marker" cx="58" cy="34" r="11" />
       <circle class="marker" cx="80" cy="98" r="11" />
@@ -276,27 +295,27 @@
 
     <symbol id="chord-g-sharp" viewBox="0 0 94 168">
       <use href="#grid-open" />
-      <circle class="marker" cx="14" cy="98" r="11" />
-      <circle class="marker" cx="36" cy="130" r="11" />
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
       <circle class="marker" cx="58" cy="34" r="11" />
       <circle class="marker" cx="80" cy="34" r="11" />
     </symbol>
 
     <symbol id="chord-em" viewBox="0 0 94 168">
       <use href="#grid-shifted" />
-      <text class="fret-label" x="2" y="26">2ª</text>
+      <text class="fret-label" x="2" y="26">4ª</text>
       <circle class="marker" cx="14" cy="66" r="11" />
-      <circle class="marker" cx="36" cy="130" r="11" />
-      <circle class="marker" cx="58" cy="98" r="11" />
-      <circle class="marker" cx="80" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="66" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
+      <circle class="marker" cx="80" cy="66" r="11" />
     </symbol>
 
     <symbol id="chord-bb" viewBox="0 0 94 168">
       <use href="#grid-shifted" />
-      <text class="fret-label" x="2" y="26">5ª</text>
-      <circle class="marker" cx="14" cy="130" r="11" />
-      <circle class="marker" cx="36" cy="66" r="11" />
-      <circle class="marker" cx="58" cy="98" r="11" />
+      <text class="fret-label" x="2" y="26">3ª</text>
+      <circle class="marker" cx="14" cy="34" r="11" />
+      <circle class="marker" cx="36" cy="34" r="11" />
+      <circle class="marker" cx="58" cy="34" r="11" />
       <circle class="marker" cx="80" cy="34" r="11" />
     </symbol>
   </defs>

@@ -1169,6 +1169,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     syncTocForViewport();
 
     if (projectChords) {
+      const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260522c';
       const chordSet = [
         {
           name: 'C',
@@ -1352,8 +1353,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
         {
           name: 'D',
           symbolId: 'chord-d',
-          caption: 'Re maggiore',
-          gallery: false
+          caption: 'Re maggiore'
         },
         {
           name: 'F#dim7',
@@ -1424,8 +1424,8 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
         hoverTitle.textContent = chord.name;
         hoverCaption.textContent = chord.caption;
         hoverDiagramSvg.setAttribute('aria-label', `Diagramma dell'accordo ${chord.name} per cavaquinho`);
-        hoverDiagramUse.setAttribute('href', `assets/chords/cavaco-diagrams.svg#${chord.symbolId}`);
-        hoverDiagramUse.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `assets/chords/cavaco-diagrams.svg#${chord.symbolId}`);
+        hoverDiagramUse.setAttribute('href', `${chordSpritePath}#${chord.symbolId}`);
+        hoverDiagramUse.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `${chordSpritePath}#${chord.symbolId}`);
         hoverCard.classList.add('is-visible');
 
         if (position) {
@@ -1529,8 +1529,8 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
         svg.setAttribute('viewBox', '0 0 94 168');
         svg.setAttribute('role', 'img');
         svg.setAttribute('aria-label', `Diagramma dell'accordo ${chord.name} per cavaquinho`);
-        use.setAttribute('href', `assets/chords/cavaco-diagrams.svg#${chord.symbolId}`);
-        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `assets/chords/cavaco-diagrams.svg#${chord.symbolId}`);
+        use.setAttribute('href', `${chordSpritePath}#${chord.symbolId}`);
+        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `${chordSpritePath}#${chord.symbolId}`);
         svg.append(use);
 
         diagram.append(svg);
