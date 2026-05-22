@@ -457,6 +457,127 @@
       color: var(--muted);
     }
 
+    /* ── INVERSIONS ── */
+    .inversion-intro {
+      max-width: 72ch;
+      margin-bottom: 20px;
+    }
+    .inversion-note-list {
+      display: grid;
+      gap: 22px;
+    }
+    .inversion-note-card {
+      background: rgba(15, 11, 8, 0.26);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 18px;
+    }
+    .inversion-note-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: var(--gold-lt);
+      margin-bottom: 6px;
+    }
+    .inversion-note-subtitle {
+      color: var(--muted);
+      font-size: .88rem;
+      margin-bottom: 18px;
+      max-width: 60ch;
+    }
+    .inversion-category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .inversion-chord-card {
+      background: rgba(26, 20, 16, 0.72);
+      border: 1px solid rgba(240, 230, 208, 0.08);
+      border-radius: 14px;
+      padding: 14px 12px 12px;
+    }
+    .inversion-chord-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .inversion-chord-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--cream);
+    }
+    .inversion-chord-subtitle {
+      color: var(--muted);
+      font-size: .78rem;
+      white-space: nowrap;
+    }
+    .inversion-voicing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .inversion-voicing-card {
+      background: rgba(15, 11, 8, 0.32);
+      border: 1px solid rgba(240, 230, 208, 0.07);
+      border-radius: 12px;
+      padding: 12px 10px 10px;
+      text-align: center;
+    }
+    .inversion-voicing-title {
+      display: block;
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .inversion-diagram {
+      display: flex;
+      justify-content: center;
+      min-height: 166px;
+    }
+    .inversion-diagram svg {
+      width: 104px;
+      height: 166px;
+      overflow: visible;
+    }
+    .inversion-voicing-caption {
+      margin-top: 10px;
+      font-size: .8rem;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+    @media (max-width: 640px) {
+      .inversion-category-grid {
+        grid-template-columns: 1fr;
+      }
+      .inversion-voicing-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .diagram-line {
+      stroke: rgba(240, 230, 208, 0.9);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+    }
+    .diagram-nut {
+      stroke: var(--cream);
+      stroke-width: 5;
+      stroke-linecap: round;
+    }
+    .diagram-marker {
+      fill: rgba(240, 230, 208, 0.97);
+      stroke: rgba(34, 28, 22, 0.75);
+      stroke-width: 1.2;
+    }
+    .diagram-fret-label {
+      fill: var(--muted);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
     /* ── CHECKLIST ── */
     .checklist { list-style: none; padding: 0; }
     .checklist li {
@@ -876,6 +997,14 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
   </section>
 
   <!-- SECTION 10 -->
+  <section id="s10-inversions" data-toc-description="Diteggiature chiuse organizzate per categorie armoniche, con inversioni essenziali per il cavaquinho.">
+    <span class="section-num">Modulo H</span>
+    <h2 class="section-title">Inversioni Essenziali degli Accordi</h2>
+    <p class="inversion-intro">Qui trovi un riferimento rapido organizzato per <strong>famiglia armonica</strong>, non per singola nota. Ho raccolto forme <strong>chiuse</strong> e pratiche per <strong>maggiori</strong>, <strong>minori</strong>, <strong>7</strong>, <strong>Maj7</strong>, <strong>m7</strong> e <strong>diminuiti</strong>, così puoi confrontare subito accordi simili e studiare le inversioni più utili sul cavaquinho.</p>
+    <div class="inversion-note-list" id="inversion-groups" aria-label="Inversioni essenziali del cavaquinho"></div>
+  </section>
+
+  <!-- SECTION 11 -->
   <section id="s10" data-toc-description="Schemi armonici pronti da portare in studio e in roda.">
     <span class="section-num">Repertorio</span>
     <h2 class="section-title">Brani Essenziali con Accordi</h2>
@@ -939,7 +1068,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     </div>
   </section>
 
-  <!-- SECTION 11 -->
+  <!-- SECTION 12 -->
   <section id="s11" data-toc-description="Programma settimanale, checklist finale e glossario dei termini chiave.">
     <span class="section-num">Studio</span>
     <h2 class="section-title">Piano di Studio &amp; Checklist</h2>
@@ -1060,6 +1189,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     const tocSummary = document.getElementById('toc-summary');
     const backToTop = document.getElementById('back-to-top');
     const projectChords = document.getElementById('project-chords');
+    const inversionGroups = document.getElementById('inversion-groups');
     const mobileQuery = window.matchMedia('(max-width: 900px)');
     const sections = Array.from(document.querySelectorAll('main section[id]'));
     const linksBySection = new Map();
@@ -1167,6 +1297,217 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     setTocOpen(false);
     syncBackToTop();
     syncTocForViewport();
+
+    const createFretDiagramSvg = (frets, chordName) => {
+      const fretted = frets.filter((fret) => fret > 0);
+      const minFret = Math.min(...fretted);
+      const maxFret = Math.max(...fretted);
+      const baseFret = maxFret > 4 || minFret > 3 ? minFret : 1;
+      const stringsX = [28, 50, 72, 94];
+      const fretsY = [18, 50, 82, 114, 146];
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+      svg.setAttribute('viewBox', '0 0 108 168');
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', `Diagramma dell'accordo ${chordName}`);
+
+      const appendLine = (x1, y1, x2, y2, className) => {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('class', className);
+        svg.append(line);
+      };
+
+      stringsX.forEach((x) => {
+        appendLine(x, fretsY[0], x, fretsY[4], 'diagram-line');
+      });
+
+      fretsY.forEach((y, index) => {
+        appendLine(stringsX[0], y, stringsX[3], y, index === 0 && baseFret === 1 ? 'diagram-nut' : 'diagram-line');
+      });
+
+      if (baseFret > 1) {
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', '4');
+        label.setAttribute('y', '26');
+        label.setAttribute('class', 'diagram-fret-label');
+        label.textContent = `${baseFret}ª`;
+        svg.append(label);
+      }
+
+      frets.forEach((fret, index) => {
+        const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
+        const cy = (fretsY[relativeFret - 1] + fretsY[relativeFret]) / 2;
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', stringsX[index]);
+        circle.setAttribute('cy', cy);
+        circle.setAttribute('r', '11');
+        circle.setAttribute('class', 'diagram-marker');
+        svg.append(circle);
+      });
+
+      return svg;
+    };
+
+    if (inversionGroups) {
+      const describeVoicing = (label) => {
+        if (label === 'Fondamentale') {
+          return 'Basso sulla tonica';
+        }
+        if (label === '1ª inv.') {
+          return 'Basso sulla terza';
+        }
+        if (label === '2ª inv.') {
+          return 'Basso sulla quinta';
+        }
+        if (label === '3ª inv.') {
+          return 'Basso sulla settima';
+        }
+        return 'Voicing chiuso';
+      };
+
+      const inversionSet = [
+        {
+          category: 'Maggiori',
+          subtitle: 'Triadi maggiori compatte per il collegamento melodico e armonico.',
+          chords: [
+            { name: 'C', caption: 'Do maggiore', voicings: [{ label: 'Fondamentale', frets: [7, 7, 5, 5] }, { label: '1ª inv.', frets: [11, 10, 10, 9] }, { label: '2ª inv.', frets: [2, 3, 2, 5] }] },
+            { name: 'D', caption: 'Re maggiore', voicings: [{ label: 'Fondamentale', frets: [9, 9, 7, 7] }, { label: '1ª inv.', frets: [13, 12, 12, 11] }, { label: '2ª inv.', frets: [4, 5, 4, 2] }] },
+            { name: 'E', caption: 'Mi maggiore', voicings: [{ label: 'Fondamentale', frets: [11, 11, 9, 9] }, { label: '1ª inv.', frets: [3, 2, 2, 1] }, { label: '2ª inv.', frets: [6, 7, 6, 4] }] },
+            { name: 'F', caption: 'Fa maggiore', voicings: [{ label: 'Fondamentale', frets: [12, 12, 10, 10] }, { label: '1ª inv.', frets: [4, 3, 3, 2] }, { label: '2ª inv.', frets: [7, 8, 7, 5] }] },
+            { name: 'G', caption: 'Sol maggiore', voicings: [{ label: 'Fondamentale', frets: [14, 14, 12, 12] }, { label: '1ª inv.', frets: [6, 5, 5, 4] }, { label: '2ª inv.', frets: [9, 10, 9, 7] }] },
+            { name: 'A', caption: 'La maggiore', voicings: [{ label: 'Fondamentale', frets: [4, 4, 2, 2] }, { label: '1ª inv.', frets: [8, 7, 7, 6] }, { label: '2ª inv.', frets: [11, 12, 11, 9] }] },
+            { name: 'B', caption: 'Si maggiore', voicings: [{ label: 'Fondamentale', frets: [6, 6, 4, 4] }, { label: '1ª inv.', frets: [10, 9, 9, 8] }, { label: '2ª inv.', frets: [1, 2, 1, 4] }] }
+          ]
+        },
+        {
+          category: 'Minori',
+          subtitle: 'Triadi minori chiuse per studiare i passaggi verso dominanti e relativi.',
+          chords: [
+            { name: 'Cm', caption: 'Do minore', voicings: [{ label: 'Fondamentale', frets: [7, 6, 5, 5] }, { label: '1ª inv.', frets: [10, 10, 10, 8] }, { label: '2ª inv.', frets: [2, 3, 1, 5] }] },
+            { name: 'Dm', caption: 'Re minore', voicings: [{ label: 'Fondamentale', frets: [9, 8, 7, 7] }, { label: '1ª inv.', frets: [12, 12, 12, 10] }, { label: '2ª inv.', frets: [4, 5, 3, 2] }] },
+            { name: 'Em', caption: 'Mi minore', voicings: [{ label: 'Fondamentale', frets: [11, 10, 9, 9] }, { label: '1ª inv.', frets: [2, 2, 2, 4] }, { label: '2ª inv.', frets: [6, 7, 5, 4] }] },
+            { name: 'Fm', caption: 'Fa minore', voicings: [{ label: 'Fondamentale', frets: [12, 11, 10, 10] }, { label: '1ª inv.', frets: [3, 3, 3, 1] }, { label: '2ª inv.', frets: [7, 8, 6, 5] }] },
+            { name: 'Gm', caption: 'Sol minore', voicings: [{ label: 'Fondamentale', frets: [14, 13, 12, 12] }, { label: '1ª inv.', frets: [5, 5, 5, 3] }, { label: '2ª inv.', frets: [9, 10, 8, 7] }] },
+            { name: 'Am', caption: 'La minore', voicings: [{ label: 'Fondamentale', frets: [4, 3, 2, 2] }, { label: '1ª inv.', frets: [7, 7, 7, 5] }, { label: '2ª inv.', frets: [11, 12, 10, 9] }] },
+            { name: 'Bm', caption: 'Si minore', voicings: [{ label: 'Fondamentale', frets: [6, 5, 4, 4] }, { label: '1ª inv.', frets: [9, 9, 9, 7] }, { label: '2ª inv.', frets: [13, 14, 12, 11] }] }
+          ]
+        },
+        {
+          category: '7',
+          subtitle: 'Dominanti utili per cadenze, preparazioni e modulazioni nel repertorio.',
+          chords: [
+            { name: 'C7', caption: 'Do settima', voicings: [{ label: 'Fondamentale', frets: [7, 10, 8, 9] }, { label: '1ª inv.', frets: [11, 13, 10, 12] }, { label: '2ª inv.', frets: [2, 3, 2, 3] }, { label: '3ª inv.', frets: [5, 7, 5, 5] }] },
+            { name: 'D7', caption: 'Re settima', voicings: [{ label: 'Fondamentale', frets: [9, 12, 10, 11] }, { label: '2ª inv.', frets: [4, 5, 4, 5] }, { label: '3ª inv.', frets: [7, 9, 7, 7] }] },
+            { name: 'E7', caption: 'Mi settima', voicings: [{ label: 'Fondamentale', frets: [11, 14, 12, 13] }, { label: '1ª inv.', frets: [3, 5, 2, 4] }, { label: '2ª inv.', frets: [6, 7, 6, 7] }, { label: '3ª inv.', frets: [9, 11, 9, 9] }] },
+            { name: 'F7', caption: 'Fa settima', voicings: [{ label: 'Fondamentale', frets: [12, 12, 10, 8] }, { label: '1ª inv.', frets: [4, 6, 3, 5] }, { label: '2ª inv.', frets: [7, 8, 7, 8] }, { label: '3ª inv.', frets: [10, 12, 10, 10] }] },
+            { name: 'G7', caption: 'Sol settima', voicings: [{ label: 'Fondamentale', frets: [2, 5, 3, 4] }, { label: '1ª inv.', frets: [6, 8, 5, 7] }, { label: '2ª inv.', frets: [9, 10, 9, 10] }, { label: '3ª inv.', frets: [12, 14, 12, 12] }] },
+            { name: 'A7', caption: 'La settima', voicings: [{ label: 'Fondamentale', frets: [4, 7, 5, 6] }, { label: '1ª inv.', frets: [8, 10, 7, 9] }, { label: '2ª inv.', frets: [11, 12, 11, 12] }, { label: '3ª inv.', frets: [2, 4, 2, 2] }] },
+            { name: 'B7', caption: 'Si settima', voicings: [{ label: 'Fondamentale', frets: [6, 9, 7, 8] }, { label: '1ª inv.', frets: [10, 12, 9, 11] }, { label: '2ª inv.', frets: [1, 2, 1, 2] }, { label: '3ª inv.', frets: [4, 6, 4, 4] }] }
+          ]
+        },
+        {
+          category: 'Maj7',
+          subtitle: 'Accordi maggiori con settima maggiore per colori più cantabili e sofisticati.',
+          chords: [
+            { name: 'Cmaj7', caption: 'Do maggiore settima', voicings: [{ label: 'Fondamentale', frets: [7, 7, 5, 4] }, { label: '1ª inv.', frets: [11, 14, 10, 12] }, { label: '2ª inv.', frets: [2, 3, 2, 4] }, { label: '3ª inv.', frets: [6, 7, 5, 5] }] },
+            { name: 'Dmaj7', caption: 'Re maggiore settima', voicings: [{ label: 'Fondamentale', frets: [9, 9, 7, 6] }, { label: '2ª inv.', frets: [4, 5, 4, 6] }, { label: '3ª inv.', frets: [8, 9, 7, 7] }] },
+            { name: 'Emaj7', caption: 'Mi maggiore settima', voicings: [{ label: 'Fondamentale', frets: [11, 11, 9, 8] }, { label: '1ª inv.', frets: [3, 6, 2, 4] }, { label: '2ª inv.', frets: [6, 7, 6, 8] }, { label: '3ª inv.', frets: [10, 11, 9, 9] }] },
+            { name: 'Fmaj7', caption: 'Fa maggiore settima', voicings: [{ label: 'Fondamentale', frets: [12, 12, 10, 9] }, { label: '1ª inv.', frets: [4, 7, 3, 5] }, { label: '2ª inv.', frets: [7, 8, 7, 9] }, { label: '3ª inv.', frets: [11, 12, 10, 10] }] },
+            { name: 'Gmaj7', caption: 'Sol maggiore settima', voicings: [{ label: 'Fondamentale', frets: [2, 5, 4, 4] }, { label: '1ª inv.', frets: [6, 9, 5, 7] }, { label: '2ª inv.', frets: [9, 10, 9, 11] }, { label: '3ª inv.', frets: [13, 14, 12, 12] }] },
+            { name: 'Amaj7', caption: 'La maggiore settima', voicings: [{ label: 'Fondamentale', frets: [4, 4, 2, 1] }, { label: '1ª inv.', frets: [8, 11, 7, 9] }, { label: '2ª inv.', frets: [11, 12, 11, 13] }, { label: '3ª inv.', frets: [3, 4, 2, 2] }] },
+            { name: 'Bmaj7', caption: 'Si maggiore settima', voicings: [{ label: 'Fondamentale', frets: [6, 6, 4, 3] }, { label: '1ª inv.', frets: [10, 13, 9, 11] }, { label: '2ª inv.', frets: [1, 2, 1, 3] }, { label: '3ª inv.', frets: [5, 6, 4, 4] }] }
+          ]
+        },
+        {
+          category: 'm7',
+          subtitle: 'Minori settima utili nelle cadenze II-V-I e nei passaggi modali più frequenti.',
+          chords: [
+            { name: 'Cm7', caption: 'Do minore settima', voicings: [{ label: 'Fondamentale', frets: [7, 10, 8, 8] }, { label: '1ª inv.', frets: [10, 13, 10, 12] }, { label: '2ª inv.', frets: [2, 3, 1, 3] }, { label: '3ª inv.', frets: [5, 6, 5, 5] }] },
+            { name: 'Dm7', caption: 'Re minore settima', voicings: [{ label: 'Fondamentale', frets: [9, 12, 10, 10] }, { label: '2ª inv.', frets: [4, 5, 3, 5] }, { label: '3ª inv.', frets: [7, 8, 7, 7] }] },
+            { name: 'Em7', caption: 'Mi minore settima', voicings: [{ label: 'Fondamentale', frets: [11, 14, 12, 12] }, { label: '1ª inv.', frets: [2, 5, 2, 4] }, { label: '2ª inv.', frets: [6, 7, 5, 7] }, { label: '3ª inv.', frets: [9, 10, 9, 9] }] },
+            { name: 'Fm7', caption: 'Fa minore settima', voicings: [{ label: 'Fondamentale', frets: [12, 11, 10, 8] }, { label: '1ª inv.', frets: [3, 6, 3, 5] }, { label: '2ª inv.', frets: [7, 8, 6, 8] }, { label: '3ª inv.', frets: [10, 11, 10, 10] }] },
+            { name: 'Gm7', caption: 'Sol minore settima', voicings: [{ label: 'Fondamentale', frets: [2, 5, 3, 3] }, { label: '1ª inv.', frets: [5, 8, 5, 7] }, { label: '2ª inv.', frets: [9, 10, 8, 10] }, { label: '3ª inv.', frets: [12, 13, 12, 12] }] },
+            { name: 'Am7', caption: 'La minore settima', voicings: [{ label: 'Fondamentale', frets: [4, 7, 5, 5] }, { label: '1ª inv.', frets: [7, 10, 7, 9] }, { label: '2ª inv.', frets: [11, 12, 10, 12] }, { label: '3ª inv.', frets: [2, 3, 2, 2] }] },
+            { name: 'Bm7', caption: 'Si minore settima', voicings: [{ label: 'Fondamentale', frets: [6, 9, 7, 7] }, { label: '1ª inv.', frets: [9, 12, 9, 11] }, { label: '2ª inv.', frets: [13, 14, 12, 14] }, { label: '3ª inv.', frets: [4, 5, 4, 4] }] }
+          ]
+        },
+        {
+          category: 'Diminuiti',
+          subtitle: 'Forme tese e simmetriche per dominanti sostitutive e passaggi cromatici.',
+          chords: [
+            { name: 'Cdim', caption: 'Do diminuito', voicings: [{ label: 'Fondamentale', frets: [7, 6, 4, 5] }, { label: '1ª inv.', frets: [10, 9, 10, 8] }, { label: '2ª inv.', frets: [1, 3, 1, 5] }] },
+            { name: 'Ddim', caption: 'Re diminuito', voicings: [{ label: 'Fondamentale', frets: [9, 8, 6, 7] }, { label: '1ª inv.', frets: [12, 11, 12, 10] }, { label: '2ª inv.', frets: [3, 5, 3, 1] }] },
+            { name: 'Edim', caption: 'Mi diminuito', voicings: [{ label: 'Fondamentale', frets: [11, 10, 8, 9] }, { label: '1ª inv.', frets: [2, 1, 2, 3] }, { label: '2ª inv.', frets: [5, 7, 5, 3] }] },
+            { name: 'Fdim', caption: 'Fa diminuito', voicings: [{ label: 'Fondamentale', frets: [12, 11, 9, 10] }, { label: '1ª inv.', frets: [3, 2, 3, 1] }, { label: '2ª inv.', frets: [6, 8, 6, 4] }] },
+            { name: 'Gdim', caption: 'Sol diminuito', voicings: [{ label: 'Fondamentale', frets: [2, 4, 5, 3] }, { label: '1ª inv.', frets: [5, 4, 5, 3] }, { label: '2ª inv.', frets: [8, 10, 8, 6] }] },
+            { name: 'Adim', caption: 'La diminuito', voicings: [{ label: 'Fondamentale', frets: [4, 3, 1, 2] }, { label: '1ª inv.', frets: [7, 6, 7, 5] }, { label: '2ª inv.', frets: [10, 12, 10, 8] }] },
+            { name: 'Bdim', caption: 'Si diminuito', voicings: [{ label: 'Fondamentale', frets: [6, 5, 3, 4] }, { label: '1ª inv.', frets: [9, 8, 9, 7] }, { label: '2ª inv.', frets: [12, 14, 12, 10] }] }
+          ]
+        }
+      ];
+
+      inversionSet.forEach((group) => {
+        const groupCard = document.createElement('article');
+        const title = document.createElement('h3');
+        const subtitle = document.createElement('p');
+        const categoryGrid = document.createElement('div');
+
+        groupCard.className = 'inversion-note-card';
+        title.className = 'inversion-note-title';
+        subtitle.className = 'inversion-note-subtitle';
+        categoryGrid.className = 'inversion-category-grid';
+
+        title.textContent = group.category;
+        subtitle.textContent = group.subtitle;
+
+        group.chords.forEach((chord) => {
+          const chordCard = document.createElement('section');
+          const chordHeader = document.createElement('div');
+          const chordTitle = document.createElement('h4');
+          const chordSubtitle = document.createElement('span');
+          const voicingGrid = document.createElement('div');
+
+          chordCard.className = 'inversion-chord-card';
+          chordHeader.className = 'inversion-chord-header';
+          chordTitle.className = 'inversion-chord-title';
+          chordSubtitle.className = 'inversion-chord-subtitle';
+          voicingGrid.className = 'inversion-voicing-grid';
+
+          chordTitle.textContent = chord.name;
+          chordSubtitle.textContent = chord.caption;
+
+          chord.voicings.forEach((voicing) => {
+            const voicingCard = document.createElement('div');
+            const voicingTitle = document.createElement('span');
+            const diagramWrap = document.createElement('div');
+            const caption = document.createElement('p');
+
+            voicingCard.className = 'inversion-voicing-card';
+            voicingTitle.className = 'inversion-voicing-title';
+            diagramWrap.className = 'inversion-diagram';
+            caption.className = 'inversion-voicing-caption';
+
+            voicingTitle.textContent = voicing.label;
+            caption.textContent = describeVoicing(voicing.label);
+            diagramWrap.append(createFretDiagramSvg(voicing.frets, `${chord.name} ${voicing.label}`));
+
+            voicingCard.append(voicingTitle, diagramWrap, caption);
+            voicingGrid.append(voicingCard);
+          });
+
+          chordHeader.append(chordTitle, chordSubtitle);
+          chordCard.append(chordHeader, voicingGrid);
+          categoryGrid.append(chordCard);
+        });
+
+        groupCard.append(title, subtitle, categoryGrid);
+        inversionGroups.append(groupCard);
+      });
+    }
 
     if (projectChords) {
       const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260522c';
