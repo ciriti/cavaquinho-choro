@@ -2180,29 +2180,32 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
         });
       };
 
-      chordSet
-        .filter((chord) => chord.gallery !== false)
-        .forEach((chord) => {
-        const card = document.createElement('article');
-        const title = document.createElement('strong');
-        const diagram = document.createElement('div');
-        const caption = document.createElement('p');
-
-        card.className = 'chord-card';
-        title.textContent = chord.name;
-        diagram.className = 'chord-diagram';
-        caption.className = 'chord-caption';
-        caption.textContent = chord.caption;
-        renderChordDiagram(diagram, chord);
-        card.append(title, diagram);
-
-        card.append(caption);
-        projectChords.append(card);
-      });
-
       document.querySelectorAll('main section').forEach((section) => {
         enhanceChordText(section);
       });
+
+      chordSet
+        .filter((chord) => chord.gallery !== false)
+        .forEach((chord) => {
+          try {
+            const card = document.createElement('article');
+            const title = document.createElement('strong');
+            const diagram = document.createElement('div');
+            const caption = document.createElement('p');
+
+            card.className = 'chord-card';
+            title.textContent = chord.name;
+            diagram.className = 'chord-diagram';
+            caption.className = 'chord-caption';
+            caption.textContent = chord.caption;
+            renderChordDiagram(diagram, chord);
+            card.append(title, diagram);
+            card.append(caption);
+            projectChords.append(card);
+          } catch (error) {
+            console.error(`Errore nel rendering del diagramma ${chord.name}:`, error);
+          }
+        });
     }
   });
 </script>
