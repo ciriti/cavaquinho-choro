@@ -1,0 +1,9 @@
+title: "Cavaquinho & Choro"
+description: "Sistema di Apprendimento Progressivo — dalla prima sincope alla Roda de Choro"
+lang: it
+
+# GitHub Pages usa index.html direttamente — questo file è opzionale
+# ma utile se vuoi aggiungere plugin Jekyll in futuro
+
+exclude:
+  - README.md

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cavaquinho & Choro — Sistema di Apprendimento</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #0f0b08;
+      --surface:   #1a1410;
+      --card:      #221c16;
+      --border:    #3a2e22;
+      --gold:      #c9952a;
+      --gold-lt:   #e8b84b;
+      --cream:     #f0e6d0;
+      --muted:     #9a8870;
+      --green:     #4a7c59;
+      --red:       #8b3a3a;
+      --code-bg:   #130f0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-weight: 300;
+      line-height: 1.75;
+      font-size: 17px;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999; opacity: .5;
+    }
+
+    /* ── HERO ── */
+    header {
+      position: relative;
+      padding: 80px 40px 60px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 0%, #c9952a18 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .flag-stripe {
+      display: flex; justify-content: center; gap: 6px;
+      margin-bottom: 32px;
+    }
+    .flag-stripe span {
+      display: block; width: 28px; height: 4px; border-radius: 2px;
+    }
+    .flag-stripe span:nth-child(1) { background: #009C3B; }
+    .flag-stripe span:nth-child(2) { background: #FFDF00; }
+    .flag-stripe span:nth-child(3) { background: #002776; }
+
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      color: var(--gold-lt);
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+    }
+    .subtitle {
+      margin-top: 14px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── LAYOUT ── */
+    .wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 4px;
+      padding: 28px 32px;
+      margin: 48px 0 56px;
+    }
+    .toc h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin: 6px 0; }
+    .toc a {
+      color: var(--cream);
+      text-decoration: none;
+      opacity: .8;
+      transition: opacity .2s, color .2s;
+    }
+    .toc a:hover { opacity: 1; color: var(--gold-lt); }
+
+    /* ── SECTIONS ── */
+    section {
+      margin-bottom: 64px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp .5s forwards;
+    }
+    section:nth-child(1)  { animation-delay: .05s }
+    section:nth-child(2)  { animation-delay: .10s }
+    section:nth-child(3)  { animation-delay: .15s }
+    section:nth-child(4)  { animation-delay: .20s }
+    section:nth-child(5)  { animation-delay: .25s }
+    section:nth-child(6)  { animation-delay: .30s }
+    section:nth-child(7)  { animation-delay: .35s }
+    section:nth-child(8)  { animation-delay: .40s }
+    section:nth-child(9)  { animation-delay: .45s }
+    section:nth-child(10) { animation-delay: .50s }
+    section:nth-child(11) { animation-delay: .55s }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2.section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--gold-lt);
+      margin-bottom: 6px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-num {
+      font-size: .8rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--cream);
+      margin: 28px 0 10px;
+    }
+    h4 {
+      font-size: .95rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin: 22px 0 8px;
+    }
+
+    p { margin: 10px 0; color: #d4c8b4; }
+
+    /* ── CODE BLOCKS ── */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: .82rem;
+      line-height: 1.6;
+      color: #c8b99a;
+    }
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: .85em;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 3px;
+      color: var(--gold-lt);
+    }
+    pre code { background: none; border: none; padding: 0; font-size: inherit; color: inherit; }
+
+    /* ── TABLES ── */
+    .table-wrap { overflow-x: auto; margin: 16px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+    th {
+      background: var(--card);
+      color: var(--gold);
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      border-bottom: 2px solid var(--gold);
+      white-space: nowrap;
+    }
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      color: #d4c8b4;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--card); }
+
+    /* ── CALLOUT / BLOCKQUOTE ── */
+    blockquote {
+      border-left: 3px solid var(--gold);
+      padding: 12px 18px;
+      margin: 16px 0;
+      background: var(--card);
+      border-radius: 0 4px 4px 0;
+      font-style: italic;
+      color: var(--muted);
+    }
+    blockquote strong { color: var(--gold-lt); font-style: normal; }
+
+    /* ── CARD (brani) ── */
+    .song-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      border-radius: 4px;
+      padding: 24px 28px;
+      margin: 24px 0;
+    }
+    .song-card h3 { margin-top: 0; color: var(--gold-lt); }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      padding: 8px 0 8px 32px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      color: #d4c8b4;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: '○';
+      position: absolute; left: 0;
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
+    /* ── STUDY TABLE ── */
+    .study-week {
+      margin: 24px 0;
+    }
+    .study-week h3 {
+      background: var(--card);
+      padding: 10px 14px;
+      border-left: 3px solid var(--green);
+      margin-bottom: 0;
+      font-size: 1rem;
+      color: var(--cream);
+    }
+
+    /* ── GLOSSARY ── */
+    .glossary dt {
+      color: var(--gold-lt);
+      font-weight: 600;
+      margin-top: 14px;
+      font-family: 'Playfair Display', serif;
+    }
+    .glossary dd { color: #d4c8b4; margin-left: 0; padding-left: 16px; border-left: 2px solid var(--border); }
+
+    /* ── LISTS ── */
+    ul, ol { padding-left: 22px; margin: 10px 0; }
+    li { margin: 5px 0; color: #d4c8b4; }
+    strong { color: var(--cream); font-weight: 600; }
+    em { color: var(--muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .85rem;
+    }
+    footer .flag { font-size: 1.3rem; margin-bottom: 6px; display: block; }
+
+    /* ── HR ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      header { padding: 50px 20px 40px; }
+      .wrapper { padding: 0 16px 60px; }
+      pre { font-size: .75rem; padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="flag-stripe">
+    <span></span><span></span><span></span>
+  </div>
+  <h1>Cavaquinho &amp; Choro</h1>
+  <p class="subtitle">Sistema di Apprendimento Progressivo — dalla prima sincope alla Roda de Choro</p>
+</header>
+
+<div class="wrapper">
+
+  <!-- TOC -->
+  <nav class="toc">
+    <h2>Indice</h2>
+    <ol>
+      <li><a href="#s1">Il Cavaquinho nel Choro</a></li>
+      <li><a href="#s2">Il "Garfinho" — Fondamenta Ritmiche</a></li>
+      <li><a href="#s3">Modulo A — Do maggiore</a></li>
+      <li><a href="#s4">Modulo B — Sol maggiore</a></li>
+      <li><a href="#s5">Modulo C — Fa maggiore</a></li>
+      <li><a href="#s6">Modulo D — La minore</a></li>
+      <li><a href="#s7">Modulo E — Re minore</a></li>
+      <li><a href="#s8">La Catena di Dominanti</a></li>
+      <li><a href="#s9">Modulazioni — Il Trio</a></li>
+      <li><a href="#s10">Repertorio Essenziale</a></li>
+      <li><a href="#s11">Piano di Studio &amp; Checklist</a></li>
+    </ol>
+  </nav>
+
+  <!-- SECTION 1 -->
+  <section id="s1">
+    <span class="section-num">Introduzione</span>
+    <h2 class="section-title">Il Cavaquinho nel Choro</h2>
+
+    <h3>Accordatura standard</h3>
+    <pre>Corda 1 (più acuta): D4
+Corda 2:             B3
+Corda 3:             G3
+Corda 4 (più grave): D3</pre>
+    <blockquote><strong>💡</strong> Uguale alle prime quattro corde di una chitarra, ma un'ottava più alta per le corde 3 e 4.</blockquote>
+
+    <h3>Ruolo nella Jam Session</h3>
+    <p>Il cavaquinho è il <strong>"motore ritmico"</strong> del choro. Non è uno strumento melodico nella jam — il tuo compito è:</p>
+    <ul>
+      <li>Tenere il tempo con il pattern ritmico giusto</li>
+      <li>Fare i cambi di accordo <strong>prima</strong> del tempo (anticipazione)</li>
+      <li>Guidare armonicamente il gruppo con le progressioni</li>
+    </ul>
+
+    <h3>Le tonalità più usate</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tonalità</th><th>Frequenza</th><th>Brani tipici</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Do maggiore (C)</strong></td><td>⭐⭐⭐⭐⭐</td><td>Brasileirinho, Odeon</td></tr>
+          <tr><td><strong>Sol maggiore (G)</strong></td><td>⭐⭐⭐⭐⭐</td><td>Noites Cariocas</td></tr>
+          <tr><td><strong>Fa maggiore (F)</strong></td><td>⭐⭐⭐⭐</td><td>Carinhoso, Vou Vivendo</td></tr>
+          <tr><td><strong>La minore (Am)</strong></td><td>⭐⭐⭐⭐</td><td>Tico-Tico no Fubá (sez. B)</td></tr>
+          <tr><td><strong>Re minore (Dm)</strong></td><td>⭐⭐⭐</td><td>Lamento, Serenata</td></tr>
+          <tr><td><strong>Re maggiore (D)</strong></td><td>⭐⭐⭐</td><td>Brejeiro</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section id="s2">
+    <span class="section-num">Modulo 0</span>
+    <h2 class="section-title">Il "Garfinho" — Fondamenta Ritmiche</h2>
+
+    <h3>Il ritmo base — 2/4</h3>
+    <p>Il choro si suona <strong>in 2</strong> (due tempi per battuta). Senti sempre il "1" e il "2".</p>
+    <pre>Battuta 2/4:  |  1  e  &amp;  a  |  2  e  &amp;  a  |
+              |  ↓     ↑     |  ↓     ↑     |</pre>
+
+    <h3>Il Pattern Garfinho</h3>
+    <pre>         1    e    &amp;    a    2    e    &amp;    a
+         ↓         ↑    ↓         ↑    ↓
+         GIÙ       SU   GIÙ       SU   GIÙ
+
+Notazione: | G  _  S  G  |  _  S  G  _ |</pre>
+
+    <h4>Esercizio 1 — Solo ritmo (senza accordi)</h4>
+    <ol>
+      <li>Metti il metronomo a <strong>♩= 60</strong></li>
+      <li>Esegui il garfinho su una sola corda aperta per 5 minuti</li>
+      <li>Aumenta di 5 BPM ogni giorno fino a 100</li>
+      <li><strong>Non passare agli accordi</strong> finché il ritmo non è automatico</li>
+    </ol>
+
+    <h4>Esercizio 2 — Anticipazione armonica</h4>
+    <p>Nel choro, i cambi avvengono sull'<strong>"&amp;" dell'ultimo tempo</strong> — mezzo tempo prima:</p>
+    <pre>| C  C  C  C½ | G7  G7  G7  G7½ | C ... |
+              ↑
+         Anticipa qui!</pre>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section id="s3">
+    <span class="section-num">Modulo A</span>
+    <h2 class="section-title">Tonalità di DO maggiore</h2>
+
+    <h3>Diteggiature sul Cavaquinho (D–B–G–D)</h3>
+    <pre>C (Do magg.):        G7 (Sol 7ª):         Dm7 (Re m7):         Am7 (La m7):
+  D: 0               D: 0                 D: 1 (fret 1)        D: 0
+  B: 1 (fret 1)      B: 1 (fret 1)        B: 1 (fret 1)        B: 2 (fret 2)
+  G: 0               G: 0                 G: 2 (fret 2)        G: 0
+  D: 2 (fret 2)      D: 0                 D: 0                 D: 0</pre>
+
+    <h4>Progressione 1 — I – V7 – I (base assoluta)</h4>
+    <pre>| C    | G7   | C    | G7   | C    |</pre>
+    <p><em>10 minuti/giorno a 70 BPM con garfinho.</em></p>
+
+    <h4>Progressione 2 — ii – V – I</h4>
+    <pre>| Dm7  | G7   | Cmaj7 |  (ripeti)
+
+Espandi: | Dm7 | Dm7 | G7 | G7 | Cmaj7 | Cmaj7 |
+Poi: una battuta per accordo → mezza battuta</pre>
+
+    <h4>Progressione 3 — ii – V – I – VI7 (circolare)</h4>
+    <pre>| Dm7 | G7 | Cmaj7 | A7 | Dm7 | G7 | Cmaj7 | ...</pre>
+    <p>Il <strong>A7</strong> (VI7) "tira" di nuovo verso Dm7 — questa è la progressione circolare del choro!</p>
+
+    <h4>Progressione 4 — Diminuito di passaggio</h4>
+    <pre>| C | C#dim7 | Dm7 | G7 | C |
+
+C#dim7:  D: 2  B: 1  G: 2  D: 1</pre>
+
+    <h3>Schema AABBACCA in Do maggiore</h3>
+    <pre>Sezione A → Do maggiore
+Sezione B → La minore  (relativa)
+Sezione C → Fa maggiore (trio / sottodominante)</pre>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section id="s4">
+    <span class="section-num">Modulo B</span>
+    <h2 class="section-title">Tonalità di SOL maggiore</h2>
+
+    <h3>Diteggiature</h3>
+    <pre>G (Sol magg.):       D7 (Re 7ª):          Em7 (Mi m7):         Bm7b5 (Si semidim.):
+  D: 2 (fret 2)      D: 2 (fret 2)        D: 0                 D: 1 (fret 1)
+  B: 3 (fret 3)      B: 1 (fret 1)        B: 3 (fret 3)        B: 2 (fret 2)
+  G: 0               G: 2 (fret 2)        G: 0                 G: 0
+  D: 0               D: 0                 D: 2 (fret 2)        D: 1 (fret 1)</pre>
+
+    <h4>Progressioni</h4>
+    <pre>I – V7 – I:         | G   | D7  | G   |
+ii – V – I:         | Am7 | D7  | Gmaj7 |
+ii – V – I – VI7:   | Am7 | D7  | Gmaj7 | E7 | Am7 | ...
+Cadenza andalusa:   | Em  | D   | C   | B7  | Em  |</pre>
+
+    <h4>Esercizio A→B→A</h4>
+    <pre>Sezione A (Sol): | G  | Am7 | D7 | G  | (×4)
+Sezione B (Mi min): | Em | B7  | Em | B7 | (×4)
+Ritorno A:       | G  | Am7 | D7 | G  | (×4)</pre>
+
+    <h3>Schema AABBACCA in Sol maggiore</h3>
+    <pre>Sezione A → Sol maggiore
+Sezione B → Mi minore  (relativa)
+Sezione C → Do maggiore (trio)</pre>
+  </section>
+
+  <!-- SECTION 5 -->
+  <section id="s5">
+    <span class="section-num">Modulo C</span>
+    <h2 class="section-title">Tonalità di FA maggiore</h2>
+    <p><em>Fa maggiore è la tonalità del trio in Do, e la tonalità di Carinhoso.</em></p>
+
+    <h3>Diteggiature</h3>
+    <pre>F (Fa magg.):        C7 (Do 7ª):          Gm7 (Sol m7):        Dm (Re min.):
+  D: 3 (fret 3)      D: 0                 D: 1 (fret 1)        D: 1 (fret 1)
+  B: 1 (fret 1)      B: 1 (fret 1)        B: 3 (fret 3)        B: 3 (fret 3)
+  G: 2 (fret 2)      G: 3 (fret 3)        G: 0                 G: 2 (fret 2)
+  D: 0               D: 0                 D: 1 (fret 1)        D: 0</pre>
+
+    <h4>Progressioni</h4>
+    <pre>ii – V – I:     | Gm7 | C7  | Fmaj7 |
+Con diminuito:  | F   | F#dim7 | Gm7 | C7 | F |
+
+Carinhoso (schema):
+| F    | F#dim7 | Gm7  | C7   |
+| F    | D7     | Gm7  | C7   |
+| F    | Bb     | F/C  | C7   | F |</pre>
+
+    <h4>Esercizio — Transizione Do → Fa (il Trio)</h4>
+    <pre>Ultimi 2 bar sez. A:  | C  | C7 |   ← C7 = V7 di Fa!
+Primo bar del Trio:   | F  | ...</pre>
+  </section>
+
+  <!-- SECTION 6 -->
+  <section id="s6">
+    <span class="section-num">Modulo D</span>
+    <h2 class="section-title">Tonalità di LA minore</h2>
+
+    <h3>Diteggiature</h3>
+    <pre>Am (La min.):        E7 (Mi 7ª):          Bm7b5 (semidim.):    E7b9 (V7b9):
+  D: 2 (fret 2)      D: 2 (fret 2)        D: 1 (fret 1)        D: 0
+  B: 2 (fret 2)      B: 0                 B: 2 (fret 2)        B: 0
+  G: 1 (fret 1)      G: 1 (fret 1)        G: 0                 G: 1 (fret 1)
+  D: 0               D: 0                 D: 0                 D: 2 (fret 2)</pre>
+
+    <h4>Progressioni</h4>
+    <pre>i – V7 – i:         | Am | E7 | Am |
+ii° – V – i:        | Bm7b5 | E7 | Am |
+Cadenza frigia:     | Am | G  | F  | E7 | Am |
+Con cromatismi:     | Bm7b5 | E7b9 | Am | A7 | Dm | Bm7b5 | E7 | Am |</pre>
+
+    <blockquote>⚠️ Il <strong>Bm7b5</strong> (semidiminuito) è l'accordo ii in minore — fondamentale per il choro!</blockquote>
+
+    <h4>Tico-Tico no Fubá — schema</h4>
+    <pre>| Am   | E7   | Am   | E7   |
+| Am   | Dm   | E7   | Am   |
+| C    | G7   | C    | G7   | C |  ← sezione in Do magg.</pre>
+  </section>
+
+  <!-- SECTION 7 -->
+  <section id="s7">
+    <span class="section-num">Modulo E</span>
+    <h2 class="section-title">Tonalità di RE minore</h2>
+
+    <h3>Diteggiature</h3>
+    <pre>Dm (Re min.):        A7 (La 7ª):          Em7b5 (semidim.):    Gm (Sol min.):
+  D: 1 (fret 1)      D: 0                 D: 0                 D: 3 (fret 3)
+  B: 3 (fret 3)      B: 2 (fret 2)        B: 3 (fret 3)        B: 3 (fret 3)
+  G: 2 (fret 2)      G: 1 (fret 1)        G: 3 (fret 3)        G: 3 (fret 3)
+  D: 0               D: 0                 D: 1 (fret 1)        D: 1 (fret 1)</pre>
+
+    <h4>Progressioni</h4>
+    <pre>ii° – V – i:    | Em7b5 | A7 | Dm |
+Con IV:         | Dm    | Gm | A7 | Dm |
+
+Lamento (Pixinguinha):
+| Dm   | A7   | Dm   | A7   |
+| Dm   | Gm   | A7   | Dm   |
+| F    | C7   | F    | C7   | F |  ← trio in Fa magg.</pre>
+  </section>
+
+  <!-- SECTION 8 -->
+  <section id="s8">
+    <span class="section-num">Modulo F</span>
+    <h2 class="section-title">La Catena di Dominanti</h2>
+    <p>Questa è la <strong>firma armonica distintiva</strong> del choro. Ogni accordo è il V7 del successivo — il movimento è a quinte discendenti.</p>
+
+    <h3>La catena completa</h3>
+    <pre>B7 → E7 → A7 → D7 → G7 → C</pre>
+
+    <h4>Esercizio base (60 BPM → aumenta)</h4>
+    <pre>| E7 | A7 | D7 | G7 | C  |</pre>
+
+    <h4>Versione avanzata — ii-V per ogni anello</h4>
+    <pre>| F#m7b5 | B7 | Bm7b5 | E7 | Em7b5 | A7 | Am7 | D7 | G7 | C |</pre>
+
+    <h4>Simulazione Roda de Choro</h4>
+    <pre>Inizio Do magg.:  | C    | C    | G7   | C    |
+→ La minore:      | Am   | E7   | Am   | E7   | Am   |
+→ Re minore:      | Dm7  | A7   | Dm7  | A7   | Dm   |
+→ Sol magg.:      | G7   | D7   | G7   | D7   | G    |
+Ritorno:          | C    | G7   | C    |</pre>
+  </section>
+
+  <!-- SECTION 9 -->
+  <section id="s9">
+    <span class="section-num">Modulo G</span>
+    <h2 class="section-title">Modulazioni — Il Trio</h2>
+
+    <h3>La regola del Trio</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sezione A</th><th>Sezione B</th><th>Sezione C (Trio)</th></tr></thead>
+        <tbody>
+          <tr><td>Do magg. (C)</td><td>La min. (Am)</td><td>Fa magg. (F)</td></tr>
+          <tr><td>Sol magg. (G)</td><td>Mi min. (Em)</td><td>Do magg. (C)</td></tr>
+          <tr><td>Fa magg. (F)</td><td>Re min. (Dm)</td><td>Sib magg. (Bb)</td></tr>
+          <tr><td>Re min. (Dm)</td><td>Fa magg. (F)</td><td>Sol min. (Gm)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Come anticipare la modulazione</h3>
+    <pre>Fine sez. A (Do):  | C  | C7 |  ← C7 = V7 di Fa!
+Inizio Trio (Fa):  | F  | ...</pre>
+
+    <h4>Esercizio A→Trio→A</h4>
+    <pre>Barre  1–8:  Sezione A in Do maggiore
+Barre  7–8:  Inserisci C7 (segnale di modulazione)
+Barre  9–16: Trio in Fa maggiore
+Barre 15–16: Inserisci G7 (segnale di ritorno)
+Barre 17–24: Ritorno sezione A in Do maggiore</pre>
+  </section>
+
+  <!-- SECTION 10 -->
+  <section id="s10">
+    <span class="section-num">Repertorio</span>
+    <h2 class="section-title">Brani Essenziali con Accordi</h2>
+
+    <div class="song-card">
+      <h3>🎵 Brasileirinho — Waldir Azevedo (Do maggiore)</h3>
+      <h4>Sezione A</h4>
+      <pre>| C    | G7   | C    | G7   |
+| C    | G7   | C    | C    |
+| F    | C    | G7   | C    |
+| F    | C    | G7   | C    |</pre>
+      <h4>Sezione B — La minore</h4>
+      <pre>| Am   | E7   | Am   | E7   |
+| Am   | Dm   | E7   | Am   |
+| Am   | E7   | Am   | E7   |
+| Am   | Dm   | E7   | Am   |</pre>
+      <h4>Trio — Fa maggiore</h4>
+      <pre>| F    | C7   | F    | C7   |
+| F    | Bb   | F    | C7   | F |</pre>
+    </div>
+
+    <div class="song-card">
+      <h3>🎵 Carinhoso — Pixinguinha (Fa maggiore)</h3>
+      <h4>Sezione A</h4>
+      <pre>| F    | F#dim7 | Gm7  | C7   |
+| F    | D7     | Gm7  | C7   |
+| F    | Bb     | F    | C7   | F |</pre>
+      <h4>Sezione B — Re minore</h4>
+      <pre>| Dm   | A7   | Dm   | A7   |
+| Dm   | Gm   | A7   | Dm   |</pre>
+    </div>
+
+    <div class="song-card">
+      <h3>🎵 Noites Cariocas — Jacob do Bandolim (Sol maggiore)</h3>
+      <h4>Sezione A</h4>
+      <pre>| G    | D7   | G    | D7   |
+| G    | Em7  | Am7  | D7   | G |</pre>
+      <h4>Sezione B — Mi minore</h4>
+      <pre>| Em   | B7   | Em   | B7   |
+| Em   | Am   | B7   | Em   |</pre>
+      <h4>Trio — Do maggiore</h4>
+      <pre>| C    | G7   | C    | G7   |
+| C    | F    | G7   | C    |</pre>
+    </div>
+
+    <div class="song-card">
+      <h3>🎵 Tico-Tico no Fubá — Zequinha de Abreu (La minore)</h3>
+      <h4>Sezione A</h4>
+      <pre>| Am   | E7   | Am   | E7   |
+| Am   | Dm   | E7   | Am   |</pre>
+      <h4>Sezione B — Do maggiore</h4>
+      <pre>| C    | G7   | C    | G7   | C |</pre>
+      <h4>Trio — La minore (variante)</h4>
+      <pre>| Am   | E7   | Am   | Dm   | E7 | Am |</pre>
+    </div>
+  </section>
+
+  <!-- SECTION 11 -->
+  <section id="s11">
+    <span class="section-num">Studio</span>
+    <h2 class="section-title">Piano di Studio &amp; Checklist</h2>
+
+    <div class="study-week">
+      <h3>⬤ Settimane 1–2 — Ritmo e Do maggiore</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Giorno</th><th>Attività</th><th>Durata</th></tr></thead>
+        <tbody>
+          <tr><td>Lun</td><td>Garfinho su accordo singolo (C)</td><td>15 min</td></tr>
+          <tr><td>Mar</td><td>Progressione I–V7–I in Do</td><td>15 min</td></tr>
+          <tr><td>Mer</td><td>Progressione ii–V–I in Do</td><td>15 min</td></tr>
+          <tr><td>Gio</td><td>Progressione circolare ii–V–I–VI7</td><td>15 min</td></tr>
+          <tr><td>Ven</td><td>Tutte le progressioni in sequenza</td><td>20 min</td></tr>
+          <tr><td>Sab</td><td>Brasileirinho (accordi, lento)</td><td>30 min</td></tr>
+          <tr><td>Dom</td><td>Revisione libera + orecchio</td><td>20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="study-week">
+      <h3>⬤ Settimane 3–4 — Sol maggiore e La minore</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Giorno</th><th>Attività</th><th>Durata</th></tr></thead>
+        <tbody>
+          <tr><td>Lun</td><td>Progressioni in Sol maggiore</td><td>15 min</td></tr>
+          <tr><td>Mar</td><td>Progressioni in La minore</td><td>15 min</td></tr>
+          <tr><td>Mer</td><td>Noites Cariocas (sezioni A e B)</td><td>20 min</td></tr>
+          <tr><td>Gio</td><td>Transizione A→B (Do→La min.)</td><td>15 min</td></tr>
+          <tr><td>Ven</td><td>Tico-Tico no Fubá (lento)</td><td>20 min</td></tr>
+          <tr><td>Sab</td><td>Jam simulata: Do → La min. → Do</td><td>30 min</td></tr>
+          <tr><td>Dom</td><td>Revisione + aumenta BPM</td><td>20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="study-week">
+      <h3>⬤ Settimane 5–6 — Fa maggiore e catena</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Giorno</th><th>Attività</th><th>Durata</th></tr></thead>
+        <tbody>
+          <tr><td>Lun</td><td>Progressioni in Fa maggiore</td><td>15 min</td></tr>
+          <tr><td>Mar</td><td>Carinhoso (schema completo)</td><td>20 min</td></tr>
+          <tr><td>Mer</td><td>Catena dominanti E7–A7–D7–G7–C</td><td>15 min</td></tr>
+          <tr><td>Gio</td><td>Transizione verso il Trio (A→C)</td><td>15 min</td></tr>
+          <tr><td>Ven</td><td>AABBACCA completo su Brasileirinho</td><td>25 min</td></tr>
+          <tr><td>Sab</td><td>Jam simulata: tutte le tonalità</td><td>30 min</td></tr>
+          <tr><td>Dom</td><td>Registra te stesso e ascolta</td><td>20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="study-week">
+      <h3>⬤ Settimane 7–8 — Velocità e fluidità</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Giorno</th><th>Attività</th><th>Durata</th></tr></thead>
+        <tbody>
+          <tr><td>Lun</td><td>Tutte le progressioni a 90 BPM</td><td>20 min</td></tr>
+          <tr><td>Mar</td><td>Catena di dominanti a velocità</td><td>15 min</td></tr>
+          <tr><td>Mer</td><td>Re minore + Sib maggiore</td><td>15 min</td></tr>
+          <tr><td>Gio</td><td>Lettura nuovi brani a prima vista</td><td>20 min</td></tr>
+          <tr><td>Ven</td><td>Pratica con registrazioni (play-along)</td><td>30 min</td></tr>
+          <tr><td>Sab</td><td>Jam reale o simulata con altri</td><td>45 min</td></tr>
+          <tr><td>Dom</td><td>Scegli il prossimo brano da imparare</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <hr/>
+
+    <h3>🎯 Checklist — Sei pronto per la Roda?</h3>
+    <ul class="checklist">
+      <li>Garfinho fluido a 80+ BPM senza pensarci</li>
+      <li>ii–V–I in Do, Sol, Fa, La min., Re min.</li>
+      <li>Catena di dominanti (E7–A7–D7–G7–C) a tempo</li>
+      <li>Riconosci la struttura AABBACCA mentre ascolti</li>
+      <li>Sai quando arriva il trio (e in che tonalità va)</li>
+      <li>Conosci almeno 3 brani del repertorio standard</li>
+      <li>Sai eseguire la transizione A→Trio→A</li>
+      <li>Accordo diminuito di passaggio (Xdim7)</li>
+      <li>V7b9 in minore (es. E7b9 in La minore)</li>
+    </ul>
+
+    <hr/>
+
+    <h3>📚 Glossario</h3>
+    <dl class="glossary">
+      <dt>Chorão</dt><dd>Musicista di choro</dd>
+      <dt>Roda de choro</dt><dd>La jam session del choro (letteralmente "cerchio di choro")</dd>
+      <dt>Garfinho</dt><dd>Il pattern ritmico sincopato del cavaquinho ("piccola forchetta")</dd>
+      <dt>Trio</dt><dd>La sezione C, nella sottodominante — spesso la più melodica</dd>
+      <dt>Catena di dominanti</dt><dd>Sequenza di accordi V7 concatenati a quinte discendenti</dd>
+      <dt>Semidiminuito</dt><dd>Accordo m7b5 — il ii° in tonalità minore</dd>
+      <dt>Modulazione</dt><dd>Cambio di tonalità tra una sezione e l'altra</dd>
+      <dt>Baixaria</dt><dd>Linea di basso contrappuntistica, tipica del violão de 7 corde</dd>
+    </dl>
+  </section>
+
+</div>
+
+<footer>
+  <span class="flag">🇧🇷</span>
+  Buono studio! — <em>Boa sorte na roda!</em>
+</footer>
+
+</body>
+</html>
