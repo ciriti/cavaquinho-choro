@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cavaquinho & Choro — Sistema di Apprendimento</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <title>Cavaquinho &amp; Choro — Sistema di Apprendimento</title>
+  <script>
+    document.documentElement.classList.add('js-enabled');
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Source+Serif+4:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
   <style>
     :root {
       --bg:        #0f0b08;
@@ -20,6 +23,10 @@
       --code-bg:   #130f0b;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -29,6 +36,18 @@
       font-weight: 300;
       line-height: 1.75;
       font-size: 17px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      section {
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
     }
 
     /* ── GRAIN OVERLAY ── */
@@ -81,9 +100,19 @@
 
     /* ── LAYOUT ── */
     .wrapper {
-      max-width: 860px;
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 0 24px 80px;
+      padding: 40px 24px 80px;
+    }
+
+    .page-layout {
+      display: grid;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .content-column {
+      min-width: 0;
     }
 
     /* ── TOC ── */
@@ -91,9 +120,16 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-left: 3px solid var(--gold);
-      border-radius: 4px;
-      padding: 28px 32px;
-      margin: 48px 0 56px;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.16);
+    }
+    .toc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
     }
     .toc h2 {
       font-family: 'Playfair Display', serif;
@@ -101,21 +137,92 @@
       text-transform: uppercase;
       letter-spacing: .14em;
       color: var(--gold);
-      margin-bottom: 16px;
+      margin-bottom: 0;
     }
-    .toc ol { padding-left: 20px; }
-    .toc li { margin: 6px 0; }
-    .toc a {
+    .toc-summary {
+      color: var(--muted);
+      font-size: .92rem;
+      margin: 0 0 18px;
+    }
+    .toc-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font: inherit;
+      cursor: pointer;
+      transition: border-color .2s, color .2s, background-color .2s;
+    }
+    .toc-toggle:hover,
+    .toc-toggle:focus-visible {
+      border-color: var(--gold);
+      color: var(--gold-lt);
+      background: rgba(201, 149, 42, 0.08);
+      outline: none;
+    }
+    .toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .toc-item {
+      margin: 0;
+    }
+    .toc-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: rgba(15, 11, 8, 0.22);
       color: var(--cream);
       text-decoration: none;
-      opacity: .8;
-      transition: opacity .2s, color .2s;
+      transition: border-color .2s, background-color .2s, transform .2s;
     }
-    .toc a:hover { opacity: 1; color: var(--gold-lt); }
+    .toc-link:hover,
+    .toc-link:focus-visible {
+      border-color: var(--gold);
+      background: rgba(201, 149, 42, 0.08);
+      transform: translateX(2px);
+      outline: none;
+    }
+    .toc-link[aria-current="true"] {
+      border-color: var(--gold);
+      background: rgba(201, 149, 42, 0.14);
+      box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.12);
+    }
+    .toc-meta {
+      display: block;
+      font-size: .72rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 4px;
+    }
+    .toc-title {
+      display: block;
+      color: var(--cream);
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .toc-description {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.5;
+    }
 
     /* ── SECTIONS ── */
     section {
       margin-bottom: 64px;
+      scroll-margin-top: 28px;
       opacity: 0;
       transform: translateY(18px);
       animation: fadeUp .5s forwards;
@@ -297,17 +404,81 @@
     /* ── HR ── */
     hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 
+    /* ── BACK TO TOP ── */
+    .back-to-top {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid rgba(232, 184, 75, 0.2);
+      background: rgba(15, 11, 8, 0.9);
+      color: var(--gold-lt);
+      text-decoration: none;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity .2s, transform .2s, border-color .2s, background-color .2s;
+      z-index: 50;
+    }
+    .back-to-top:hover,
+    .back-to-top:focus-visible {
+      border-color: var(--gold);
+      background: rgba(34, 28, 22, 0.96);
+      outline: none;
+    }
+    .back-to-top.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    @media (min-width: 901px) {
+      .page-layout {
+        grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+      }
+
+      .toc {
+        position: sticky;
+        top: 24px;
+      }
+    }
+
     /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .wrapper { padding: 32px 16px 60px; }
+
+      .js-enabled .toc-toggle {
+        display: inline-flex;
+      }
+
+      .js-enabled .toc-list {
+        display: none;
+      }
+
+      .js-enabled .toc.is-open .toc-list {
+        display: grid;
+      }
+    }
+
     @media (max-width: 600px) {
       header { padding: 50px 20px 40px; }
-      .wrapper { padding: 0 16px 60px; }
       pre { font-size: .75rem; padding: 12px 14px; }
+      .back-to-top {
+        right: 16px;
+        bottom: 16px;
+      }
     }
   </style>
 </head>
 <body>
 
-<header>
+<header id="top">
   <div class="flag-stripe">
     <span></span><span></span><span></span>
   </div>
@@ -316,27 +487,24 @@
 </header>
 
 <div class="wrapper">
+  <div class="page-layout">
 
-  <!-- TOC -->
-  <nav class="toc">
-    <h2>Indice</h2>
-    <ol>
-      <li><a href="#s1">Il Cavaquinho nel Choro</a></li>
-      <li><a href="#s2">Il "Garfinho" — Fondamenta Ritmiche</a></li>
-      <li><a href="#s3">Modulo A — Do maggiore</a></li>
-      <li><a href="#s4">Modulo B — Sol maggiore</a></li>
-      <li><a href="#s5">Modulo C — Fa maggiore</a></li>
-      <li><a href="#s6">Modulo D — La minore</a></li>
-      <li><a href="#s7">Modulo E — Re minore</a></li>
-      <li><a href="#s8">La Catena di Dominanti</a></li>
-      <li><a href="#s9">Modulazioni — Il Trio</a></li>
-      <li><a href="#s10">Repertorio Essenziale</a></li>
-      <li><a href="#s11">Piano di Studio &amp; Checklist</a></li>
-    </ol>
-  </nav>
+    <!-- TOC -->
+    <nav class="toc" id="toc" aria-label="Indice dei contenuti">
+      <div class="toc-header">
+        <h2>Indice</h2>
+        <button class="toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list">
+          Apri
+        </button>
+      </div>
+      <p class="toc-summary" id="toc-summary">Scorri i moduli, salta al punto che ti serve e torna subito alla sezione giusta.</p>
+      <ol class="toc-list" id="toc-list"></ol>
+    </nav>
+
+    <main class="content-column">
 
   <!-- SECTION 1 -->
-  <section id="s1">
+  <section id="s1" data-toc-description="Accordatura, ruolo ritmico e panoramica delle tonalità più usate.">
     <span class="section-num">Introduzione</span>
     <h2 class="section-title">Il Cavaquinho nel Choro</h2>
 
@@ -372,7 +540,7 @@ Corda 4 (più grave): D3</pre>
   </section>
 
   <!-- SECTION 2 -->
-  <section id="s2">
+  <section id="s2" data-toc-description="Pattern base del choro, sincope e anticipazione armonica.">
     <span class="section-num">Modulo 0</span>
     <h2 class="section-title">Il "Garfinho" — Fondamenta Ritmiche</h2>
 
@@ -404,7 +572,7 @@ Notazione: | G  _  S  G  |  _  S  G  _ |</pre>
   </section>
 
   <!-- SECTION 3 -->
-  <section id="s3">
+  <section id="s3" data-toc-description="Accordi e progressioni essenziali in Do maggiore.">
     <span class="section-num">Modulo A</span>
     <h2 class="section-title">Tonalità di DO maggiore</h2>
 
@@ -441,7 +609,7 @@ Sezione C → Fa maggiore (trio / sottodominante)</pre>
   </section>
 
   <!-- SECTION 4 -->
-  <section id="s4">
+  <section id="s4" data-toc-description="Cadenze, collegamenti e schema AABBACCA in Sol maggiore.">
     <span class="section-num">Modulo B</span>
     <h2 class="section-title">Tonalità di SOL maggiore</h2>
 
@@ -470,7 +638,7 @@ Sezione C → Do maggiore (trio)</pre>
   </section>
 
   <!-- SECTION 5 -->
-  <section id="s5">
+  <section id="s5" data-toc-description="Progressioni in Fa maggiore e ingresso naturale nel trio.">
     <span class="section-num">Modulo C</span>
     <h2 class="section-title">Tonalità di FA maggiore</h2>
     <p><em>Fa maggiore è la tonalità del trio in Do, e la tonalità di Carinhoso.</em></p>
@@ -497,7 +665,7 @@ Primo bar del Trio:   | F  | ...</pre>
   </section>
 
   <!-- SECTION 6 -->
-  <section id="s6">
+  <section id="s6" data-toc-description="Lavoro sulle tonalità minori, cadenze e cromatismi.">
     <span class="section-num">Modulo D</span>
     <h2 class="section-title">Tonalità di LA minore</h2>
 
@@ -523,7 +691,7 @@ Con cromatismi:     | Bm7b5 | E7b9 | Am | A7 | Dm | Bm7b5 | E7 | Am |</pre>
   </section>
 
   <!-- SECTION 7 -->
-  <section id="s7">
+  <section id="s7" data-toc-description="Diteggiature e progressioni per il repertorio in Re minore.">
     <span class="section-num">Modulo E</span>
     <h2 class="section-title">Tonalità di RE minore</h2>
 
@@ -545,7 +713,7 @@ Lamento (Pixinguinha):
   </section>
 
   <!-- SECTION 8 -->
-  <section id="s8">
+  <section id="s8" data-toc-description="La firma armonica del choro, da studiare a catena e in contesto.">
     <span class="section-num">Modulo F</span>
     <h2 class="section-title">La Catena di Dominanti</h2>
     <p>Questa è la <strong>firma armonica distintiva</strong> del choro. Ogni accordo è il V7 del successivo — il movimento è a quinte discendenti.</p>
@@ -568,7 +736,7 @@ Ritorno:          | C    | G7   | C    |</pre>
   </section>
 
   <!-- SECTION 9 -->
-  <section id="s9">
+  <section id="s9" data-toc-description="Come riconoscere, preparare e gestire la modulazione al trio.">
     <span class="section-num">Modulo G</span>
     <h2 class="section-title">Modulazioni — Il Trio</h2>
 
@@ -598,7 +766,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
   </section>
 
   <!-- SECTION 10 -->
-  <section id="s10">
+  <section id="s10" data-toc-description="Schemi armonici pronti da portare in studio e in roda.">
     <span class="section-num">Repertorio</span>
     <h2 class="section-title">Brani Essenziali con Accordi</h2>
 
@@ -656,7 +824,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
   </section>
 
   <!-- SECTION 11 -->
-  <section id="s11">
+  <section id="s11" data-toc-description="Programma settimanale, checklist finale e glossario dei termini chiave.">
     <span class="section-num">Studio</span>
     <h2 class="section-title">Piano di Studio &amp; Checklist</h2>
 
@@ -754,12 +922,136 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     </dl>
   </section>
 
+    </main>
+  </div>
+
 </div>
 
 <footer>
   <span class="flag">🇧🇷</span>
   Buono studio! — <em>Boa sorte na roda!</em>
 </footer>
+
+<a class="back-to-top" id="back-to-top" href="#top" aria-label="Torna all'inizio">
+  ↑
+</a>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toc = document.getElementById('toc');
+    const tocList = document.getElementById('toc-list');
+    const tocToggle = document.getElementById('toc-toggle');
+    const tocSummary = document.getElementById('toc-summary');
+    const backToTop = document.getElementById('back-to-top');
+    const mobileQuery = window.matchMedia('(max-width: 900px)');
+    const sections = Array.from(document.querySelectorAll('main section[id]'));
+    const linksBySection = new Map();
+
+    if (!toc || !tocList || !tocToggle || !tocSummary || !backToTop || sections.length === 0) {
+      return;
+    }
+
+    const setTocOpen = (isOpen) => {
+      toc.classList.toggle('is-open', isOpen);
+      tocToggle.setAttribute('aria-expanded', String(isOpen));
+      tocToggle.textContent = isOpen ? 'Chiudi' : 'Apri';
+    };
+
+    const setActiveSection = (sectionId) => {
+      linksBySection.forEach((link, id) => {
+        if (id === sectionId) {
+          link.setAttribute('aria-current', 'true');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    };
+
+    sections.forEach((section, index) => {
+      const title = section.querySelector('.section-title')?.textContent?.trim();
+      if (!title) {
+        return;
+      }
+
+      const meta = section.querySelector('.section-num')?.textContent?.trim() || `Sezione ${index + 1}`;
+      const description = section.dataset.tocDescription?.trim() || section.querySelector('h3')?.textContent?.trim() || '';
+      const item = document.createElement('li');
+      const link = document.createElement('a');
+      const metaSpan = document.createElement('span');
+      const titleSpan = document.createElement('span');
+      const descriptionSpan = document.createElement('span');
+
+      item.className = 'toc-item';
+      link.className = 'toc-link';
+      link.href = `#${section.id}`;
+
+      metaSpan.className = 'toc-meta';
+      metaSpan.textContent = meta;
+
+      titleSpan.className = 'toc-title';
+      titleSpan.textContent = title;
+
+      descriptionSpan.className = 'toc-description';
+      descriptionSpan.textContent = description;
+
+      link.append(metaSpan, titleSpan);
+      if (description) {
+        link.append(descriptionSpan);
+      }
+
+      link.addEventListener('click', () => {
+        if (mobileQuery.matches) {
+          setTocOpen(false);
+        }
+      });
+
+      item.append(link);
+      tocList.append(item);
+      linksBySection.set(section.id, link);
+    });
+
+    tocSummary.textContent = `${linksBySection.size} sezioni navigabili, con evidenziazione automatica della sezione attiva.`;
+
+    const observer = new IntersectionObserver((entries) => {
+      const visibleEntries = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((left, right) => right.intersectionRatio - left.intersectionRatio);
+
+      if (visibleEntries.length > 0) {
+        setActiveSection(visibleEntries[0].target.id);
+      }
+    }, {
+      rootMargin: '-20% 0px -55% 0px',
+      threshold: [0.2, 0.35, 0.5, 0.7]
+    });
+
+    sections.forEach((section) => observer.observe(section));
+
+    const syncBackToTop = () => {
+      const shouldShow = window.scrollY > 480;
+      backToTop.classList.toggle('is-visible', shouldShow);
+    };
+
+    const syncTocForViewport = () => {
+      if (!mobileQuery.matches) {
+        setTocOpen(false);
+      }
+    };
+
+    tocToggle.addEventListener('click', () => {
+      const isOpen = tocToggle.getAttribute('aria-expanded') === 'true';
+      setTocOpen(!isOpen);
+    });
+
+    window.addEventListener('scroll', syncBackToTop, { passive: true });
+    mobileQuery.addEventListener('change', syncTocForViewport);
+
+    setActiveSection(sections[0].id);
+    setTocOpen(false);
+    syncBackToTop();
+    syncTocForViewport();
+  });
+</script>
 
 </body>
 </html>
