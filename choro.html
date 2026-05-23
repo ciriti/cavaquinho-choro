@@ -1,0 +1,2311 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cavaquinho &amp; Choro — Sistema di Apprendimento</title>
+  <script>
+    document.documentElement.classList.add('js-enabled');
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Source+Serif+4:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #0f0b08;
+      --surface:   #1a1410;
+      --card:      #221c16;
+      --border:    #3a2e22;
+      --gold:      #c9952a;
+      --gold-lt:   #e8b84b;
+      --cream:     #f0e6d0;
+      --muted:     #9a8870;
+      --green:     #4a7c59;
+      --red:       #8b3a3a;
+      --code-bg:   #130f0b;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-weight: 300;
+      line-height: 1.75;
+      font-size: 17px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      section {
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999; opacity: .5;
+    }
+
+    /* ── HERO ── */
+    header {
+      position: relative;
+      padding: 80px 40px 60px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 0%, #c9952a18 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .flag-stripe {
+      display: flex; justify-content: center; gap: 6px;
+      margin-bottom: 32px;
+    }
+    .flag-stripe span {
+      display: block; width: 28px; height: 4px; border-radius: 2px;
+    }
+    .flag-stripe span:nth-child(1) { background: #009C3B; }
+    .flag-stripe span:nth-child(2) { background: #FFDF00; }
+    .flag-stripe span:nth-child(3) { background: #002776; }
+
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      color: var(--gold-lt);
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+    }
+    .subtitle {
+      margin-top: 14px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .genre-nav {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .genre-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 138px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(15, 11, 8, 0.35);
+      color: var(--cream);
+      text-decoration: none;
+      font-size: .92rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      transition: transform .2s, border-color .2s, background-color .2s, color .2s;
+    }
+    .genre-link:hover,
+    .genre-link:focus-visible {
+      border-color: var(--gold);
+      background: rgba(201, 149, 42, 0.1);
+      color: var(--gold-lt);
+      transform: translateY(-1px);
+      outline: none;
+    }
+    .genre-link.is-active {
+      border-color: rgba(232, 184, 75, 0.5);
+      background: rgba(201, 149, 42, 0.18);
+      color: var(--gold-lt);
+      box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.12);
+    }
+
+    /* ── LAYOUT ── */
+    .wrapper {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .page-layout {
+      display: grid;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .content-column {
+      min-width: 0;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.16);
+    }
+    .toc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+    .toc h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--gold);
+      margin-bottom: 0;
+    }
+    .toc-summary {
+      color: var(--muted);
+      font-size: .92rem;
+      margin: 0 0 18px;
+    }
+    .toc-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font: inherit;
+      cursor: pointer;
+      transition: border-color .2s, color .2s, background-color .2s;
+    }
+    .toc-toggle:hover,
+    .toc-toggle:focus-visible {
+      border-color: var(--gold);
+      color: var(--gold-lt);
+      background: rgba(201, 149, 42, 0.08);
+      outline: none;
+    }
+    .toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .toc-item {
+      margin: 0;
+    }
+    .toc-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: rgba(15, 11, 8, 0.22);
+      color: var(--cream);
+      text-decoration: none;
+      transition: border-color .2s, background-color .2s, transform .2s;
+    }
+    .toc-link:hover,
+    .toc-link:focus-visible {
+      border-color: var(--gold);
+      background: rgba(201, 149, 42, 0.08);
+      transform: translateX(2px);
+      outline: none;
+    }
+    .toc-link[aria-current="true"] {
+      border-color: var(--gold);
+      background: rgba(201, 149, 42, 0.14);
+      box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.12);
+    }
+    .toc-meta {
+      display: block;
+      font-size: .72rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 4px;
+    }
+    .toc-title {
+      display: block;
+      color: var(--cream);
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .toc-description {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.5;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      margin-bottom: 64px;
+      scroll-margin-top: 28px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp .5s forwards;
+    }
+    section:nth-child(1)  { animation-delay: .05s }
+    section:nth-child(2)  { animation-delay: .10s }
+    section:nth-child(3)  { animation-delay: .15s }
+    section:nth-child(4)  { animation-delay: .20s }
+    section:nth-child(5)  { animation-delay: .25s }
+    section:nth-child(6)  { animation-delay: .30s }
+    section:nth-child(7)  { animation-delay: .35s }
+    section:nth-child(8)  { animation-delay: .40s }
+    section:nth-child(9)  { animation-delay: .45s }
+    section:nth-child(10) { animation-delay: .50s }
+    section:nth-child(11) { animation-delay: .55s }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2.section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--gold-lt);
+      margin-bottom: 6px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-num {
+      font-size: .8rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--cream);
+      margin: 28px 0 10px;
+    }
+    h4 {
+      font-size: .95rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin: 22px 0 8px;
+    }
+
+    p { margin: 10px 0; color: #d4c8b4; }
+
+    /* ── CODE BLOCKS ── */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin: 14px 0;
+      font-family: 'Courier New', monospace;
+      font-size: .82rem;
+      line-height: 1.6;
+      color: #c8b99a;
+    }
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: .85em;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 3px;
+      color: var(--gold-lt);
+    }
+    pre code { background: none; border: none; padding: 0; font-size: inherit; color: inherit; }
+
+    /* ── TABLES ── */
+    .table-wrap { overflow-x: auto; margin: 16px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+    th {
+      background: var(--card);
+      color: var(--gold);
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      border-bottom: 2px solid var(--gold);
+      white-space: nowrap;
+    }
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      color: #d4c8b4;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--card); }
+
+    /* ── CALLOUT / BLOCKQUOTE ── */
+    blockquote {
+      border-left: 3px solid var(--gold);
+      padding: 12px 18px;
+      margin: 16px 0;
+      background: var(--card);
+      border-radius: 0 4px 4px 0;
+      font-style: italic;
+      color: var(--muted);
+    }
+    blockquote strong { color: var(--gold-lt); font-style: normal; }
+
+    /* ── CARD (brani) ── */
+    .song-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      border-radius: 4px;
+      padding: 24px 28px;
+      margin: 24px 0;
+    }
+    .song-card h3 { margin-top: 0; color: var(--gold-lt); }
+
+    /* ── CHORD GALLERY ── */
+    .song-card-intro {
+      margin-bottom: 18px;
+      color: #d8ccb7;
+    }
+    .chord-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 18px;
+      margin: 20px 0 8px;
+    }
+    .chord-card {
+      background: rgba(15, 11, 8, 0.28);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 12px 14px;
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+    .chord-card strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--gold-lt);
+      margin-bottom: 10px;
+    }
+    .chord-caption {
+      margin-top: 10px;
+      font-size: .8rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+    .chord-diagram-stack {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+    }
+    .chord-diagram-variant {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .chord-diagram-variant-label {
+      font-size: .68rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .chord-diagram {
+      display: flex;
+      justify-content: center;
+      min-height: 170px;
+    }
+    .chord-diagram svg {
+      width: 88px;
+      height: 168px;
+      overflow: visible;
+    }
+    .chord-token {
+      color: var(--gold-lt);
+      font-weight: 600;
+      cursor: pointer;
+      transition: color .18s ease;
+    }
+    .chord-token:hover,
+    .chord-token:focus-visible {
+      color: #ffd27a;
+      outline: none;
+    }
+    .chord-hover-card {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 188px;
+      max-width: 348px;
+      padding: 0 0 16px;
+      border: 1px solid rgba(240, 230, 208, 0.08);
+      border-radius: 18px;
+      background: rgba(22, 24, 24, 0.96);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.38);
+      color: var(--cream);
+      opacity: 0;
+      transform: translate3d(0, 8px, 0) scale(.98);
+      pointer-events: none;
+      z-index: 1200;
+      transition: opacity .14s ease, transform .14s ease;
+    }
+    .chord-hover-card.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    .chord-hover-banner {
+      height: 14px;
+      border-radius: 18px 18px 0 0;
+      background:
+        linear-gradient(90deg, transparent 0 4px, rgba(255,255,255,.7) 4px 8px, transparent 8px 12px),
+        linear-gradient(rgba(0,0,0,.08), rgba(0,0,0,.08));
+      background-size: 12px 12px, auto;
+      background-color: #1b1b1a;
+      border-bottom: 1px solid rgba(240, 230, 208, 0.08);
+    }
+    .chord-hover-title {
+      padding: 14px 20px 8px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--cream);
+    }
+    .chord-hover-diagram {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4px 12px 2px;
+    }
+    .chord-hover-diagram svg {
+      width: 100px;
+      height: 182px;
+      overflow: visible;
+    }
+    .chord-hover-diagram .chord-diagram-stack {
+      gap: 12px;
+    }
+    .chord-hover-diagram .chord-diagram-variant-label {
+      font-size: .66rem;
+    }
+    .chord-hover-caption {
+      padding: 8px 16px 0;
+      text-align: center;
+      font-size: .76rem;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    /* ── INVERSIONS ── */
+    .inversion-intro {
+      max-width: 72ch;
+      margin-bottom: 20px;
+    }
+    .inversion-note-list {
+      display: grid;
+      gap: 22px;
+    }
+    .inversion-note-card {
+      background: rgba(15, 11, 8, 0.26);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 18px;
+    }
+    .inversion-note-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: var(--gold-lt);
+      margin-bottom: 6px;
+    }
+    .inversion-note-subtitle {
+      color: var(--muted);
+      font-size: .88rem;
+      margin-bottom: 18px;
+      max-width: 60ch;
+    }
+    .inversion-category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .inversion-chord-card {
+      background: rgba(26, 20, 16, 0.72);
+      border: 1px solid rgba(240, 230, 208, 0.08);
+      border-radius: 14px;
+      padding: 14px 12px 12px;
+    }
+    .inversion-chord-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .inversion-chord-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--cream);
+    }
+    .inversion-chord-subtitle {
+      color: var(--muted);
+      font-size: .78rem;
+      white-space: nowrap;
+    }
+    .inversion-voicing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .inversion-voicing-card {
+      background: rgba(15, 11, 8, 0.32);
+      border: 1px solid rgba(240, 230, 208, 0.07);
+      border-radius: 12px;
+      padding: 12px 10px 10px;
+      text-align: center;
+    }
+    .inversion-voicing-title {
+      display: block;
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .inversion-diagram {
+      display: flex;
+      justify-content: center;
+      min-height: 166px;
+    }
+    .inversion-diagram svg {
+      width: 104px;
+      height: 166px;
+      overflow: visible;
+    }
+    .inversion-voicing-caption {
+      margin-top: 10px;
+      font-size: .8rem;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+    @media (max-width: 640px) {
+      .inversion-category-grid {
+        grid-template-columns: 1fr;
+      }
+      .inversion-voicing-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .diagram-line {
+      stroke: rgba(240, 230, 208, 0.9);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+    }
+    .diagram-nut {
+      stroke: var(--cream);
+      stroke-width: 5;
+      stroke-linecap: round;
+    }
+    .diagram-marker {
+      fill: rgba(240, 230, 208, 0.97);
+      stroke: rgba(34, 28, 22, 0.75);
+      stroke-width: 1.2;
+    }
+    .diagram-role-root {
+      fill: none;
+      stroke: #e8b84b;
+      stroke-width: 2.6;
+    }
+    .diagram-role-third {
+      fill: none;
+      stroke: #78c39c;
+      stroke-width: 2.6;
+    }
+    .diagram-role-fifth {
+      fill: none;
+      stroke: #6fa8dc;
+      stroke-width: 2.6;
+    }
+    .diagram-fret-label {
+      fill: var(--muted);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 13px;
+      font-weight: 600;
+      paint-order: stroke;
+      stroke: rgba(22, 24, 24, 0.94);
+      stroke-width: 3px;
+      stroke-linejoin: round;
+    }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      padding: 8px 0 8px 32px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      color: #d4c8b4;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: '○';
+      position: absolute; left: 0;
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
+    /* ── STUDY TABLE ── */
+    .study-week {
+      margin: 24px 0;
+    }
+    .study-week h3 {
+      background: var(--card);
+      padding: 10px 14px;
+      border-left: 3px solid var(--green);
+      margin-bottom: 0;
+      font-size: 1rem;
+      color: var(--cream);
+    }
+
+    /* ── GLOSSARY ── */
+    .glossary dt {
+      color: var(--gold-lt);
+      font-weight: 600;
+      margin-top: 14px;
+      font-family: 'Playfair Display', serif;
+    }
+    .glossary dd { color: #d4c8b4; margin-left: 0; padding-left: 16px; border-left: 2px solid var(--border); }
+
+    /* ── LISTS ── */
+    ul, ol { padding-left: 22px; margin: 10px 0; }
+    li { margin: 5px 0; color: #d4c8b4; }
+    strong { color: var(--cream); font-weight: 600; }
+    em { color: var(--muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 32px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .85rem;
+    }
+    footer .flag { font-size: 1.3rem; margin-bottom: 6px; display: block; }
+
+    /* ── HR ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    /* ── BACK TO TOP ── */
+    .back-to-top {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid rgba(232, 184, 75, 0.2);
+      background: rgba(15, 11, 8, 0.9);
+      color: var(--gold-lt);
+      text-decoration: none;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity .2s, transform .2s, border-color .2s, background-color .2s;
+      z-index: 50;
+    }
+    .back-to-top:hover,
+    .back-to-top:focus-visible {
+      border-color: var(--gold);
+      background: rgba(34, 28, 22, 0.96);
+      outline: none;
+    }
+    .back-to-top.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    @media (min-width: 901px) {
+      .page-layout {
+        grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+      }
+
+      .toc {
+        position: sticky;
+        top: 24px;
+      }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .wrapper { padding: 32px 16px 60px; }
+
+      .js-enabled .toc.toc-ready .toc-toggle {
+        display: inline-flex;
+      }
+
+      .js-enabled .toc.toc-ready .toc-list {
+        display: none;
+      }
+
+      .js-enabled .toc.toc-ready.is-open .toc-list {
+        display: grid;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 50px 20px 40px; }
+      pre { font-size: .75rem; padding: 12px 14px; }
+      .back-to-top {
+        right: 16px;
+        bottom: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header id="top">
+  <div class="flag-stripe">
+    <span></span><span></span><span></span>
+  </div>
+  <nav class="genre-nav" aria-label="Percorsi del sito">
+    <a class="genre-link" href="index.html">Scegli il percorso</a>
+    <a class="genre-link is-active" href="choro.html" aria-current="page">Choro</a>
+    <a class="genre-link" href="forro.html">Forró</a>
+  </nav>
+  <h1>Cavaquinho &amp; Choro</h1>
+  <p class="subtitle">Sistema di Apprendimento Progressivo — dalla prima sincope alla Roda de Choro</p>
+</header>
+
+<div class="wrapper">
+  <div class="page-layout">
+
+    <!-- TOC -->
+    <nav class="toc" id="toc" aria-label="Indice dei contenuti">
+      <div class="toc-header">
+        <h2>Indice</h2>
+        <button class="toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list">
+          Apri
+        </button>
+      </div>
+      <p class="toc-summary" id="toc-summary">Scorri i moduli, salta al punto che ti serve e torna subito alla sezione giusta.</p>
+      <ol class="toc-list" id="toc-list"></ol>
+    </nav>
+
+    <main class="content-column">
+
+  <!-- SECTION 1 -->
+  <section id="s1" data-toc-description="Accordatura, ruolo ritmico e panoramica delle tonalità più usate.">
+    <span class="section-num">Introduzione</span>
+    <h2 class="section-title">Il Cavaquinho nel Choro</h2>
+
+    <h3>Accordatura standard</h3>
+    <pre>Corda 1 (più acuta): D4
+Corda 2:             B3
+Corda 3:             G3
+Corda 4 (più grave): D3</pre>
+    <blockquote><strong>💡</strong> Uguale alle prime quattro corde di una chitarra, ma un'ottava più alta per le corde 3 e 4.</blockquote>
+
+    <h3>Ruolo nella Jam Session</h3>
+    <p>Il cavaquinho è il <strong>"motore ritmico"</strong> del choro. Non è uno strumento melodico nella jam — il tuo compito è:</p>
+    <ul>
+      <li>Tenere il tempo con il pattern ritmico giusto</li>
+      <li>Fare i cambi di accordo <strong>prima</strong> del tempo (anticipazione)</li>
+      <li>Guidare armonicamente il gruppo con le progressioni</li>
+    </ul>
+
+    <h3>Le tonalità più usate</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tonalità</th><th>Frequenza</th><th>Brani tipici</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Do maggiore (C)</strong></td><td>⭐⭐⭐⭐⭐</td><td>Brasileirinho, Odeon</td></tr>
+          <tr><td><strong>Sol maggiore (G)</strong></td><td>⭐⭐⭐⭐⭐</td><td>Noites Cariocas</td></tr>
+          <tr><td><strong>Fa maggiore (F)</strong></td><td>⭐⭐⭐⭐</td><td>Carinhoso, Vou Vivendo</td></tr>
+          <tr><td><strong>La minore (Am)</strong></td><td>⭐⭐⭐⭐</td><td>Tico-Tico no Fubá (sez. B)</td></tr>
+          <tr><td><strong>Re minore (Dm)</strong></td><td>⭐⭐⭐</td><td>Lamento, Serenata</td></tr>
+          <tr><td><strong>Re maggiore (D)</strong></td><td>⭐⭐⭐</td><td>Brejeiro</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section id="s2" data-toc-description="Pattern base del choro, sincope e anticipazione armonica.">
+    <span class="section-num">Modulo 0</span>
+    <h2 class="section-title">Il "Garfinho" — Fondamenta Ritmiche</h2>
+
+    <h3>Il ritmo base — 2/4</h3>
+    <p>Il choro si suona <strong>in 2</strong> (due tempi per battuta). Senti sempre il "1" e il "2".</p>
+    <pre>Battuta 2/4:  |  1  e  &amp;  a  |  2  e  &amp;  a  |
+              |  ↓     ↑     |  ↓     ↑     |</pre>
+
+    <h3>Il Pattern Garfinho</h3>
+    <pre>         1    e    &amp;    a    2    e    &amp;    a
+         ↓         ↑    ↓         ↑    ↓
+         GIÙ       SU   GIÙ       SU   GIÙ
+
+Notazione: | G  _  S  G  |  _  S  G  _ |</pre>
+
+    <h4>Esercizio 1 — Solo ritmo (senza accordi)</h4>
+    <ol>
+      <li>Metti il metronomo a <strong>♩= 60</strong></li>
+      <li>Esegui il garfinho su una sola corda aperta per 5 minuti</li>
+      <li>Aumenta di 5 BPM ogni giorno fino a 100</li>
+      <li><strong>Non passare agli accordi</strong> finché il ritmo non è automatico</li>
+    </ol>
+
+    <h4>Esercizio 2 — Anticipazione armonica</h4>
+    <p>Nel choro, i cambi avvengono sull'<strong>"&amp;" dell'ultimo tempo</strong> — mezzo tempo prima:</p>
+    <pre>| C  C  C  C½ | G7  G7  G7  G7½ | C ... |
+              ↑
+         Anticipa qui!</pre>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section id="s3" data-toc-description="Accordi e progressioni essenziali in Do maggiore.">
+    <span class="section-num">Modulo A</span>
+    <h2 class="section-title">Tonalità di DO maggiore</h2>
+
+    <h3>Diteggiature sul Cavaquinho (D–B–G–D)</h3>
+    <pre>C (Do magg.):        G7 (Sol 7ª):         Dm7 (Re m7):         Am7 (La m7):
+  D: 0               D: 0                 D: 1 (fret 1)        D: 0
+  B: 1 (fret 1)      B: 1 (fret 1)        B: 1 (fret 1)        B: 2 (fret 2)
+  G: 0               G: 0                 G: 2 (fret 2)        G: 0
+  D: 2 (fret 2)      D: 0                 D: 0                 D: 0</pre>
+
+    <h4>Progressione 1 — I – V7 – I (base assoluta)</h4>
+    <pre>| C    | G7   | C    | G7   | C    |</pre>
+    <p><em>10 minuti/giorno a 70 BPM con garfinho.</em></p>
+
+    <h4>Progressione 2 — ii – V – I</h4>
+    <pre>| Dm7  | G7   | Cmaj7 |  (ripeti)
+
+Espandi: | Dm7 | Dm7 | G7 | G7 | Cmaj7 | Cmaj7 |
+Poi: una battuta per accordo → mezza battuta</pre>
+
+    <h4>Progressione 3 — ii – V – I – VI7 (circolare)</h4>
+    <pre>| Dm7 | G7 | Cmaj7 | A7 | Dm7 | G7 | Cmaj7 | ...</pre>
+    <p>Il <strong>A7</strong> (VI7) "tira" di nuovo verso Dm7 — questa è la progressione circolare del choro!</p>
+
+    <h4>Progressione 4 — Diminuito di passaggio</h4>
+    <pre>| C | C#dim7 | Dm7 | G7 | C |
+
+C#dim7:  D: 2  B: 1  G: 2  D: 1</pre>
+
+    <h3>Schema AABBACCA in Do maggiore</h3>
+    <pre>Sezione A → Do maggiore
+Sezione B → La minore  (relativa)
+Sezione C → Fa maggiore (trio / sottodominante)</pre>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section id="s4" data-toc-description="Cadenze, collegamenti e schema AABBACCA in Sol maggiore.">
+    <span class="section-num">Modulo B</span>
+    <h2 class="section-title">Tonalità di SOL maggiore</h2>
+
+    <h3>Diteggiature</h3>
+    <pre>G (Sol magg.):       D7 (Re 7ª):          Em7 (Mi m7):         Bm7b5 (Si semidim.):
+  D: 2 (fret 2)      D: 2 (fret 2)        D: 0                 D: 1 (fret 1)
+  B: 3 (fret 3)      B: 1 (fret 1)        B: 3 (fret 3)        B: 2 (fret 2)
+  G: 0               G: 2 (fret 2)        G: 0                 G: 0
+  D: 0               D: 0                 D: 2 (fret 2)        D: 1 (fret 1)</pre>
+
+    <h4>Progressioni</h4>
+    <pre>I – V7 – I:         | G   | D7  | G   |
+ii – V – I:         | Am7 | D7  | Gmaj7 |
+ii – V – I – VI7:   | Am7 | D7  | Gmaj7 | E7 | Am7 | ...
+Cadenza andalusa:   | Em  | D   | C   | B7  | Em  |</pre>
+
+    <h4>Esercizio A→B→A</h4>
+    <pre>Sezione A (Sol): | G  | Am7 | D7 | G  | (×4)
+Sezione B (Mi min): | Em | B7  | Em | B7 | (×4)
+Ritorno A:       | G  | Am7 | D7 | G  | (×4)</pre>
+
+    <h3>Schema AABBACCA in Sol maggiore</h3>
+    <pre>Sezione A → Sol maggiore
+Sezione B → Mi minore  (relativa)
+Sezione C → Do maggiore (trio)</pre>
+  </section>
+
+  <!-- SECTION 5 -->
+  <section id="s5" data-toc-description="Progressioni in Fa maggiore e ingresso naturale nel trio.">
+    <span class="section-num">Modulo C</span>
+    <h2 class="section-title">Tonalità di FA maggiore</h2>
+    <p><em>Fa maggiore è la tonalità del trio in Do, e la tonalità di Carinhoso.</em></p>
+
+    <h3>Diteggiature</h3>
+    <pre>F (Fa magg.):        C7 (Do 7ª):          Gm7 (Sol m7):        Dm (Re min.):
+  D: 3 (fret 3)      D: 0                 D: 1 (fret 1)        D: 1 (fret 1)
+  B: 1 (fret 1)      B: 1 (fret 1)        B: 3 (fret 3)        B: 3 (fret 3)
+  G: 2 (fret 2)      G: 3 (fret 3)        G: 0                 G: 2 (fret 2)
+  D: 0               D: 0                 D: 1 (fret 1)        D: 0</pre>
+
+    <h4>Progressioni</h4>
+    <pre>ii – V – I:     | Gm7 | C7  | Fmaj7 |
+Con diminuito:  | F   | F#dim7 | Gm7 | C7 | F |
+
+Carinhoso (schema):
+| F    | F#dim7 | Gm7  | C7   |
+| F    | D7     | Gm7  | C7   |
+| F    | Bb     | F/C  | C7   | F |</pre>
+
+    <h4>Esercizio — Transizione Do → Fa (il Trio)</h4>
+    <pre>Ultimi 2 bar sez. A:  | C  | C7 |   ← C7 = V7 di Fa!
+Primo bar del Trio:   | F  | ...</pre>
+  </section>
+
+  <!-- SECTION 6 -->
+  <section id="s6" data-toc-description="Lavoro sulle tonalità minori, cadenze e cromatismi.">
+    <span class="section-num">Modulo D</span>
+    <h2 class="section-title">Tonalità di LA minore</h2>
+
+    <h3>Diteggiature</h3>
+    <pre>Am (La min.):        E7 (Mi 7ª):          Bm7b5 (semidim.):    E7b9 (V7b9):
+  D: 2 (fret 2)      D: 2 (fret 2)        D: 1 (fret 1)        D: 0
+  B: 2 (fret 2)      B: 0                 B: 2 (fret 2)        B: 0
+  G: 1 (fret 1)      G: 1 (fret 1)        G: 0                 G: 1 (fret 1)
+  D: 0               D: 0                 D: 0                 D: 2 (fret 2)</pre>
+
+    <h4>Progressioni</h4>
+    <pre>i – V7 – i:         | Am | E7 | Am |
+ii° – V – i:        | Bm7b5 | E7 | Am |
+Cadenza frigia:     | Am | G  | F  | E7 | Am |
+Con cromatismi:     | Bm7b5 | E7b9 | Am | A7 | Dm | Bm7b5 | E7 | Am |</pre>
+
+    <blockquote>⚠️ Il <strong>Bm7b5</strong> (semidiminuito) è l'accordo ii in minore — fondamentale per il choro!</blockquote>
+
+    <h4>Tico-Tico no Fubá — schema</h4>
+    <pre>| Am   | E7   | Am   | E7   |
+| Am   | Dm   | E7   | Am   |
+| C    | G7   | C    | G7   | C |  ← sezione in Do magg.</pre>
+  </section>
+
+  <!-- SECTION 7 -->
+  <section id="s7" data-toc-description="Diteggiature e progressioni per il repertorio in Re minore.">
+    <span class="section-num">Modulo E</span>
+    <h2 class="section-title">Tonalità di RE minore</h2>
+
+    <h3>Diteggiature</h3>
+    <pre>Dm (Re min.):        A7 (La 7ª):          Em7b5 (semidim.):    Gm (Sol min.):
+  D: 1 (fret 1)      D: 0                 D: 0                 D: 3 (fret 3)
+  B: 3 (fret 3)      B: 2 (fret 2)        B: 3 (fret 3)        B: 3 (fret 3)
+  G: 2 (fret 2)      G: 1 (fret 1)        G: 3 (fret 3)        G: 3 (fret 3)
+  D: 0               D: 0                 D: 1 (fret 1)        D: 1 (fret 1)</pre>
+
+    <h4>Progressioni</h4>
+    <pre>ii° – V – i:    | Em7b5 | A7 | Dm |
+Con IV:         | Dm    | Gm | A7 | Dm |
+
+Lamento (Pixinguinha):
+| Dm   | A7   | Dm   | A7   |
+| Dm   | Gm   | A7   | Dm   |
+| F    | C7   | F    | C7   | F |  ← trio in Fa magg.</pre>
+  </section>
+
+  <!-- SECTION 8 -->
+  <section id="s8" data-toc-description="La firma armonica del choro, da studiare a catena e in contesto.">
+    <span class="section-num">Modulo F</span>
+    <h2 class="section-title">La Catena di Dominanti</h2>
+    <p>Questa è la <strong>firma armonica distintiva</strong> del choro. Ogni accordo è il V7 del successivo — il movimento è a quinte discendenti.</p>
+
+    <h3>La catena completa</h3>
+    <pre>B7 → E7 → A7 → D7 → G7 → C</pre>
+
+    <h4>Esercizio base (60 BPM → aumenta)</h4>
+    <pre>| E7 | A7 | D7 | G7 | C  |</pre>
+
+    <h4>Versione avanzata — ii-V per ogni anello</h4>
+    <pre>| F#m7b5 | B7 | Bm7b5 | E7 | Em7b5 | A7 | Am7 | D7 | G7 | C |</pre>
+
+    <h4>Simulazione Roda de Choro</h4>
+    <pre>Inizio Do magg.:  | C    | C    | G7   | C    |
+→ La minore:      | Am   | E7   | Am   | E7   | Am   |
+→ Re minore:      | Dm7  | A7   | Dm7  | A7   | Dm   |
+→ Sol magg.:      | G7   | D7   | G7   | D7   | G    |
+Ritorno:          | C    | G7   | C    |</pre>
+  </section>
+
+  <!-- SECTION 9 -->
+  <section id="s9" data-toc-description="Come riconoscere, preparare e gestire la modulazione al trio.">
+    <span class="section-num">Modulo G</span>
+    <h2 class="section-title">Modulazioni — Il Trio</h2>
+
+    <h3>La regola del Trio</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sezione A</th><th>Sezione B</th><th>Sezione C (Trio)</th></tr></thead>
+        <tbody>
+          <tr><td>Do magg. (C)</td><td>La min. (Am)</td><td>Fa magg. (F)</td></tr>
+          <tr><td>Sol magg. (G)</td><td>Mi min. (Em)</td><td>Do magg. (C)</td></tr>
+          <tr><td>Fa magg. (F)</td><td>Re min. (Dm)</td><td>Sib magg. (Bb)</td></tr>
+          <tr><td>Re min. (Dm)</td><td>Fa magg. (F)</td><td>Sol min. (Gm)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Come anticipare la modulazione</h3>
+    <pre>Fine sez. A (Do):  | C  | C7 |  ← C7 = V7 di Fa!
+Inizio Trio (Fa):  | F  | ...</pre>
+
+    <h4>Esercizio A→Trio→A</h4>
+    <pre>Barre  1–8:  Sezione A in Do maggiore
+Barre  7–8:  Inserisci C7 (segnale di modulazione)
+Barre  9–16: Trio in Fa maggiore
+Barre 15–16: Inserisci G7 (segnale di ritorno)
+Barre 17–24: Ritorno sezione A in Do maggiore</pre>
+  </section>
+
+  <!-- SECTION 10 -->
+  <section id="s10-inversions" data-toc-description="Diteggiature chiuse organizzate per categorie armoniche, con inversioni essenziali per il cavaquinho.">
+    <span class="section-num">Modulo H</span>
+    <h2 class="section-title">Inversioni Essenziali degli Accordi</h2>
+    <p class="inversion-intro">Qui trovi un riferimento rapido organizzato per <strong>famiglia armonica</strong>, non per singola nota. Ho raccolto forme <strong>chiuse</strong> e pratiche per <strong>maggiori</strong>, <strong>minori</strong>, <strong>7</strong>, <strong>Maj7</strong>, <strong>m7</strong> e <strong>diminuiti</strong>, così puoi confrontare subito accordi simili e studiare le inversioni più utili sul cavaquinho. Nei diagrammi, l'<strong>anello oro</strong> segna la <strong>root</strong> e l'<strong>anello verde</strong> indica la <strong>terza</strong>.</p>
+    <div class="inversion-note-list" id="inversion-groups" aria-label="Inversioni essenziali del cavaquinho"></div>
+  </section>
+
+  <!-- SECTION 11 -->
+  <section id="s10" data-toc-description="Schemi armonici pronti da portare in studio e in roda.">
+    <span class="section-num">Repertorio</span>
+    <h2 class="section-title">Brani Essenziali con Accordi</h2>
+
+    <div class="song-card">
+      <h3>🎵 Brasileirinho — Waldir Azevedo (Do maggiore)</h3>
+      <h4>Sezione A</h4>
+      <pre>| C    | G7   | C    | G7   |
+| C    | G7   | C    | C    |
+| F    | C    | G7   | C    |
+| F    | C    | G7   | C    |</pre>
+      <h4>Sezione B — La minore</h4>
+      <pre>| Am   | E7   | Am   | E7   |
+| Am   | Dm   | E7   | Am   |
+| Am   | E7   | Am   | E7   |
+| Am   | Dm   | E7   | Am   |</pre>
+      <h4>Trio — Fa maggiore</h4>
+      <pre>| F    | C7   | F    | C7   |
+| F    | Bb   | F    | C7   | F |</pre>
+    </div>
+
+    <div class="song-card">
+      <h3>🎵 Carinhoso — Pixinguinha (Fa maggiore)</h3>
+      <h4>Sezione A</h4>
+      <pre>| F    | F#dim7 | Gm7  | C7   |
+| F    | D7     | Gm7  | C7   |
+| F    | Bb     | F    | C7   | F |</pre>
+      <h4>Sezione B — Re minore</h4>
+      <pre>| Dm   | A7   | Dm   | A7   |
+| Dm   | Gm   | A7   | Dm   |</pre>
+    </div>
+
+    <div class="song-card">
+      <h3>🎵 Noites Cariocas — Jacob do Bandolim (Sol maggiore)</h3>
+      <h4>Sezione A</h4>
+      <pre>| G    | D7   | G    | D7   |
+| G    | Em7  | Am7  | D7   | G |</pre>
+      <h4>Sezione B — Mi minore</h4>
+      <pre>| Em   | B7   | Em   | B7   |
+| Em   | Am   | B7   | Em   |</pre>
+      <h4>Trio — Do maggiore</h4>
+      <pre>| C    | G7   | C    | G7   |
+| C    | F    | G7   | C    |</pre>
+    </div>
+
+    <div class="song-card">
+      <h3>🎵 Tico-Tico no Fubá — Zequinha de Abreu (La minore)</h3>
+      <h4>Sezione A</h4>
+      <pre>| Am   | E7   | Am   | E7   |
+| Am   | Dm   | E7   | Am   |</pre>
+      <h4>Sezione B — Do maggiore</h4>
+      <pre>| C    | G7   | C    | G7   | C |</pre>
+      <h4>Trio — La minore (variante)</h4>
+      <pre>| Am   | E7   | Am   | Dm   | E7 | Am |</pre>
+    </div>
+
+    <div class="song-card">
+      <h3>Diteggiario Visivo del Sito</h3>
+      <p class="song-card-intro">Questa raccolta unisce gli accordi già spiegati nel percorso con un'estensione presa dalle tonalità ricorrenti nelle pagine di Falamansa su Cifra Club. In questo modo il sito copre meglio giri in <strong>G</strong>, <strong>F#</strong>, <strong>C#m</strong>, <strong>E</strong>, <strong>Dm</strong>, <strong>Am</strong>, <strong>C</strong> ed <strong>Em</strong>, che sono le aree più ricorrenti nella raccolta dell'artista.</p>
+      <div class="chord-gallery" id="project-chords" aria-label="Diteggiature visive del cavaquinho usate nel sito"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 12 -->
+  <section id="s11" data-toc-description="Programma settimanale, checklist finale e glossario dei termini chiave.">
+    <span class="section-num">Studio</span>
+    <h2 class="section-title">Piano di Studio &amp; Checklist</h2>
+
+    <div class="study-week">
+      <h3>⬤ Settimane 1–2 — Ritmo e Do maggiore</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Giorno</th><th>Attività</th><th>Durata</th></tr></thead>
+        <tbody>
+          <tr><td>Lun</td><td>Garfinho su accordo singolo (C)</td><td>15 min</td></tr>
+          <tr><td>Mar</td><td>Progressione I–V7–I in Do</td><td>15 min</td></tr>
+          <tr><td>Mer</td><td>Progressione ii–V–I in Do</td><td>15 min</td></tr>
+          <tr><td>Gio</td><td>Progressione circolare ii–V–I–VI7</td><td>15 min</td></tr>
+          <tr><td>Ven</td><td>Tutte le progressioni in sequenza</td><td>20 min</td></tr>
+          <tr><td>Sab</td><td>Brasileirinho (accordi, lento)</td><td>30 min</td></tr>
+          <tr><td>Dom</td><td>Revisione libera + orecchio</td><td>20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="study-week">
+      <h3>⬤ Settimane 3–4 — Sol maggiore e La minore</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Giorno</th><th>Attività</th><th>Durata</th></tr></thead>
+        <tbody>
+          <tr><td>Lun</td><td>Progressioni in Sol maggiore</td><td>15 min</td></tr>
+          <tr><td>Mar</td><td>Progressioni in La minore</td><td>15 min</td></tr>
+          <tr><td>Mer</td><td>Noites Cariocas (sezioni A e B)</td><td>20 min</td></tr>
+          <tr><td>Gio</td><td>Transizione A→B (Do→La min.)</td><td>15 min</td></tr>
+          <tr><td>Ven</td><td>Tico-Tico no Fubá (lento)</td><td>20 min</td></tr>
+          <tr><td>Sab</td><td>Jam simulata: Do → La min. → Do</td><td>30 min</td></tr>
+          <tr><td>Dom</td><td>Revisione + aumenta BPM</td><td>20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="study-week">
+      <h3>⬤ Settimane 5–6 — Fa maggiore e catena</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Giorno</th><th>Attività</th><th>Durata</th></tr></thead>
+        <tbody>
+          <tr><td>Lun</td><td>Progressioni in Fa maggiore</td><td>15 min</td></tr>
+          <tr><td>Mar</td><td>Carinhoso (schema completo)</td><td>20 min</td></tr>
+          <tr><td>Mer</td><td>Catena dominanti E7–A7–D7–G7–C</td><td>15 min</td></tr>
+          <tr><td>Gio</td><td>Transizione verso il Trio (A→C)</td><td>15 min</td></tr>
+          <tr><td>Ven</td><td>AABBACCA completo su Brasileirinho</td><td>25 min</td></tr>
+          <tr><td>Sab</td><td>Jam simulata: tutte le tonalità</td><td>30 min</td></tr>
+          <tr><td>Dom</td><td>Registra te stesso e ascolta</td><td>20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="study-week">
+      <h3>⬤ Settimane 7–8 — Velocità e fluidità</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Giorno</th><th>Attività</th><th>Durata</th></tr></thead>
+        <tbody>
+          <tr><td>Lun</td><td>Tutte le progressioni a 90 BPM</td><td>20 min</td></tr>
+          <tr><td>Mar</td><td>Catena di dominanti a velocità</td><td>15 min</td></tr>
+          <tr><td>Mer</td><td>Re minore + Sib maggiore</td><td>15 min</td></tr>
+          <tr><td>Gio</td><td>Lettura nuovi brani a prima vista</td><td>20 min</td></tr>
+          <tr><td>Ven</td><td>Pratica con registrazioni (play-along)</td><td>30 min</td></tr>
+          <tr><td>Sab</td><td>Jam reale o simulata con altri</td><td>45 min</td></tr>
+          <tr><td>Dom</td><td>Scegli il prossimo brano da imparare</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <hr/>
+
+    <h3>🎯 Checklist — Sei pronto per la Roda?</h3>
+    <ul class="checklist">
+      <li>Garfinho fluido a 80+ BPM senza pensarci</li>
+      <li>ii–V–I in Do, Sol, Fa, La min., Re min.</li>
+      <li>Catena di dominanti (E7–A7–D7–G7–C) a tempo</li>
+      <li>Riconosci la struttura AABBACCA mentre ascolti</li>
+      <li>Sai quando arriva il trio (e in che tonalità va)</li>
+      <li>Conosci almeno 3 brani del repertorio standard</li>
+      <li>Sai eseguire la transizione A→Trio→A</li>
+      <li>Accordo diminuito di passaggio (Xdim7)</li>
+      <li>V7b9 in minore (es. E7b9 in La minore)</li>
+    </ul>
+
+    <hr/>
+
+    <h3>📚 Glossario</h3>
+    <dl class="glossary">
+      <dt>Chorão</dt><dd>Musicista di choro</dd>
+      <dt>Roda de choro</dt><dd>La jam session del choro (letteralmente "cerchio di choro")</dd>
+      <dt>Garfinho</dt><dd>Il pattern ritmico sincopato del cavaquinho ("piccola forchetta")</dd>
+      <dt>Trio</dt><dd>La sezione C, nella sottodominante — spesso la più melodica</dd>
+      <dt>Catena di dominanti</dt><dd>Sequenza di accordi V7 concatenati a quinte discendenti</dd>
+      <dt>Semidiminuito</dt><dd>Accordo m7b5 — il ii° in tonalità minore</dd>
+      <dt>Modulazione</dt><dd>Cambio di tonalità tra una sezione e l'altra</dd>
+      <dt>Baixaria</dt><dd>Linea di basso contrappuntistica, tipica del violão de 7 corde</dd>
+    </dl>
+  </section>
+
+    </main>
+  </div>
+
+</div>
+
+<footer>
+  <span class="flag">🇧🇷</span>
+  Buono studio! — <em>Boa sorte na roda!</em>
+</footer>
+
+<a class="back-to-top" id="back-to-top" href="#top" aria-label="Torna all'inizio">
+  ↑
+</a>
+
+<script>
+  (() => {
+    const toc = document.getElementById('toc');
+    const tocList = document.getElementById('toc-list');
+    const tocToggle = document.getElementById('toc-toggle');
+    const tocSummary = document.getElementById('toc-summary');
+    const backToTop = document.getElementById('back-to-top');
+    const projectChords = document.getElementById('project-chords');
+    const inversionGroups = document.getElementById('inversion-groups');
+    const mobileQuery = window.matchMedia('(max-width: 900px)');
+    const sections = Array.from(document.querySelectorAll('main section[id]'));
+    const linksBySection = new Map();
+
+    if (!toc || !tocList || !tocToggle || !tocSummary || !backToTop || sections.length === 0) {
+      return;
+    }
+
+    const setTocOpen = (isOpen) => {
+      toc.classList.toggle('is-open', isOpen);
+      tocToggle.setAttribute('aria-expanded', String(isOpen));
+      tocToggle.textContent = isOpen ? 'Chiudi' : 'Apri';
+    };
+
+    const setActiveSection = (sectionId) => {
+      linksBySection.forEach((link, id) => {
+        if (id === sectionId) {
+          link.setAttribute('aria-current', 'true');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    };
+
+    sections.forEach((section, index) => {
+      const title = section.querySelector('.section-title')?.textContent?.trim();
+      if (!title) {
+        return;
+      }
+
+      const meta = section.querySelector('.section-num')?.textContent?.trim() || `Sezione ${index + 1}`;
+      const description = section.dataset.tocDescription?.trim() || section.querySelector('h3')?.textContent?.trim() || '';
+      const item = document.createElement('li');
+      const link = document.createElement('a');
+      const metaSpan = document.createElement('span');
+      const titleSpan = document.createElement('span');
+      const descriptionSpan = document.createElement('span');
+
+      item.className = 'toc-item';
+      link.className = 'toc-link';
+      link.href = `#${section.id}`;
+
+      metaSpan.className = 'toc-meta';
+      metaSpan.textContent = meta;
+
+      titleSpan.className = 'toc-title';
+      titleSpan.textContent = title;
+
+      descriptionSpan.className = 'toc-description';
+      descriptionSpan.textContent = description;
+
+      link.append(metaSpan, titleSpan);
+      if (description) {
+        link.append(descriptionSpan);
+      }
+
+      link.addEventListener('click', () => {
+        if (mobileQuery.matches) {
+          setTocOpen(false);
+        }
+      });
+
+      item.append(link);
+      tocList.append(item);
+      linksBySection.set(section.id, link);
+    });
+
+    tocSummary.textContent = `${linksBySection.size} sezioni navigabili, con evidenziazione automatica della sezione attiva.`;
+    toc.classList.add('toc-ready');
+
+    const observer = new IntersectionObserver((entries) => {
+      const visibleEntries = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((left, right) => right.intersectionRatio - left.intersectionRatio);
+
+      if (visibleEntries.length > 0) {
+        setActiveSection(visibleEntries[0].target.id);
+      }
+    }, {
+      rootMargin: '-20% 0px -55% 0px',
+      threshold: [0.2, 0.35, 0.5, 0.7]
+    });
+
+    sections.forEach((section) => observer.observe(section));
+
+    const syncBackToTop = () => {
+      const shouldShow = window.scrollY > 480;
+      backToTop.classList.toggle('is-visible', shouldShow);
+    };
+
+    const syncTocForViewport = () => {
+      if (!mobileQuery.matches) {
+        setTocOpen(false);
+      }
+    };
+
+    tocToggle.addEventListener('click', () => {
+      const isOpen = tocToggle.getAttribute('aria-expanded') === 'true';
+      setTocOpen(!isOpen);
+    });
+
+    window.addEventListener('scroll', syncBackToTop, { passive: true });
+    mobileQuery.addEventListener('change', syncTocForViewport);
+
+    setActiveSection(sections[0].id);
+    setTocOpen(false);
+    syncBackToTop();
+    syncTocForViewport();
+
+    const notePitchClasses = {
+      C: 0, 'C#': 1, Db: 1, D: 2, 'D#': 3, Eb: 3, E: 4, F: 5,
+      'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11
+    };
+    const inversionOpenPitches = [5, 9, 2, 7];
+    const referenceOpenPitches = [2, 7, 11, 2];
+
+    const getChordDescriptor = (chordName) => {
+      const match = chordName.match(/^([A-G](?:#|b)?)(.*)$/);
+      if (!match) {
+        return null;
+      }
+
+      const [, root, suffix] = match;
+      let thirdInterval = 4;
+      let fifthInterval = 7;
+
+      if (/^m(?!aj)/i.test(suffix) || /dim/i.test(suffix)) {
+        thirdInterval = 3;
+      }
+      if (/dim|b5|ø/i.test(suffix)) {
+        fifthInterval = 6;
+      } else if (/#5|aug/i.test(suffix)) {
+        fifthInterval = 8;
+      }
+
+      return {
+        root,
+        rootPc: notePitchClasses[root],
+        thirdPc: (notePitchClasses[root] + thirdInterval) % 12,
+        fifthPc: (notePitchClasses[root] + fifthInterval) % 12
+      };
+    };
+
+    const getRoleMarkers = (frets, chordName, openPitches) => {
+      const descriptor = getChordDescriptor(chordName);
+      if (!descriptor) {
+        return { root: new Set(), third: new Set(), fifth: new Set() };
+      }
+
+      const root = new Set();
+      const third = new Set();
+      const fifth = new Set();
+
+      frets.forEach((fret, index) => {
+        if (typeof fret !== 'number' || fret < 0) {
+          return;
+        }
+        const pitchClass = (openPitches[index] + fret) % 12;
+        if (pitchClass === descriptor.rootPc) {
+          root.add(index);
+        } else if (pitchClass === descriptor.thirdPc) {
+          third.add(index);
+        } else if (pitchClass === descriptor.fifthPc) {
+          fifth.add(index);
+        }
+      });
+
+      return { root, third, fifth };
+    };
+
+    const appendRoleRing = (svg, x, y, role) => {
+      const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      ring.setAttribute('cx', x);
+      ring.setAttribute('cy', y);
+      ring.setAttribute('r', '12.9');
+      const className = role === 'root'
+        ? 'diagram-role-root'
+        : role === 'third'
+          ? 'diagram-role-third'
+          : 'diagram-role-fifth';
+      ring.setAttribute('class', className);
+      svg.append(ring);
+    };
+
+    const createFretDiagramSvg = (frets, chordName, options = {}) => {
+      const fretted = frets.filter((fret) => fret > 0);
+      const minFret = Math.min(...fretted);
+      const maxFret = Math.max(...fretted);
+      const baseFret = maxFret > 4 || minFret > 3 ? minFret : 1;
+      const openPitches = options.openPitches || inversionOpenPitches;
+      const markers = getRoleMarkers(frets, chordName, openPitches);
+      const stringsX = [28, 50, 72, 94];
+      const fretsY = [18, 50, 82, 114, 146];
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+      svg.setAttribute('viewBox', '0 0 108 168');
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', `Diagramma dell'accordo ${chordName}`);
+
+      const appendLine = (x1, y1, x2, y2, className) => {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('class', className);
+        svg.append(line);
+      };
+
+      stringsX.forEach((x) => {
+        appendLine(x, fretsY[0], x, fretsY[4], 'diagram-line');
+      });
+
+      fretsY.forEach((y, index) => {
+        appendLine(stringsX[0], y, stringsX[3], y, index === 0 && baseFret === 1 ? 'diagram-nut' : 'diagram-line');
+      });
+
+      if (baseFret > 1) {
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', '18');
+        label.setAttribute('y', '16');
+        label.setAttribute('text-anchor', 'end');
+        label.setAttribute('class', 'diagram-fret-label');
+        label.textContent = `${baseFret}ª`;
+        svg.append(label);
+      }
+
+      frets.forEach((fret, index) => {
+        if (fret <= 0) {
+          return;
+        }
+        const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
+        const cy = (fretsY[relativeFret - 1] + fretsY[relativeFret]) / 2;
+        if (markers.root.has(index)) {
+          appendRoleRing(svg, stringsX[index], cy, 'root');
+        } else if (markers.third.has(index)) {
+          appendRoleRing(svg, stringsX[index], cy, 'third');
+        } else if (markers.fifth.has(index)) {
+          appendRoleRing(svg, stringsX[index], cy, 'fifth');
+        }
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', stringsX[index]);
+        circle.setAttribute('cy', cy);
+        circle.setAttribute('r', '11');
+        circle.setAttribute('class', 'diagram-marker');
+        svg.append(circle);
+      });
+
+      return svg;
+    };
+
+    if (inversionGroups) {
+      const describeVoicing = (label) => {
+        if (label === 'Fondamentale') {
+          return 'Basso sulla tonica';
+        }
+        if (label === '1ª inv.') {
+          return 'Basso sulla terza';
+        }
+        if (label === '2ª inv.') {
+          return 'Basso sulla quinta';
+        }
+        if (label === '3ª inv.') {
+          return 'Basso sulla settima';
+        }
+        return 'Voicing chiuso';
+      };
+
+      const inversionSet = [
+        {
+          category: 'Maggiori',
+          subtitle: 'Triadi maggiori compatte per il collegamento melodico e armonico.',
+          chords: [
+            { name: 'C', caption: 'Do maggiore', voicings: [{ label: 'Fondamentale', frets: [7, 7, 5, 5] }, { label: '1ª inv.', frets: [11, 10, 10, 9] }, { label: '2ª inv.', frets: [2, 3, 2, 5] }] },
+            { name: 'D', caption: 'Re maggiore', voicings: [{ label: 'Fondamentale', frets: [9, 9, 7, 7] }, { label: '1ª inv.', frets: [13, 12, 12, 11] }, { label: '2ª inv.', frets: [4, 5, 4, 2] }] },
+            { name: 'E', caption: 'Mi maggiore', voicings: [{ label: 'Fondamentale', frets: [11, 11, 9, 9] }, { label: '1ª inv.', frets: [3, 2, 2, 1] }, { label: '2ª inv.', frets: [6, 7, 6, 4] }] },
+            { name: 'F', caption: 'Fa maggiore', voicings: [{ label: 'Fondamentale', frets: [12, 12, 10, 10] }, { label: '1ª inv.', frets: [4, 3, 3, 2] }, { label: '2ª inv.', frets: [7, 8, 7, 5] }] },
+            { name: 'G', caption: 'Sol maggiore', voicings: [{ label: 'Fondamentale', frets: [14, 14, 12, 12] }, { label: '1ª inv.', frets: [6, 5, 5, 4] }, { label: '2ª inv.', frets: [9, 10, 9, 7] }] },
+            { name: 'A', caption: 'La maggiore', voicings: [{ label: 'Fondamentale', frets: [4, 4, 2, 2] }, { label: '1ª inv.', frets: [8, 7, 7, 6] }, { label: '2ª inv.', frets: [11, 12, 11, 9] }] },
+            { name: 'B', caption: 'Si maggiore', voicings: [{ label: 'Fondamentale', frets: [6, 6, 4, 4] }, { label: '1ª inv.', frets: [10, 9, 9, 8] }, { label: '2ª inv.', frets: [1, 2, 1, 4] }] }
+          ]
+        },
+        {
+          category: 'Minori',
+          subtitle: 'Triadi minori chiuse per studiare i passaggi verso dominanti e relativi.',
+          chords: [
+            { name: 'Cm', caption: 'Do minore', voicings: [{ label: 'Fondamentale', frets: [7, 6, 5, 5] }, { label: '1ª inv.', frets: [10, 10, 10, 8] }, { label: '2ª inv.', frets: [2, 3, 1, 5] }] },
+            { name: 'Dm', caption: 'Re minore', voicings: [{ label: 'Fondamentale', frets: [9, 8, 7, 7] }, { label: '1ª inv.', frets: [12, 12, 12, 10] }, { label: '2ª inv.', frets: [4, 5, 3, 2] }] },
+            { name: 'Em', caption: 'Mi minore', voicings: [{ label: 'Fondamentale', frets: [11, 10, 9, 9] }, { label: '1ª inv.', frets: [2, 2, 2, 4] }, { label: '2ª inv.', frets: [6, 7, 5, 4] }] },
+            { name: 'Fm', caption: 'Fa minore', voicings: [{ label: 'Fondamentale', frets: [12, 11, 10, 10] }, { label: '1ª inv.', frets: [3, 3, 3, 1] }, { label: '2ª inv.', frets: [7, 8, 6, 5] }] },
+            { name: 'Gm', caption: 'Sol minore', voicings: [{ label: 'Fondamentale', frets: [14, 13, 12, 12] }, { label: '1ª inv.', frets: [5, 5, 5, 3] }, { label: '2ª inv.', frets: [9, 10, 8, 7] }] },
+            { name: 'Am', caption: 'La minore', voicings: [{ label: 'Fondamentale', frets: [4, 3, 2, 2] }, { label: '1ª inv.', frets: [7, 7, 7, 5] }, { label: '2ª inv.', frets: [11, 12, 10, 9] }] },
+            { name: 'Bm', caption: 'Si minore', voicings: [{ label: 'Fondamentale', frets: [6, 5, 4, 4] }, { label: '1ª inv.', frets: [9, 9, 9, 7] }, { label: '2ª inv.', frets: [13, 14, 12, 11] }] }
+          ]
+        },
+        {
+          category: '7',
+          subtitle: 'Dominanti utili per cadenze, preparazioni e modulazioni nel repertorio.',
+          chords: [
+            { name: 'C7', caption: 'Do settima', voicings: [{ label: 'Fondamentale', frets: [7, 10, 8, 9] }, { label: '1ª inv.', frets: [11, 13, 10, 12] }, { label: '2ª inv.', frets: [2, 3, 2, 3] }, { label: '3ª inv.', frets: [5, 7, 5, 5] }] },
+            { name: 'D7', caption: 'Re settima', voicings: [{ label: 'Fondamentale', frets: [9, 12, 10, 11] }, { label: '2ª inv.', frets: [4, 5, 4, 5] }, { label: '3ª inv.', frets: [7, 9, 7, 7] }] },
+            { name: 'E7', caption: 'Mi settima', voicings: [{ label: 'Fondamentale', frets: [11, 14, 12, 13] }, { label: '1ª inv.', frets: [3, 5, 2, 4] }, { label: '2ª inv.', frets: [6, 7, 6, 7] }, { label: '3ª inv.', frets: [9, 11, 9, 9] }] },
+            { name: 'F7', caption: 'Fa settima', voicings: [{ label: 'Fondamentale', frets: [12, 12, 10, 8] }, { label: '1ª inv.', frets: [4, 6, 3, 5] }, { label: '2ª inv.', frets: [7, 8, 7, 8] }, { label: '3ª inv.', frets: [10, 12, 10, 10] }] },
+            { name: 'G7', caption: 'Sol settima', voicings: [{ label: 'Fondamentale', frets: [2, 5, 3, 4] }, { label: '1ª inv.', frets: [6, 8, 5, 7] }, { label: '2ª inv.', frets: [9, 10, 9, 10] }, { label: '3ª inv.', frets: [12, 14, 12, 12] }] },
+            { name: 'A7', caption: 'La settima', voicings: [{ label: 'Fondamentale', frets: [4, 7, 5, 6] }, { label: '1ª inv.', frets: [8, 10, 7, 9] }, { label: '2ª inv.', frets: [11, 12, 11, 12] }, { label: '3ª inv.', frets: [2, 4, 2, 2] }] },
+            { name: 'B7', caption: 'Si settima', voicings: [{ label: 'Fondamentale', frets: [6, 9, 7, 8] }, { label: '1ª inv.', frets: [10, 12, 9, 11] }, { label: '2ª inv.', frets: [1, 2, 1, 2] }, { label: '3ª inv.', frets: [4, 6, 4, 4] }] }
+          ]
+        },
+        {
+          category: 'Maj7',
+          subtitle: 'Due forme guida per i major 7: una con root sulla 2ª corda come Cmaj7 e una con root sulla 1ª corda come Fmaj7.',
+          chords: [
+            { name: 'Cmaj7', caption: 'Do maggiore settima', voicings: [{ label: 'Shape 2ª corda', frets: [2, 4, 1, 2], caption: 'Root sulla 2ª corda', openPitches: referenceOpenPitches }, { label: 'Shape 1ª corda', frets: [10, 9, 12, 10], caption: 'Root sulla 1ª corda', openPitches: referenceOpenPitches }] },
+            { name: 'Dmaj7', caption: 'Re maggiore settima', voicings: [{ label: 'Shape 2ª corda', frets: [4, 6, 3, 4], caption: 'Root sulla 2ª corda', openPitches: referenceOpenPitches }, { label: 'Shape 1ª corda', frets: [12, 11, 14, 12], caption: 'Root sulla 1ª corda', openPitches: referenceOpenPitches }] },
+            { name: 'Emaj7', caption: 'Mi maggiore settima', voicings: [{ label: 'Shape 2ª corda', frets: [6, 8, 5, 6], caption: 'Root sulla 2ª corda', openPitches: referenceOpenPitches }, { label: 'Shape 1ª corda', frets: [14, 13, 16, 14], caption: 'Root sulla 1ª corda', openPitches: referenceOpenPitches }] },
+            { name: 'Fmaj7', caption: 'Fa maggiore settima', voicings: [{ label: 'Shape 2ª corda', frets: [7, 9, 6, 7], caption: 'Root sulla 2ª corda', openPitches: referenceOpenPitches }, { label: 'Shape 1ª corda', frets: [3, 2, 5, 3], caption: 'Root sulla 1ª corda', openPitches: referenceOpenPitches }] },
+            { name: 'Gmaj7', caption: 'Sol maggiore settima', voicings: [{ label: 'Shape 2ª corda', frets: [9, 11, 8, 9], caption: 'Root sulla 2ª corda', openPitches: referenceOpenPitches }, { label: 'Shape 1ª corda', frets: [5, 4, 7, 5], caption: 'Root sulla 1ª corda', openPitches: referenceOpenPitches }] },
+            { name: 'Amaj7', caption: 'La maggiore settima', voicings: [{ label: 'Shape 2ª corda', frets: [11, 13, 10, 11], caption: 'Root sulla 2ª corda', openPitches: referenceOpenPitches }, { label: 'Shape 1ª corda', frets: [7, 6, 9, 7], caption: 'Root sulla 1ª corda', openPitches: referenceOpenPitches }] },
+            { name: 'Bmaj7', caption: 'Si maggiore settima', voicings: [{ label: 'Shape 2ª corda', frets: [13, 15, 12, 13], caption: 'Root sulla 2ª corda', openPitches: referenceOpenPitches }, { label: 'Shape 1ª corda', frets: [9, 8, 11, 9], caption: 'Root sulla 1ª corda', openPitches: referenceOpenPitches }] }
+          ]
+        },
+        {
+          category: 'm7',
+          subtitle: 'Minori settima utili nelle cadenze II-V-I e nei passaggi modali più frequenti.',
+          chords: [
+            { name: 'Cm7', caption: 'Do minore settima', voicings: [{ label: 'Fondamentale', frets: [7, 10, 8, 8] }, { label: '1ª inv.', frets: [10, 13, 10, 12] }, { label: '2ª inv.', frets: [2, 3, 1, 3] }, { label: '3ª inv.', frets: [5, 6, 5, 5] }] },
+            { name: 'Dm7', caption: 'Re minore settima', voicings: [{ label: 'Fondamentale', frets: [9, 12, 10, 10] }, { label: '2ª inv.', frets: [4, 5, 3, 5] }, { label: '3ª inv.', frets: [7, 8, 7, 7] }] },
+            { name: 'Em7', caption: 'Mi minore settima', voicings: [{ label: 'Fondamentale', frets: [11, 14, 12, 12] }, { label: '1ª inv.', frets: [2, 5, 2, 4] }, { label: '2ª inv.', frets: [6, 7, 5, 7] }, { label: '3ª inv.', frets: [9, 10, 9, 9] }] },
+            { name: 'Fm7', caption: 'Fa minore settima', voicings: [{ label: 'Fondamentale', frets: [12, 11, 10, 8] }, { label: '1ª inv.', frets: [3, 6, 3, 5] }, { label: '2ª inv.', frets: [7, 8, 6, 8] }, { label: '3ª inv.', frets: [10, 11, 10, 10] }] },
+            { name: 'Gm7', caption: 'Sol minore settima', voicings: [{ label: 'Fondamentale', frets: [2, 5, 3, 3] }, { label: '1ª inv.', frets: [5, 8, 5, 7] }, { label: '2ª inv.', frets: [9, 10, 8, 10] }, { label: '3ª inv.', frets: [12, 13, 12, 12] }] },
+            { name: 'Am7', caption: 'La minore settima', voicings: [{ label: 'Fondamentale', frets: [4, 7, 5, 5] }, { label: '1ª inv.', frets: [7, 10, 7, 9] }, { label: '2ª inv.', frets: [11, 12, 10, 12] }, { label: '3ª inv.', frets: [2, 3, 2, 2] }] },
+            { name: 'Bm7', caption: 'Si minore settima', voicings: [{ label: 'Fondamentale', frets: [6, 9, 7, 7] }, { label: '1ª inv.', frets: [9, 12, 9, 11] }, { label: '2ª inv.', frets: [13, 14, 12, 14] }, { label: '3ª inv.', frets: [4, 5, 4, 4] }] }
+          ]
+        },
+        {
+          category: 'Diminuiti',
+          subtitle: 'Forme tese e simmetriche per dominanti sostitutive e passaggi cromatici.',
+          chords: [
+            { name: 'Cdim', caption: 'Do diminuito', voicings: [{ label: 'Fondamentale', frets: [7, 6, 4, 5] }, { label: '1ª inv.', frets: [10, 9, 10, 8] }, { label: '2ª inv.', frets: [1, 3, 1, 5] }] },
+            { name: 'Ddim', caption: 'Re diminuito', voicings: [{ label: 'Fondamentale', frets: [9, 8, 6, 7] }, { label: '1ª inv.', frets: [12, 11, 12, 10] }, { label: '2ª inv.', frets: [3, 5, 3, 1] }] },
+            { name: 'Edim', caption: 'Mi diminuito', voicings: [{ label: 'Fondamentale', frets: [11, 10, 8, 9] }, { label: '1ª inv.', frets: [2, 1, 2, 3] }, { label: '2ª inv.', frets: [5, 7, 5, 3] }] },
+            { name: 'Fdim', caption: 'Fa diminuito', voicings: [{ label: 'Fondamentale', frets: [12, 11, 9, 10] }, { label: '1ª inv.', frets: [3, 2, 3, 1] }, { label: '2ª inv.', frets: [6, 8, 6, 4] }] },
+            { name: 'Gdim', caption: 'Sol diminuito', voicings: [{ label: 'Fondamentale', frets: [2, 4, 5, 3] }, { label: '1ª inv.', frets: [5, 4, 5, 3] }, { label: '2ª inv.', frets: [8, 10, 8, 6] }] },
+            { name: 'Adim', caption: 'La diminuito', voicings: [{ label: 'Fondamentale', frets: [4, 3, 1, 2] }, { label: '1ª inv.', frets: [7, 6, 7, 5] }, { label: '2ª inv.', frets: [10, 12, 10, 8] }] },
+            { name: 'Bdim', caption: 'Si diminuito', voicings: [{ label: 'Fondamentale', frets: [6, 5, 3, 4] }, { label: '1ª inv.', frets: [9, 8, 9, 7] }, { label: '2ª inv.', frets: [12, 14, 12, 10] }] }
+          ]
+        }
+      ];
+
+      inversionSet.forEach((group) => {
+        const groupCard = document.createElement('article');
+        const title = document.createElement('h3');
+        const subtitle = document.createElement('p');
+        const categoryGrid = document.createElement('div');
+
+        groupCard.className = 'inversion-note-card';
+        title.className = 'inversion-note-title';
+        subtitle.className = 'inversion-note-subtitle';
+        categoryGrid.className = 'inversion-category-grid';
+
+        title.textContent = group.category;
+        subtitle.textContent = group.subtitle;
+
+        group.chords.forEach((chord) => {
+          const chordCard = document.createElement('section');
+          const chordHeader = document.createElement('div');
+          const chordTitle = document.createElement('h4');
+          const chordSubtitle = document.createElement('span');
+          const voicingGrid = document.createElement('div');
+
+          chordCard.className = 'inversion-chord-card';
+          chordHeader.className = 'inversion-chord-header';
+          chordTitle.className = 'inversion-chord-title';
+          chordSubtitle.className = 'inversion-chord-subtitle';
+          voicingGrid.className = 'inversion-voicing-grid';
+
+          chordTitle.textContent = chord.name;
+          chordSubtitle.textContent = chord.caption;
+
+          chord.voicings.forEach((voicing) => {
+            const voicingCard = document.createElement('div');
+            const voicingTitle = document.createElement('span');
+            const diagramWrap = document.createElement('div');
+            const caption = document.createElement('p');
+
+            voicingCard.className = 'inversion-voicing-card';
+            voicingTitle.className = 'inversion-voicing-title';
+            diagramWrap.className = 'inversion-diagram';
+            caption.className = 'inversion-voicing-caption';
+
+            voicingTitle.textContent = voicing.label;
+            caption.textContent = voicing.caption || describeVoicing(voicing.label);
+            diagramWrap.append(createFretDiagramSvg(voicing.frets, chord.name, { openPitches: voicing.openPitches || inversionOpenPitches }));
+
+            voicingCard.append(voicingTitle, diagramWrap, caption);
+            voicingGrid.append(voicingCard);
+          });
+
+          chordHeader.append(chordTitle, chordSubtitle);
+          chordCard.append(chordHeader, voicingGrid);
+          categoryGrid.append(chordCard);
+        });
+
+        groupCard.append(title, subtitle, categoryGrid);
+        inversionGroups.append(groupCard);
+      });
+    }
+
+    if (projectChords) {
+      const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260523g';
+      const referenceChordOptions = {
+        A: [{ frets: [2, 2, 2, 2], barre: { fret: 2, from: 1, to: 4, finger: 1, labelString: 2 } }],
+        A7: [{ frets: [2, 0, 2, 2], fingers: [1, 0, 2, 3] }],
+        Am: [{ frets: [2, 2, 1, 2], fingers: [2, 3, 1, 4] }],
+        Bm: [{ frets: [4, 4, 3, 4], fingers: [2, 3, 1, 4] }],
+        C: [{ frets: [2, 0, 1, 2], fingers: [2, 0, 1, 3] }],
+        D: [{ frets: [4, 2, 3, 4], fingers: [3, 1, 2, 4] }],
+        Dm: [{ frets: [3, 2, 3, 3], fingers: [2, 1, 3, 4] }],
+        D7: [{ frets: [4, 2, 1, 4], fingers: [3, 2, 1, 4] }],
+        E: [{ frets: [2, 1, 0, 2], fingers: [2, 1, 0, 3] }],
+        E7: [{ frets: [2, 1, 0, 0], fingers: [2, 1, 0, 0] }],
+        Em: [{ frets: [5, 4, 5, 5], fingers: [2, 1, 3, 4], baseFret: 2, hideBaseFretLabel: true }],
+        F: [{ frets: [3, 2, 1, 3], fingers: [3, 2, 1, 4] }],
+        G: [{ frets: [5, 4, 3, 5], fingers: [3, 2, 1, 4], baseFret: 3, hideBaseFretLabel: true }],
+        G7: [{ frets: [3, 4, 3, 5], fingers: [0, 3, 0, 4], barre: { fret: 3, from: 1, to: 4, finger: 1, labelString: 1 }, baseFret: 3, hideBaseFretLabel: true }],
+        Gm: [{ frets: [5, 3, 3, 5], fingers: [3, 1, 2, 4], baseFret: 2, hideBaseFretLabel: true }],
+        'A#m': [{ frets: [3, 3, 2, 3], fingers: [2, 3, 1, 4] }],
+        B: [{ frets: [4, 4, 4, 4], barre: { fret: 4, from: 1, to: 4, finger: 1, labelString: 2 }, baseFret: 4 }],
+        'C#': [{ frets: [6, 6, 6, 6], barre: { fret: 6, from: 1, to: 4, finger: 1, labelString: 2 }, baseFret: 6 }],
+        'D#m': [{ frets: [4, 3, 4, 4], fingers: [2, 1, 3, 4] }],
+        'F#': [{ frets: [4, 3, 2, 4], fingers: [3, 2, 1, 4] }],
+        'F#m': [{ frets: [4, 2, 2, 4], fingers: [3, 1, 2, 4] }],
+        'G#m': [{ frets: [5, 4, 4, 5], fingers: [3, 1, 2, 4], baseFret: 4 }],
+        Db7: [{ frets: [3, 4, 2, 3], fingers: [2, 4, 1, 3] }],
+        'G#': [{ frets: [6, 5, 4, 6], fingers: [3, 2, 1, 4], baseFret: 4 }],
+        C7: [{ frets: [2, 3, 1, 2], fingers: [2, 4, 1, 3] }],
+        'F#7': [{ frets: [4, 3, 2, 2], fingers: [4, 3, 0, 0], barre: { fret: 2, from: 3, to: 4, finger: 1, labelString: 3 }, baseFret: 2, hideBaseFretLabel: true }]
+      };
+      const generatedChordOptions = {
+        G7: [{ frets: [0, 0, 0, 3] }],
+        Dm7: [{ frets: [0, 10, 10, 10] }],
+        Am7: [{ frets: [5, 5, 5, 7] }],
+        'C#dim7': [{ frets: [2, 3, 2, 5] }],
+        Em7: [{ frets: [0, 0, 0, 2] }],
+        Bm7b5: [{ frets: [0, 2, 0, 3] }],
+        Gm7: [{ frets: [3, 3, 3, 5] }],
+        E7: [{ frets: [0, 9, 9, 9] }],
+        E7b9: [{ frets: [2, 1, 3, 3] }],
+        Em7b5: [{ frets: [0, 9, 8, 8] }],
+        'C#m': [{ frets: [2, 1, 2, 2] }],
+        E: [{ frets: [9, 9, 9, 9] }],
+        Bb: [{ frets: [0, 3, 3, 3] }],
+        Cmaj7: [
+          { label: 'Root 2ª corda', frets: [2, 4, 1, 2], fingers: [2, 4, 1, 3] },
+          { label: 'Root 1ª corda', frets: [10, 9, 12, 10], fingers: [2, 1, 4, 3], baseFret: 9 }
+        ],
+        Gmaj7: [
+          { label: 'Root 2ª corda', frets: [9, 11, 8, 9], fingers: [2, 4, 1, 3], baseFret: 8 },
+          { label: 'Root 1ª corda', frets: [5, 4, 7, 5], fingers: [2, 1, 4, 3], baseFret: 4 }
+        ],
+        Fmaj7: [
+          { label: 'Root 2ª corda', frets: [7, 9, 6, 7], fingers: [2, 4, 1, 3], baseFret: 6 },
+          { label: 'Root 1ª corda', frets: [3, 2, 5, 3], fingers: [2, 1, 4, 3], baseFret: 2 }
+        ],
+        B7: [{ frets: [7, 8, 7, 9] }],
+        D: [{ frets: [0, 7, 7, 7] }],
+        'F#dim7': [{ frets: [1, 2, 1, 4] }],
+        'F#m7b5': [{ frets: [2, 2, 1, 4] }],
+        'F/C': [{ frets: [10, 10, 10, 10] }]
+      };
+      const chordSet = [
+        {
+          name: 'C',
+          symbolId: 'chord-c',
+          caption: 'Do maggiore'
+        },
+        {
+          name: 'G7',
+          symbolId: 'chord-g7',
+          caption: 'Sol settima'
+        },
+        {
+          name: 'Dm7',
+          symbolId: 'chord-dm7',
+          caption: 'Re minore settima'
+        },
+        {
+          name: 'Am7',
+          symbolId: 'chord-am7',
+          caption: 'La minore settima'
+        },
+        {
+          name: 'C#dim7',
+          symbolId: 'chord-c-sharp-dim7',
+          caption: 'Diminuito di passaggio'
+        },
+        {
+          name: 'G',
+          symbolId: 'chord-g',
+          caption: 'Sol maggiore'
+        },
+        {
+          name: 'D7',
+          symbolId: 'chord-d7',
+          caption: 'Re settima'
+        },
+        {
+          name: 'Em7',
+          symbolId: 'chord-em7',
+          caption: 'Mi minore settima'
+        },
+        {
+          name: 'Bm7b5',
+          symbolId: 'chord-bm7b5',
+          caption: 'Si semidiminuito'
+        },
+        {
+          name: 'F',
+          symbolId: 'chord-f',
+          caption: 'Fa maggiore'
+        },
+        {
+          name: 'C7',
+          symbolId: 'chord-c7',
+          caption: 'Do settima'
+        },
+        {
+          name: 'Gm7',
+          symbolId: 'chord-gm7',
+          caption: 'Sol minore settima'
+        },
+        {
+          name: 'Dm',
+          symbolId: 'chord-dm',
+          caption: 'Re minore'
+        },
+        {
+          name: 'Am',
+          symbolId: 'chord-am',
+          caption: 'La minore'
+        },
+        {
+          name: 'E7',
+          symbolId: 'chord-e7',
+          caption: 'Mi settima'
+        },
+        {
+          name: 'E7b9',
+          symbolId: 'chord-e7b9',
+          caption: 'Dominante alterata'
+        },
+        {
+          name: 'A7',
+          symbolId: 'chord-a7',
+          caption: 'La settima'
+        },
+        {
+          name: 'Em7b5',
+          symbolId: 'chord-em7b5',
+          caption: 'Mi semidiminuito'
+        },
+        {
+          name: 'Gm',
+          symbolId: 'chord-gm',
+          caption: 'Sol minore'
+        },
+        {
+          name: 'F#',
+          symbolId: 'chord-f-sharp',
+          caption: 'Fa diesis maggiore'
+        },
+        {
+          name: 'C#',
+          symbolId: 'chord-c-sharp',
+          caption: 'Do diesis maggiore'
+        },
+        {
+          name: 'D#m',
+          symbolId: 'chord-d-sharp-minor',
+          caption: 'Re diesis minore'
+        },
+        {
+          name: 'A#m',
+          symbolId: 'chord-a-sharp-minor',
+          caption: 'La diesis minore'
+        },
+        {
+          name: 'B',
+          symbolId: 'chord-b',
+          caption: 'Si maggiore'
+        },
+        {
+          name: 'G#m',
+          symbolId: 'chord-g-sharp-minor',
+          caption: 'Sol diesis minore'
+        },
+        {
+          name: 'C#m',
+          symbolId: 'chord-c-sharp-minor',
+          caption: 'Do diesis minore'
+        },
+        {
+          name: 'A',
+          symbolId: 'chord-a',
+          caption: 'La maggiore'
+        },
+        {
+          name: 'E',
+          symbolId: 'chord-e',
+          caption: 'Mi maggiore'
+        },
+        {
+          name: 'G#',
+          symbolId: 'chord-g-sharp',
+          caption: 'Sol diesis maggiore'
+        },
+        {
+          name: 'Em',
+          symbolId: 'chord-em',
+          caption: 'Mi minore'
+        },
+        {
+          name: 'Bb',
+          symbolId: 'chord-bb',
+          caption: 'Si bemolle maggiore'
+        },
+        {
+          name: 'Cmaj7',
+          symbolId: 'chord-c',
+          caption: 'Do maggiore settima',
+          gallery: false
+        },
+        {
+          name: 'Gmaj7',
+          symbolId: 'chord-g',
+          caption: 'Sol maggiore settima',
+          gallery: false
+        },
+        {
+          name: 'Fmaj7',
+          symbolId: 'chord-f',
+          caption: 'Fa maggiore settima',
+          gallery: false
+        },
+        {
+          name: 'B7',
+          symbolId: 'chord-b',
+          caption: 'Si settima',
+          gallery: false
+        },
+        {
+          name: 'D',
+          symbolId: 'chord-d',
+          caption: 'Re maggiore'
+        },
+        {
+          name: 'F#dim7',
+          symbolId: 'chord-c-sharp-dim7',
+          caption: 'Fa diesis diminuito',
+          gallery: false
+        },
+        {
+          name: 'F#7',
+          symbolId: 'chord-f-sharp7',
+          caption: 'Fa diesis settima',
+          gallery: false
+        },
+        {
+          name: 'F#m7b5',
+          symbolId: 'chord-bm7b5',
+          caption: 'Fa diesis semidiminuito',
+          gallery: false
+        },
+        {
+          name: 'F/C',
+          symbolId: 'chord-f',
+          caption: 'Fa con Do al basso',
+          gallery: false
+        }
+      ];
+      chordSet.forEach((chord) => {
+        if (referenceChordOptions[chord.name]) {
+          chord.options = referenceChordOptions[chord.name];
+        } else if (generatedChordOptions[chord.name]) {
+          chord.options = generatedChordOptions[chord.name];
+        }
+      });
+      const chordLookup = new Map(chordSet.map((chord) => [chord.name, chord]));
+      const hoverableChordNames = Array.from(chordLookup.keys()).sort((left, right) => right.length - left.length);
+      const chordPattern = new RegExp(`(^|[^A-Za-z0-9#/])(${hoverableChordNames.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?=$|[^A-Za-z0-9#/])`, 'g');
+      const hoverCard = document.createElement('div');
+      const hoverBanner = document.createElement('div');
+      const hoverTitle = document.createElement('div');
+      const hoverDiagram = document.createElement('div');
+      const hoverCaption = document.createElement('div');
+
+      hoverCard.className = 'chord-hover-card';
+      hoverBanner.className = 'chord-hover-banner';
+      hoverTitle.className = 'chord-hover-title';
+      hoverDiagram.className = 'chord-hover-diagram';
+      hoverCaption.className = 'chord-hover-caption';
+      hoverCard.append(hoverBanner, hoverTitle, hoverDiagram, hoverCaption);
+      document.body.append(hoverCard);
+
+      const createReferenceChordSvg = (shape, chordName) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const stringsX = [18, 36, 54, 72];
+        const lineY = [20, 46, 72, 98, 124];
+        const frets = shape.frets || [];
+        const markers = getRoleMarkers(frets, chordName, referenceOpenPitches);
+        const positiveFrets = frets.filter((fret) => fret > 0);
+        const minFret = positiveFrets.length ? Math.min(...positiveFrets) : 1;
+        const maxFret = positiveFrets.length ? Math.max(...positiveFrets) : 1;
+        const baseFret = shape.baseFret || ((maxFret > 4 || minFret > 3) ? minFret : 1);
+
+        svg.setAttribute('viewBox', '0 0 94 186');
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chordName} per cavaquinho`);
+
+        const append = (node) => {
+          svg.append(node);
+          return node;
+        };
+        const line = (x1, y1, x2, y2, stroke, width) => {
+          const element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          element.setAttribute('x1', x1);
+          element.setAttribute('y1', y1);
+          element.setAttribute('x2', x2);
+          element.setAttribute('y2', y2);
+          element.setAttribute('stroke', stroke);
+          element.setAttribute('stroke-width', width);
+          element.setAttribute('stroke-linecap', 'round');
+          append(element);
+        };
+
+        stringsX.forEach((x) => {
+          line(x, lineY[0], x, lineY[4], 'rgba(240, 230, 208, 0.92)', 2.2);
+        });
+
+        lineY.forEach((y, index) => {
+          line(stringsX[0], y, stringsX[3], y, 'rgba(240, 230, 208, 0.92)', index === 0 && baseFret === 1 ? 5 : 2.2);
+        });
+
+        if (baseFret > 1 && !shape.hideBaseFretLabel) {
+          const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          label.setAttribute('x', '8');
+          label.setAttribute('y', '16');
+          label.setAttribute('text-anchor', 'end');
+          label.setAttribute('fill', 'rgba(240, 230, 208, 0.82)');
+          label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+          label.setAttribute('font-size', '11');
+          label.setAttribute('font-weight', '700');
+          label.setAttribute('paint-order', 'stroke');
+          label.setAttribute('stroke', 'rgba(22, 24, 24, 0.94)');
+          label.setAttribute('stroke-width', '3');
+          label.setAttribute('stroke-linejoin', 'round');
+          label.textContent = `${baseFret}ª`;
+          append(label);
+        }
+
+        if (shape.barre) {
+          const relativeBarreFret = baseFret === 1 ? shape.barre.fret : shape.barre.fret - baseFret + 1;
+          if (relativeBarreFret > 0 && relativeBarreFret < lineY.length) {
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            const y = (lineY[relativeBarreFret - 1] + lineY[relativeBarreFret]) / 2 - 6;
+            rect.setAttribute('x', stringsX[shape.barre.from - 1] - 6);
+            rect.setAttribute('y', y);
+            rect.setAttribute('width', stringsX[shape.barre.to - 1] - stringsX[shape.barre.from - 1] + 12);
+            rect.setAttribute('height', '12');
+            rect.setAttribute('rx', '6');
+            rect.setAttribute('fill', '#3c4040');
+            append(rect);
+          }
+        }
+
+        frets.forEach((fret, index) => {
+          if (!fret) {
+            return;
+          }
+          const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
+          if (relativeFret <= 0 || relativeFret >= lineY.length) {
+            return;
+          }
+
+          const cy = (lineY[relativeFret - 1] + lineY[relativeFret]) / 2;
+          if (markers.root.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'root');
+          } else if (markers.third.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'third');
+          } else if (markers.fifth.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'fifth');
+          }
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', stringsX[index]);
+          circle.setAttribute('cy', cy);
+          circle.setAttribute('r', '8.5');
+          circle.setAttribute('fill', 'rgba(255,255,255,0.96)');
+          circle.setAttribute('stroke', 'rgba(34, 28, 22, 0.78)');
+          circle.setAttribute('stroke-width', '1.1');
+          append(circle);
+
+          let finger = shape.fingers && shape.fingers[index];
+          if (!finger && shape.barre && shape.barre.finger && shape.barre.fret === fret) {
+            const labelIndex = (shape.barre.labelString || shape.barre.from) - 1;
+            if (index === labelIndex) {
+              finger = shape.barre.finger;
+            }
+          }
+          if (finger) {
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', stringsX[index]);
+            label.setAttribute('y', cy + 3.4);
+            label.setAttribute('fill', '#6a6a6a');
+            label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+            label.setAttribute('font-size', '9.5');
+            label.setAttribute('font-weight', '700');
+            label.setAttribute('text-anchor', 'middle');
+            label.textContent = `${finger}`;
+            append(label);
+          }
+        });
+
+        [18, 36, 54, 72].forEach((x, index) => {
+          if (frets[index] === 0) {
+            if (markers.root.has(index)) {
+              appendRoleRing(svg, x, 168, 'root');
+            } else if (markers.third.has(index)) {
+              appendRoleRing(svg, x, 168, 'third');
+            } else if (markers.fifth.has(index)) {
+              appendRoleRing(svg, x, 168, 'fifth');
+            }
+          }
+          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          dot.setAttribute('cx', x);
+          dot.setAttribute('cy', '168');
+          dot.setAttribute('r', '5.4');
+          dot.setAttribute('stroke', 'rgba(240, 230, 208, 0.92)');
+          dot.setAttribute('stroke-width', '1.5');
+          dot.setAttribute('fill', index === 0 ? 'rgba(200, 200, 200, 0.92)' : 'transparent');
+          append(dot);
+        });
+
+        return svg;
+      };
+
+      const createSpriteChordSvg = (chord) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        svg.setAttribute('viewBox', '0 0 94 168');
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chord.name} per cavaquinho`);
+        use.setAttribute('href', `${chordSpritePath}#${chord.symbolId}`);
+        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `${chordSpritePath}#${chord.symbolId}`);
+        svg.append(use);
+        return svg;
+      };
+
+      const renderChordDiagram = (container, chord) => {
+        container.replaceChildren();
+
+        if (!chord.options || chord.options.length === 0) {
+          container.append(createSpriteChordSvg(chord));
+          return;
+        }
+
+        const stack = document.createElement('div');
+        stack.className = 'chord-diagram-stack';
+
+        chord.options.forEach((option, index) => {
+          const variant = document.createElement('div');
+          const diagram = createReferenceChordSvg(option, chord.name);
+          variant.className = 'chord-diagram-variant';
+
+          if (chord.options.length > 1) {
+            const variantLabel = document.createElement('span');
+            variantLabel.className = 'chord-diagram-variant-label';
+            variantLabel.textContent = option.label || `Opzione ${index + 1}`;
+            variant.append(variantLabel);
+          }
+
+          variant.append(diagram);
+          stack.append(variant);
+        });
+
+        container.append(stack);
+      };
+
+      const positionHoverCard = (x, y) => {
+        const margin = 18;
+        const rect = hoverCard.getBoundingClientRect();
+        let left = x + 26;
+        let top = y - 22;
+
+        if (left + rect.width > window.innerWidth - margin) {
+          left = x - rect.width - 26;
+        }
+        if (top + rect.height > window.innerHeight - margin) {
+          top = window.innerHeight - rect.height - margin;
+        }
+        if (top < margin) {
+          top = margin;
+        }
+        if (left < margin) {
+          left = margin;
+        }
+
+        hoverCard.style.left = `${left}px`;
+        hoverCard.style.top = `${top}px`;
+      };
+
+      const showHoverCard = (trigger, chord, position) => {
+        hoverTitle.textContent = chord.name;
+        hoverCaption.textContent = chord.caption;
+        hoverCard.classList.toggle('has-multiple-options', Boolean(chord.options && chord.options.length > 1));
+        renderChordDiagram(hoverDiagram, chord);
+        hoverCard.classList.add('is-visible');
+
+        if (position) {
+          positionHoverCard(position.x, position.y);
+          return;
+        }
+
+        const rect = trigger.getBoundingClientRect();
+        positionHoverCard(rect.right, rect.top + rect.height / 2);
+      };
+
+      const hideHoverCard = () => {
+        hoverCard.classList.remove('is-visible');
+      };
+
+      const enhanceChordText = (root) => {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node) {
+            if (!node.textContent || !node.textContent.trim()) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            if (!node.parentElement || node.parentElement.closest('#project-chords, .chord-hover-card')) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return node.parentElement.closest('pre') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }
+        });
+        const textNodes = [];
+
+        while (walker.nextNode()) {
+          textNodes.push(walker.currentNode);
+        }
+
+        textNodes.forEach((node) => {
+          const source = node.textContent;
+          const matches = Array.from(source.matchAll(chordPattern));
+
+          if (matches.length === 0) {
+            return;
+          }
+
+          const fragment = document.createDocumentFragment();
+          let lastIndex = 0;
+
+          matches.forEach((match) => {
+            const boundary = match[1] || '';
+            const chordName = match[2];
+            const chordStart = match.index + boundary.length;
+            const chord = chordLookup.get(chordName);
+
+            fragment.append(source.slice(lastIndex, chordStart));
+
+            if (!chord) {
+              fragment.append(chordName);
+            } else {
+              const token = document.createElement('span');
+              token.className = 'chord-token';
+              token.textContent = chordName;
+              token.tabIndex = 0;
+              token.dataset.chordName = chord.name;
+
+              token.addEventListener('mouseenter', (event) => {
+                showHoverCard(token, chord, { x: event.clientX, y: event.clientY });
+              });
+              token.addEventListener('mousemove', (event) => {
+                positionHoverCard(event.clientX, event.clientY);
+              });
+              token.addEventListener('mouseleave', hideHoverCard);
+              token.addEventListener('focus', () => {
+                showHoverCard(token, chord);
+              });
+              token.addEventListener('blur', hideHoverCard);
+
+              fragment.append(token);
+            }
+
+            lastIndex = chordStart + chordName.length;
+          });
+
+          fragment.append(source.slice(lastIndex));
+          node.parentNode.replaceChild(fragment, node);
+        });
+      };
+
+      document.querySelectorAll('main section').forEach((section) => {
+        enhanceChordText(section);
+      });
+
+      chordSet
+        .filter((chord) => chord.gallery !== false)
+        .forEach((chord) => {
+          try {
+            const card = document.createElement('article');
+            const title = document.createElement('strong');
+            const diagram = document.createElement('div');
+            const caption = document.createElement('p');
+
+            card.className = 'chord-card';
+            title.textContent = chord.name;
+            diagram.className = 'chord-diagram';
+            caption.className = 'chord-caption';
+            caption.textContent = chord.caption;
+            renderChordDiagram(diagram, chord);
+            card.append(title, diagram);
+            card.append(caption);
+            projectChords.append(card);
+          } catch (error) {
+            console.error(`Errore nel rendering del diagramma ${chord.name}:`, error);
+          }
+        });
+    }
+  })();
+</script>
+
+</body>
+</html>

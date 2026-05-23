@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cavaquinho &amp; Forró — Sistema di Apprendimento</title>
+  <script>
+    document.documentElement.classList.add('js-enabled');
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f0b08;
+      --surface: #1a1410;
+      --card: #221c16;
+      --border: #3a2e22;
+      --gold: #c9952a;
+      --gold-lt: #e8b84b;
+      --cream: #f0e6d0;
+      --muted: #9f8d75;
+      --green: #5c8659;
+      --green-soft: rgba(92, 134, 89, 0.16);
+      --code-bg: #130f0b;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.75;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .46;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+
+    a {
+      color: inherit;
+    }
+
+    header {
+      position: relative;
+      padding: 80px 40px 60px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 68% 58% at 50% 0%, rgba(201, 149, 42, 0.12), transparent 68%),
+        radial-gradient(ellipse 42% 26% at 50% 14%, rgba(92, 134, 89, 0.12), transparent 80%);
+      pointer-events: none;
+    }
+
+    .flag-stripe {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+
+    .flag-stripe span {
+      display: block;
+      width: 28px;
+      height: 4px;
+      border-radius: 999px;
+    }
+
+    .flag-stripe span:nth-child(1) { background: #009c3b; }
+    .flag-stripe span:nth-child(2) { background: #ffdf00; }
+    .flag-stripe span:nth-child(3) { background: #002776; }
+
+    .genre-nav {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .genre-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 138px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(15, 11, 8, 0.36);
+      color: var(--cream);
+      text-decoration: none;
+      font-size: .92rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      transition: transform .2s, border-color .2s, background-color .2s, color .2s;
+    }
+
+    .genre-link:hover,
+    .genre-link:focus-visible {
+      border-color: var(--gold);
+      background: rgba(201, 149, 42, 0.1);
+      color: var(--gold-lt);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .genre-link.is-active {
+      border-color: rgba(232, 184, 75, 0.46);
+      background: rgba(92, 134, 89, 0.14);
+      color: var(--gold-lt);
+      box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.1);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.1rem, 5vw, 3.7rem);
+      line-height: 1.13;
+      letter-spacing: -0.02em;
+      color: var(--gold-lt);
+    }
+
+    .subtitle {
+      max-width: 820px;
+      margin: 14px auto 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-style: italic;
+    }
+
+    .wrapper {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .page-layout {
+      display: grid;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .content-column {
+      min-width: 0;
+    }
+
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.16);
+    }
+
+    .toc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .toc h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--gold);
+    }
+
+    .toc-summary {
+      color: var(--muted);
+      font-size: .92rem;
+      margin: 0 0 18px;
+    }
+
+    .toc-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      color: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .toc-link {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(15, 11, 8, 0.24);
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: border-color .2s, background-color .2s, transform .2s;
+    }
+
+    .toc-link:hover,
+    .toc-link:focus-visible {
+      border-color: var(--gold);
+      background: rgba(201, 149, 42, 0.08);
+      transform: translateX(2px);
+      outline: none;
+    }
+
+    .toc-link[aria-current="true"] {
+      border-color: var(--gold);
+      background: rgba(201, 149, 42, 0.14);
+    }
+
+    .toc-meta {
+      display: block;
+      font-size: .72rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 4px;
+    }
+
+    .toc-title {
+      display: block;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .toc-description {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.5;
+    }
+
+    section {
+      position: relative;
+      margin-bottom: 28px;
+      padding: 30px 28px 28px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, rgba(34, 28, 22, 0.96), rgba(24, 18, 14, 0.98)),
+        radial-gradient(circle at top right, rgba(92, 134, 89, 0.08), transparent 34%);
+      box-shadow: 0 20px 46px rgba(0, 0, 0, 0.16);
+    }
+
+    .section-num {
+      display: inline-flex;
+      margin-bottom: 10px;
+      color: var(--gold);
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      color: var(--gold-lt);
+      margin-bottom: 20px;
+      line-height: 1.12;
+    }
+
+    h3,
+    h4 {
+      margin-top: 18px;
+      margin-bottom: 10px;
+      color: var(--cream);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    p,
+    ul,
+    ol,
+    blockquote,
+    .table-wrap,
+    .song-card,
+    .chord-gallery {
+      margin-top: 10px;
+    }
+
+    ul,
+    ol {
+      padding-left: 22px;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    blockquote {
+      padding: 16px 18px;
+      border-left: 3px solid var(--gold);
+      border-radius: 12px;
+      background: rgba(201, 149, 42, 0.08);
+      color: var(--cream);
+    }
+
+    pre {
+      padding: 16px 18px;
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(58, 46, 34, 0.74);
+      background: var(--code-bg);
+      color: #eadfc8;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: .92rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px 12px;
+      border-top: 1px solid rgba(58, 46, 34, 0.72);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--gold);
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-weight: 700;
+    }
+
+    .song-card {
+      padding: 22px 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(58, 46, 34, 0.78);
+      background: rgba(15, 11, 8, 0.26);
+    }
+
+    .song-card + .song-card {
+      margin-top: 18px;
+    }
+
+    .song-card-intro {
+      color: var(--muted);
+    }
+
+    .chord-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+      gap: 16px;
+    }
+
+    .chord-card {
+      padding: 16px 14px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(58, 46, 34, 0.72);
+      background: rgba(15, 11, 8, 0.28);
+      text-align: center;
+    }
+
+    .chord-card strong {
+      display: block;
+      color: var(--gold-lt);
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    .chord-card svg {
+      width: 92px;
+      height: 164px;
+      display: block;
+      margin: 0 auto 8px;
+    }
+
+    .chord-caption {
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.45;
+    }
+    .chord-diagram-stack {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+    }
+    .chord-diagram-variant {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .chord-diagram-variant-label {
+      font-size: .68rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .chord-token {
+      color: var(--gold-lt);
+      font-weight: 600;
+      cursor: pointer;
+      transition: color .18s ease;
+    }
+    .chord-token:hover,
+    .chord-token:focus-visible {
+      color: #ffd27a;
+      outline: none;
+    }
+    .chord-hover-card {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 188px;
+      max-width: 348px;
+      padding: 0 0 16px;
+      border: 1px solid rgba(240, 230, 208, 0.08);
+      border-radius: 18px;
+      background: rgba(22, 24, 24, 0.96);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.38);
+      color: var(--cream);
+      opacity: 0;
+      transform: translate3d(0, 8px, 0) scale(.98);
+      pointer-events: none;
+      z-index: 1200;
+      transition: opacity .14s ease, transform .14s ease;
+    }
+    .chord-hover-card.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    .chord-hover-banner {
+      height: 14px;
+      border-radius: 18px 18px 0 0;
+      background:
+        linear-gradient(90deg, transparent 0 4px, rgba(255,255,255,.7) 4px 8px, transparent 8px 12px),
+        linear-gradient(rgba(0,0,0,.08), rgba(0,0,0,.08));
+      background-size: 12px 12px, auto;
+      background-color: #1b1b1a;
+      border-bottom: 1px solid rgba(240, 230, 208, 0.08);
+    }
+    .chord-hover-title {
+      padding: 14px 20px 8px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--cream);
+    }
+    .chord-hover-diagram {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4px 12px 2px;
+    }
+    .chord-hover-diagram svg {
+      width: 100px;
+      height: 182px;
+      overflow: visible;
+    }
+    .chord-hover-diagram .chord-diagram-stack {
+      gap: 12px;
+    }
+    .chord-hover-diagram .chord-diagram-variant-label {
+      font-size: .66rem;
+    }
+    .chord-hover-caption {
+      padding: 8px 16px 0;
+      text-align: center;
+      font-size: .76rem;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .diagram-role-root {
+      fill: none;
+      stroke: #e8b84b;
+      stroke-width: 2.6;
+    }
+    .diagram-role-third {
+      fill: none;
+      stroke: #78c39c;
+      stroke-width: 2.6;
+    }
+    .diagram-role-fifth {
+      fill: none;
+      stroke: #6fa8dc;
+      stroke-width: 2.6;
+    }
+
+    .study-week + .study-week {
+      margin-top: 18px;
+    }
+
+    footer {
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      background: rgba(201, 149, 42, 0.18);
+      border: 1px solid rgba(232, 184, 75, 0.28);
+      color: var(--cream);
+      text-decoration: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s, transform .2s;
+      transform: translateY(8px);
+      z-index: 30;
+    }
+
+    .back-to-top.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    @media (min-width: 980px) {
+      .page-layout {
+        grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+      }
+
+      .toc {
+        position: sticky;
+        top: 24px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .toc {
+        padding: 18px;
+      }
+
+      .toc-toggle {
+        display: inline-flex;
+      }
+
+      .js-enabled .toc.toc-ready .toc-list {
+        display: none;
+      }
+
+      .js-enabled .toc.toc-ready.is-open .toc-list {
+        display: grid;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        padding: 58px 20px 42px;
+      }
+
+      .wrapper {
+        padding: 28px 14px 72px;
+      }
+
+      section {
+        padding: 24px 18px;
+      }
+
+      pre {
+        font-size: .8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header id="top">
+    <div class="flag-stripe" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    <nav class="genre-nav" aria-label="Percorsi del sito">
+      <a class="genre-link" href="index.html">Scegli il percorso</a>
+      <a class="genre-link" href="choro.html">Choro</a>
+      <a class="genre-link is-active" href="forro.html" aria-current="page">Forró</a>
+    </nav>
+    <h1>Cavaquinho &amp; Forró</h1>
+    <p class="subtitle">Sistema di apprendimento progressivo per xote, baião e accompagnamento da palco, costruito con lo stesso spirito didattico del percorso Choro ma orientato al repertorio popolare tipo Falamansa.</p>
+  </header>
+
+  <div class="wrapper">
+    <div class="page-layout">
+      <nav class="toc" id="toc" aria-label="Indice dei contenuti">
+        <div class="toc-header">
+          <h2>Indice</h2>
+          <button class="toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list">Apri</button>
+        </div>
+        <p class="toc-summary" id="toc-summary">Un percorso pratico per entrare nel forró con levada, giri e repertorio.</p>
+        <ol class="toc-list" id="toc-list"></ol>
+      </nav>
+
+      <main class="content-column">
+        <section id="s1" data-toc-description="Accordatura, ruolo del cavaco e tonalità più ricorrenti nel forró moderno.">
+          <span class="section-num">Introduzione</span>
+          <h2 class="section-title">Il Cavaquinho nel Forró</h2>
+
+          <h3>Accordatura standard</h3>
+          <pre>Corda 1 (più acuta): D4
+Corda 2:             B3
+Corda 3:             G3
+Corda 4 (più grave): D3</pre>
+
+          <blockquote>Nel forró il cavaco non deve sembrare una chitarra piccola: deve lavorare come cerniera tra zabumba, triangolo e voce.</blockquote>
+
+          <h3>Tre responsabilità chiare</h3>
+          <ul>
+            <li>Tenere la <strong>levada</strong> in modo stabile e ballabile.</li>
+            <li>Far sentire bene i cambi di sezione, soprattutto pre e ritornello.</li>
+            <li>Sostenere la voce con un suono compatto, senza invadere.</li>
+          </ul>
+
+          <h3>Le tonalità che tornano spesso</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Tonalità</th><th>Uso</th><th>Brani di riferimento</th></tr></thead>
+              <tbody>
+                <tr><td><strong>G</strong></td><td>Xote diretto e luminoso</td><td>Rindo À Toa, Xote Dos Milagres</td></tr>
+                <tr><td><strong>F#</strong></td><td>Centro molto comune per voce maschile</td><td>Xote da Alegria</td></tr>
+                <tr><td><strong>C#m</strong></td><td>Colore emotivo e moderno</td><td>Oh! Chuva</td></tr>
+                <tr><td><strong>E</strong></td><td>Ritornelli aperti e cantabili</td><td>Esperando Na Janela, Asas</td></tr>
+                <tr><td><strong>Am / Dm</strong></td><td>Cadute più nordestine o nostalgiche</td><td>Avisa, 100 anos</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="s2" data-toc-description="Levada di xote, baião e arrasta-pé spiegate in modo pratico per il cavaco.">
+          <span class="section-num">Modulo 0</span>
+          <h2 class="section-title">Levada Prima degli Accordi</h2>
+
+          <h3>Xote base</h3>
+          <pre>Conta:    | 1  e  &amp;  a | 2  e  &amp;  a |
+Mano:     | ↓     ↑    | ↓   ↑  ↓   |
+Accento:  | forte      |    medio    |</pre>
+
+          <h3>Baião essenziale</h3>
+          <pre>Conta:    | 1  e  &amp;  a | 2  e  &amp;  a |
+Mano:     | ↓  x  ↑    | ↓     ↑ ↓  |
+Idea:     | zabumba    | resposta    |</pre>
+
+          <h3>Arrasta-pé</h3>
+          <pre>| ↓  ↑  ↓  ↑ | ↓  ↑  ↓  ↑ |
+Più fitto, ma sempre con il battere chiaro.</pre>
+
+          <ol>
+            <li>Studia prima il gesto a vuoto, senza accordi.</li>
+            <li>Passa poi a un solo accordo fermo per 4 minuti.</li>
+            <li>Solo dopo entra nei giri armonici veri.</li>
+          </ol>
+        </section>
+
+        <section id="s3" data-toc-description="Il vocabolario armonico dello xote in Sol maggiore: giro base, chiusure e pre-chorus.">
+          <span class="section-num">Modulo A</span>
+          <h2 class="section-title">Tonalità di Sol — Il Grande Xote Cantabile</h2>
+
+          <h3>Giro da memorizzare senza pensarci</h3>
+          <pre>| G | D7 | Em | C |
+| G | D7 | Em | C |</pre>
+
+          <h3>Chiusura di ritornello</h3>
+          <pre>| C | G | D7 | G |</pre>
+
+          <h3>Pre-chorus con passaggio cromatico</h3>
+          <pre>| C | G | D7 | Db7 |
+| C | G | D7 | G   |</pre>
+
+          <p>Questo è il centro tonale che ti fa entrare subito in una grande parte del forró radiofonico e da palco.</p>
+        </section>
+
+        <section id="s4" data-toc-description="Giri comuni in Fa diesis maggiore, molto usato nel repertorio moderno.">
+          <span class="section-num">Modulo B</span>
+          <h2 class="section-title">Tonalità di Fa diesis — Centro da Palco</h2>
+
+          <h3>Xote diretto</h3>
+          <pre>| F# | C# | D#m | B |
+| F# | C# | D#m | B |</pre>
+
+          <h3>Ritornello largo</h3>
+          <pre>| F# | C# | D#m | A#m |
+| B  | F# | C#  | F#  |</pre>
+
+          <h3>Spinta verso la dominante</h3>
+          <pre>| F# | C# | G#m | C#7 |
+| F# | C# | B   | C#7 |</pre>
+
+          <p>Pensa a questa area come al tuo banco di prova: se la levada regge qui, reggerà bene anche nelle altre tonalità da repertorio.</p>
+        </section>
+
+        <section id="s5" data-toc-description="Il territorio Mi maggiore / Do diesis minore, molto presente in Falamansa.">
+          <span class="section-num">Modulo C</span>
+          <h2 class="section-title">Mi Maggiore e Do diesis minore</h2>
+
+          <h3>Campo emotivo in C#m</h3>
+          <pre>| C#m | G#m | C#m | G#m |
+| A   | E   | A   | G#  |</pre>
+
+          <h3>Ritornello aperto in E</h3>
+          <pre>| E | B | C#m | A |
+| E | B | A   | B | E |</pre>
+
+          <h3>Ponte verso il refrain</h3>
+          <pre>| A | E | B | C#m |
+| A | E | B | E   |</pre>
+
+          <blockquote>Nel forró in minore la levada non deve diventare pesante: la malinconia arriva dall'armonia, non dalla rigidità della mano.</blockquote>
+        </section>
+
+        <section id="s6" data-toc-description="Le cadenze minori più tipiche del linguaggio nordestino e del forró melodico.">
+          <span class="section-num">Modulo D</span>
+          <h2 class="section-title">Cadência Nordestina e Tonalità Minori</h2>
+
+          <h3>La discesa da sentire a orecchio</h3>
+          <pre>| Am | G | F | E7 |
+| Am | G | F | E7 | Am |</pre>
+
+          <h3>Varianti utili</h3>
+          <pre>In Re minore: | Dm | C | Bb | A7 |
+In Mi minore: | Em | D | C  | B7 |
+Con ponte:    | Am | Dm | E7 | Am |</pre>
+
+          <ul>
+            <li>Perfetta per intro nostalgiche.</li>
+            <li>Utile per abbassare l'energia prima del ritornello.</li>
+            <li>Ottima per chiudere finali più tradizionali.</li>
+          </ul>
+        </section>
+
+        <section id="s7" data-toc-description="Dominanti secondarie e giri che spingono il forró in avanti senza appesantirlo.">
+          <span class="section-num">Modulo E</span>
+          <h2 class="section-title">Dominanti che Fanno Muovere il Brano</h2>
+
+          <h3>Tre giri da studiare</h3>
+          <pre>In Sol: | G  | E7  | Am | D7  | G  |
+In Fa#: | F# | D#7 | G#m | C#7 | F# |
+In Mi:  | E  | C#7 | F#m | B7  | E  |</pre>
+
+          <h3>Esercizio guidato</h3>
+          <pre>Base:       | G | D | Em | C |
+Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
+
+          <p>Appena senti un accordo fuori campo, chiediti sempre dove vuole andare. Questo è il salto da suonatore di sigle a musicista che accompagna davvero.</p>
+        </section>
+
+        <section id="s8" data-toc-description="Pattern e famiglie di brani da portare subito nello studio del forró.">
+          <span class="section-num">Repertorio</span>
+          <h2 class="section-title">Pattern Essenziali da Repertorio Forró</h2>
+
+          <div class="song-card">
+            <h3>Xote Dos Milagres — famiglia in Sol</h3>
+            <pre>| G | D | Am | C |
+| G | D | Em | C D7 |</pre>
+          </div>
+
+          <div class="song-card">
+            <h3>Rindo À Toa — giro da memorizzare subito</h3>
+            <pre>| G | D7 | Em | C |
+| C | G | D7 | Db7 |</pre>
+          </div>
+
+          <div class="song-card">
+            <h3>Xote da Alegria — famiglia in Fa diesis</h3>
+            <pre>| F# | C# | D#m | C# |
+| F# | C# | D#m | A#m |
+| B  | F# | C#  | F#  |</pre>
+          </div>
+
+          <div class="song-card">
+            <h3>Oh! Chuva — famiglia in Do diesis minore</h3>
+            <pre>| C#m | G#m | C#m | G#m |
+| A   | E   | A   | G#  |</pre>
+          </div>
+
+          <div class="song-card">
+            <h3>Diteggiario visivo rapido</h3>
+            <p class="song-card-intro">Gli accordi sotto coprono le aree tonali che ricorrono spesso nel repertorio di Falamansa e in tante canzoni di forró moderno.</p>
+            <div class="chord-gallery" id="forro-quick-chords" aria-label="Diteggiature visive del forró"></div>
+          </div>
+        </section>
+
+        <section id="s9" data-toc-description="Programma di studio progressivo per entrare nel forró con metodo.">
+          <span class="section-num">Studio</span>
+          <h2 class="section-title">Piano di Studio &amp; Checklist</h2>
+
+          <div class="study-week">
+            <h3>Settimane 1–2 — Levada e Sol</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Giorno</th><th>Attività</th><th>Durata</th></tr></thead>
+                <tbody>
+                  <tr><td>Lun</td><td>Xote su una corda aperta</td><td>12 min</td></tr>
+                  <tr><td>Mar</td><td>Giro G–D7–Em–C</td><td>15 min</td></tr>
+                  <tr><td>Mer</td><td>Chiusura C–G–D7–G</td><td>15 min</td></tr>
+                  <tr><td>Gio</td><td>Alternanza strofa / ritornello</td><td>18 min</td></tr>
+                  <tr><td>Ven</td><td>Rindo À Toa o Xote Dos Milagres lento</td><td>20 min</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="study-week">
+            <h3>Settimane 3–4 — F# e C#m</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Focus</th><th>Dettaglio</th></tr></thead>
+                <tbody>
+                  <tr><td>F# maggiore</td><td>F#, C#, D#m, B e chiusure con C#7</td></tr>
+                  <tr><td>C#m</td><td>Giro emotivo con A, E e G#</td></tr>
+                  <tr><td>Obiettivo</td><td>Passare da levada regolare a dinamica di sezione</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="study-week">
+            <h3>Settimane 5–6 — Dominanti e repertorio</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Allenamento</th><th>Obiettivo</th></tr></thead>
+                <tbody>
+                  <tr><td>Dominanti secondarie</td><td>Capire dove portano e farle sentire senza irrigidire il groove</td></tr>
+                  <tr><td>Cadute minori</td><td>Am–G–F–E7, Dm–C–Bb–A7, Em–D–C–B7</td></tr>
+                  <tr><td>Repertorio</td><td>Xote da Alegria, Rindo À Toa, Xote Dos Milagres, Oh! Chuva</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <h3>Checklist finale</h3>
+          <ul>
+            <li>So tenere la levada di xote senza accelerare.</li>
+            <li>Riconosco a orecchio il giro I–V–vi–IV in più tonalità.</li>
+            <li>So accompagnare almeno un brano in G e uno in F#.</li>
+            <li>So usare una dominante secondaria per spingere il giro.</li>
+            <li>So alleggerire la strofa e aprire il ritornello senza perdere il tempo.</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <footer>
+    Buono studio! Il forró chiede mano regolare, orecchio armonico e voglia di far danzare.
+  </footer>
+
+  <a class="back-to-top" id="back-to-top" href="#top" aria-label="Torna all'inizio">↑</a>
+
+  <script>
+    (() => {
+      const toc = document.getElementById('toc');
+      const tocList = document.getElementById('toc-list');
+      const tocToggle = document.getElementById('toc-toggle');
+      const tocSummary = document.getElementById('toc-summary');
+      const backToTop = document.getElementById('back-to-top');
+      const mobileQuery = window.matchMedia('(max-width: 900px)');
+      const sections = Array.from(document.querySelectorAll('main section[id]'));
+      const linksBySection = new Map();
+
+      if (!toc || !tocList || !tocToggle || !tocSummary || !backToTop || sections.length === 0) {
+        return;
+      }
+
+      const setTocOpen = (isOpen) => {
+        toc.classList.toggle('is-open', isOpen);
+        tocToggle.setAttribute('aria-expanded', String(isOpen));
+        tocToggle.textContent = isOpen ? 'Chiudi' : 'Apri';
+      };
+
+      const setActiveSection = (sectionId) => {
+        linksBySection.forEach((link, id) => {
+          if (id === sectionId) {
+            link.setAttribute('aria-current', 'true');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      };
+
+      sections.forEach((section, index) => {
+        const title = section.querySelector('.section-title')?.textContent?.trim();
+        if (!title) {
+          return;
+        }
+
+        const meta = section.querySelector('.section-num')?.textContent?.trim() || `Sezione ${index + 1}`;
+        const description = section.dataset.tocDescription?.trim() || '';
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        const metaSpan = document.createElement('span');
+        const titleSpan = document.createElement('span');
+        const descriptionSpan = document.createElement('span');
+
+        item.className = 'toc-item';
+        link.href = `#${section.id}`;
+        link.className = 'toc-link';
+        metaSpan.className = 'toc-meta';
+        titleSpan.className = 'toc-title';
+        descriptionSpan.className = 'toc-description';
+
+        metaSpan.textContent = meta;
+        titleSpan.textContent = title;
+        descriptionSpan.textContent = description;
+
+        link.append(metaSpan, titleSpan);
+        if (description) {
+          link.append(descriptionSpan);
+        }
+
+        link.addEventListener('click', () => {
+          if (mobileQuery.matches) {
+            setTocOpen(false);
+          }
+        });
+
+        item.append(link);
+        tocList.append(item);
+        linksBySection.set(section.id, link);
+      });
+
+      tocSummary.textContent = `${linksBySection.size} sezioni navigabili per studiare levada, giri e repertorio in ordine.`;
+      toc.classList.add('toc-ready');
+
+      const observer = new IntersectionObserver((entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((left, right) => right.intersectionRatio - left.intersectionRatio);
+
+        if (visibleEntries.length > 0) {
+          setActiveSection(visibleEntries[0].target.id);
+        }
+      }, {
+        rootMargin: '-18% 0px -55% 0px',
+        threshold: [0.2, 0.35, 0.5, 0.7]
+      });
+
+      sections.forEach((section) => observer.observe(section));
+
+      const syncBackToTop = () => {
+        backToTop.classList.toggle('is-visible', window.scrollY > 420);
+      };
+
+      const syncTocForViewport = () => {
+        if (!mobileQuery.matches) {
+          setTocOpen(false);
+        }
+      };
+
+      tocToggle.addEventListener('click', () => {
+        const isOpen = tocToggle.getAttribute('aria-expanded') === 'true';
+        setTocOpen(!isOpen);
+      });
+
+      window.addEventListener('scroll', syncBackToTop, { passive: true });
+      mobileQuery.addEventListener('change', syncTocForViewport);
+
+      setActiveSection(sections[0].id);
+      setTocOpen(false);
+      syncBackToTop();
+      syncTocForViewport();
+
+      const notePitchClasses = {
+        C: 0, 'C#': 1, Db: 1, D: 2, 'D#': 3, Eb: 3, E: 4, F: 5,
+        'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11
+      };
+      const referenceOpenPitches = [2, 7, 11, 2];
+      const getChordDescriptor = (chordName) => {
+        const match = chordName.match(/^([A-G](?:#|b)?)(.*)$/);
+        if (!match) {
+          return null;
+        }
+        const [, root, suffix] = match;
+        let thirdInterval = 4;
+        let fifthInterval = 7;
+        if (/^m(?!aj)/i.test(suffix) || /dim/i.test(suffix)) {
+          thirdInterval = 3;
+        }
+        if (/dim|b5|ø/i.test(suffix)) {
+          fifthInterval = 6;
+        } else if (/#5|aug/i.test(suffix)) {
+          fifthInterval = 8;
+        }
+        return {
+          rootPc: notePitchClasses[root],
+          thirdPc: (notePitchClasses[root] + thirdInterval) % 12,
+          fifthPc: (notePitchClasses[root] + fifthInterval) % 12
+        };
+      };
+      const getRoleMarkers = (frets, chordName, openPitches = referenceOpenPitches) => {
+        const descriptor = getChordDescriptor(chordName);
+        if (!descriptor) {
+          return { root: new Set(), third: new Set(), fifth: new Set() };
+        }
+        const root = new Set();
+        const third = new Set();
+        const fifth = new Set();
+        frets.forEach((fret, index) => {
+          if (typeof fret !== 'number' || fret < 0) {
+            return;
+          }
+          const pitchClass = (openPitches[index] + fret) % 12;
+          if (pitchClass === descriptor.rootPc) {
+            root.add(index);
+          } else if (pitchClass === descriptor.thirdPc) {
+            third.add(index);
+          } else if (pitchClass === descriptor.fifthPc) {
+            fifth.add(index);
+          }
+        });
+        return { root, third, fifth };
+      };
+      const appendRoleRing = (svg, x, y, role) => {
+        const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        ring.setAttribute('cx', x);
+        ring.setAttribute('cy', y);
+        ring.setAttribute('r', '10.2');
+        const className = role === 'root'
+          ? 'diagram-role-root'
+          : role === 'third'
+            ? 'diagram-role-third'
+            : 'diagram-role-fifth';
+        ring.setAttribute('class', className);
+        svg.append(ring);
+      };
+
+      const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260523g';
+      const chordOptions = {
+        A: [{ frets: [2, 2, 2, 2], barre: { fret: 2, from: 1, to: 4, finger: 1, labelString: 2 } }],
+        A7: [{ frets: [2, 0, 2, 2], fingers: [1, 0, 2, 3] }],
+        Am: [{ frets: [2, 2, 1, 2], fingers: [2, 3, 1, 4] }],
+        'A#m': [{ frets: [3, 3, 2, 3], fingers: [2, 3, 1, 4] }],
+        B: [{ frets: [4, 4, 4, 4], barre: { fret: 4, from: 1, to: 4, finger: 1, labelString: 2 }, baseFret: 4 }],
+        B7: [{ frets: [7, 8, 7, 9], fingers: [2, 3, 1, 4], baseFret: 7 }],
+        Bb: [{ frets: [0, 3, 3, 3], fingers: [0, 1, 2, 3] }],
+        C: [{ frets: [2, 0, 1, 2], fingers: [2, 0, 1, 3] }],
+        'C#': [{ frets: [6, 6, 6, 6], barre: { fret: 6, from: 1, to: 4, finger: 1, labelString: 2 }, baseFret: 6 }],
+        'C#7': [{ frets: [3, 4, 2, 3], fingers: [2, 4, 1, 3], baseFret: 2 }],
+        'C#m': [{ frets: [2, 1, 2, 2], fingers: [2, 1, 3, 4] }],
+        D: [{ frets: [4, 2, 3, 4], fingers: [3, 1, 2, 4] }],
+        D7: [{ frets: [4, 2, 1, 4], fingers: [3, 2, 1, 4] }],
+        Dm: [{ frets: [3, 2, 3, 3], fingers: [2, 1, 3, 4] }],
+        Db7: [{ frets: [3, 4, 2, 3], fingers: [2, 4, 1, 3], baseFret: 2 }],
+        'D#m': [{ frets: [4, 3, 4, 4], fingers: [2, 1, 3, 4] }],
+        'D#7': [{ frets: [5, 3, 2, 5], fingers: [3, 2, 1, 4], baseFret: 2 }],
+        E: [{ frets: [2, 1, 0, 2], fingers: [2, 1, 0, 3] }],
+        E7: [{ frets: [2, 1, 0, 0], fingers: [2, 1, 0, 0] }],
+        Em: [{ frets: [5, 4, 5, 5], fingers: [2, 1, 3, 4], baseFret: 2, hideBaseFretLabel: true }],
+        F: [{ frets: [3, 2, 1, 3], fingers: [3, 2, 1, 4] }],
+        'F#': [{ frets: [4, 3, 2, 4], fingers: [3, 2, 1, 4] }],
+        'F#7': [{ frets: [4, 3, 2, 2], fingers: [4, 3, 0, 0], barre: { fret: 2, from: 3, to: 4, finger: 1, labelString: 3 }, baseFret: 2, hideBaseFretLabel: true }],
+        G: [{ frets: [5, 4, 3, 5], fingers: [3, 2, 1, 4], baseFret: 3, hideBaseFretLabel: true }],
+        G7: [{ frets: [3, 4, 3, 5], fingers: [0, 3, 0, 4], barre: { fret: 3, from: 1, to: 4, finger: 1, labelString: 1 }, baseFret: 3, hideBaseFretLabel: true }],
+        'G#': [{ frets: [6, 5, 4, 6], fingers: [3, 2, 1, 4], baseFret: 4 }],
+        'G#m': [{ frets: [5, 4, 4, 5], fingers: [3, 1, 2, 4], baseFret: 4 }]
+      };
+      const chordSet = [
+        { name: 'A', symbolId: 'chord-a', caption: 'La maggiore' },
+        { name: 'A7', symbolId: 'chord-a7', caption: 'La settima' },
+        { name: 'Am', symbolId: 'chord-am', caption: 'La minore' },
+        { name: 'A#m', symbolId: 'chord-a-sharp-minor', caption: 'La diesis minore' },
+        { name: 'B', symbolId: 'chord-b', caption: 'Si maggiore' },
+        { name: 'B7', symbolId: 'chord-b', caption: 'Si settima' },
+        { name: 'Bb', symbolId: 'chord-bb', caption: 'Si bemolle maggiore' },
+        { name: 'C', symbolId: 'chord-c', caption: 'Do maggiore' },
+        { name: 'C#', symbolId: 'chord-c-sharp', caption: 'Do diesis maggiore' },
+        { name: 'C#7', symbolId: 'chord-c-sharp', caption: 'Do diesis settima' },
+        { name: 'C#m', symbolId: 'chord-c-sharp-minor', caption: 'Do diesis minore' },
+        { name: 'D', symbolId: 'chord-d', caption: 'Re maggiore' },
+        { name: 'D7', symbolId: 'chord-d7', caption: 'Re settima' },
+        { name: 'Dm', symbolId: 'chord-dm', caption: 'Re minore' },
+        { name: 'Db7', symbolId: 'chord-d7', caption: 'Re bemolle settima' },
+        { name: 'D#m', symbolId: 'chord-d-sharp-minor', caption: 'Re diesis minore' },
+        { name: 'D#7', symbolId: 'chord-d-sharp-minor', caption: 'Re diesis settima' },
+        { name: 'E', symbolId: 'chord-e', caption: 'Mi maggiore' },
+        { name: 'E7', symbolId: 'chord-e7', caption: 'Mi settima' },
+        { name: 'Em', symbolId: 'chord-em', caption: 'Mi minore' },
+        { name: 'F', symbolId: 'chord-f', caption: 'Fa maggiore' },
+        { name: 'F#', symbolId: 'chord-f-sharp', caption: 'Fa diesis maggiore' },
+        { name: 'F#7', symbolId: 'chord-f-sharp7', caption: 'Fa diesis settima' },
+        { name: 'G', symbolId: 'chord-g', caption: 'Sol maggiore' },
+        { name: 'G7', symbolId: 'chord-g7', caption: 'Sol settima' },
+        { name: 'G#', symbolId: 'chord-g-sharp', caption: 'Sol diesis maggiore' },
+        { name: 'G#m', symbolId: 'chord-g-sharp-minor', caption: 'Sol diesis minore' }
+      ];
+      chordSet.forEach((chord) => {
+        if (chordOptions[chord.name]) {
+          chord.options = chordOptions[chord.name];
+        }
+      });
+
+      const chordLookup = new Map(chordSet.map((chord) => [chord.name, chord]));
+      const hoverableChordNames = Array.from(chordLookup.keys()).sort((left, right) => right.length - left.length);
+      const chordPattern = new RegExp(`(^|[^A-Za-z0-9#/])(${hoverableChordNames.map((name) => name.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')).join('|')})(?=$|[^A-Za-z0-9#/])`, 'g');
+
+      const forroQuickChords = document.getElementById('forro-quick-chords');
+
+      const hoverCard = document.createElement('div');
+      const hoverBanner = document.createElement('div');
+      const hoverTitle = document.createElement('div');
+      const hoverDiagram = document.createElement('div');
+      const hoverCaption = document.createElement('div');
+      hoverCard.className = 'chord-hover-card';
+      hoverBanner.className = 'chord-hover-banner';
+      hoverTitle.className = 'chord-hover-title';
+      hoverDiagram.className = 'chord-hover-diagram';
+      hoverCaption.className = 'chord-hover-caption';
+      hoverCard.append(hoverBanner, hoverTitle, hoverDiagram, hoverCaption);
+      document.body.append(hoverCard);
+
+      const createReferenceChordSvg = (shape, chordName) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const stringsX = [18, 36, 54, 72];
+        const lineY = [20, 46, 72, 98, 124];
+        const frets = shape.frets || [];
+        const markers = getRoleMarkers(frets, chordName);
+        const positiveFrets = frets.filter((fret) => fret > 0);
+        const minFret = positiveFrets.length ? Math.min(...positiveFrets) : 1;
+        const maxFret = positiveFrets.length ? Math.max(...positiveFrets) : 1;
+        const baseFret = shape.baseFret || ((maxFret > 4 || minFret > 3) ? minFret : 1);
+
+        svg.setAttribute('viewBox', '0 0 94 186');
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chordName} per cavaquinho`);
+
+        const append = (node) => {
+          svg.append(node);
+          return node;
+        };
+        const line = (x1, y1, x2, y2, stroke, width) => {
+          const element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          element.setAttribute('x1', x1);
+          element.setAttribute('y1', y1);
+          element.setAttribute('x2', x2);
+          element.setAttribute('y2', y2);
+          element.setAttribute('stroke', stroke);
+          element.setAttribute('stroke-width', width);
+          element.setAttribute('stroke-linecap', 'round');
+          append(element);
+        };
+
+        stringsX.forEach((x) => {
+          line(x, lineY[0], x, lineY[4], 'rgba(240, 230, 208, 0.92)', 2.2);
+        });
+        lineY.forEach((y, index) => {
+          line(stringsX[0], y, stringsX[3], y, 'rgba(240, 230, 208, 0.92)', index === 0 && baseFret === 1 ? 5 : 2.2);
+        });
+
+        if (baseFret > 1 && !shape.hideBaseFretLabel) {
+          const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          label.setAttribute('x', '8');
+          label.setAttribute('y', '16');
+          label.setAttribute('text-anchor', 'end');
+          label.setAttribute('fill', 'rgba(240, 230, 208, 0.82)');
+          label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+          label.setAttribute('font-size', '11');
+          label.setAttribute('font-weight', '700');
+          label.setAttribute('paint-order', 'stroke');
+          label.setAttribute('stroke', 'rgba(22, 24, 24, 0.94)');
+          label.setAttribute('stroke-width', '3');
+          label.setAttribute('stroke-linejoin', 'round');
+          label.textContent = `${baseFret}ª`;
+          append(label);
+        }
+
+        if (shape.barre) {
+          const relativeBarreFret = baseFret === 1 ? shape.barre.fret : shape.barre.fret - baseFret + 1;
+          if (relativeBarreFret > 0 && relativeBarreFret < lineY.length) {
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            const y = (lineY[relativeBarreFret - 1] + lineY[relativeBarreFret]) / 2 - 6;
+            rect.setAttribute('x', stringsX[shape.barre.from - 1] - 6);
+            rect.setAttribute('y', y);
+            rect.setAttribute('width', stringsX[shape.barre.to - 1] - stringsX[shape.barre.from - 1] + 12);
+            rect.setAttribute('height', '12');
+            rect.setAttribute('rx', '6');
+            rect.setAttribute('fill', '#3c4040');
+            append(rect);
+          }
+        }
+
+        frets.forEach((fret, index) => {
+          if (!fret) {
+            return;
+          }
+          const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
+          if (relativeFret <= 0 || relativeFret >= lineY.length) {
+            return;
+          }
+          const cy = (lineY[relativeFret - 1] + lineY[relativeFret]) / 2;
+          if (markers.root.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'root');
+          } else if (markers.third.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'third');
+          } else if (markers.fifth.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'fifth');
+          }
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', stringsX[index]);
+          circle.setAttribute('cy', cy);
+          circle.setAttribute('r', '8.5');
+          circle.setAttribute('fill', 'rgba(255,255,255,0.96)');
+          circle.setAttribute('stroke', 'rgba(34, 28, 22, 0.78)');
+          circle.setAttribute('stroke-width', '1.1');
+          append(circle);
+
+          let finger = shape.fingers && shape.fingers[index];
+          if (!finger && shape.barre && shape.barre.finger && shape.barre.fret === fret) {
+            const labelIndex = (shape.barre.labelString || shape.barre.from) - 1;
+            if (index === labelIndex) {
+              finger = shape.barre.finger;
+            }
+          }
+          if (finger) {
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', stringsX[index]);
+            label.setAttribute('y', cy + 3.4);
+            label.setAttribute('fill', '#6a6a6a');
+            label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+            label.setAttribute('font-size', '9.5');
+            label.setAttribute('font-weight', '700');
+            label.setAttribute('text-anchor', 'middle');
+            label.textContent = `${finger}`;
+            append(label);
+          }
+        });
+
+        [18, 36, 54, 72].forEach((x, index) => {
+          if (frets[index] === 0) {
+            if (markers.root.has(index)) {
+              appendRoleRing(svg, x, 168, 'root');
+            } else if (markers.third.has(index)) {
+              appendRoleRing(svg, x, 168, 'third');
+            } else if (markers.fifth.has(index)) {
+              appendRoleRing(svg, x, 168, 'fifth');
+            }
+          }
+          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          dot.setAttribute('cx', x);
+          dot.setAttribute('cy', '168');
+          dot.setAttribute('r', '5.4');
+          dot.setAttribute('stroke', 'rgba(240, 230, 208, 0.92)');
+          dot.setAttribute('stroke-width', '1.5');
+          dot.setAttribute('fill', index === 0 ? 'rgba(200, 200, 200, 0.92)' : 'transparent');
+          append(dot);
+        });
+
+        return svg;
+      };
+
+      const createSpriteChordSvg = (chord) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        svg.setAttribute('viewBox', '0 0 94 168');
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chord.name} per cavaquinho`);
+        use.setAttribute('href', `${chordSpritePath}#${chord.symbolId}`);
+        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `${chordSpritePath}#${chord.symbolId}`);
+        svg.append(use);
+        return svg;
+      };
+
+      const renderChordDiagram = (container, chord) => {
+        container.replaceChildren();
+        if (!chord.options || chord.options.length === 0) {
+          container.append(createSpriteChordSvg(chord));
+          return;
+        }
+        const stack = document.createElement('div');
+        stack.className = 'chord-diagram-stack';
+        chord.options.forEach((option, index) => {
+          const variant = document.createElement('div');
+          const diagram = createReferenceChordSvg(option, chord.name);
+          variant.className = 'chord-diagram-variant';
+          if (chord.options.length > 1) {
+            const variantLabel = document.createElement('span');
+            variantLabel.className = 'chord-diagram-variant-label';
+            variantLabel.textContent = option.label || `Opzione ${index + 1}`;
+            variant.append(variantLabel);
+          }
+          variant.append(diagram);
+          stack.append(variant);
+        });
+        container.append(stack);
+      };
+
+      const positionHoverCard = (x, y) => {
+        const margin = 18;
+        const rect = hoverCard.getBoundingClientRect();
+        let left = x + 26;
+        let top = y - 22;
+        if (left + rect.width > window.innerWidth - margin) {
+          left = x - rect.width - 26;
+        }
+        if (top + rect.height > window.innerHeight - margin) {
+          top = window.innerHeight - rect.height - margin;
+        }
+        if (top < margin) {
+          top = margin;
+        }
+        if (left < margin) {
+          left = margin;
+        }
+        hoverCard.style.left = `${left}px`;
+        hoverCard.style.top = `${top}px`;
+      };
+
+      const showHoverCard = (trigger, chord, position) => {
+        hoverTitle.textContent = chord.name;
+        hoverCaption.textContent = chord.caption;
+        renderChordDiagram(hoverDiagram, chord);
+        hoverCard.classList.add('is-visible');
+        if (position) {
+          positionHoverCard(position.x, position.y);
+          return;
+        }
+        const rect = trigger.getBoundingClientRect();
+        positionHoverCard(rect.right, rect.top + rect.height / 2);
+      };
+
+      const hideHoverCard = () => {
+        hoverCard.classList.remove('is-visible');
+      };
+
+      const enhanceChordText = (root) => {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node) {
+            if (!node.textContent || !node.textContent.trim()) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            if (!node.parentElement || node.parentElement.closest('.chord-hover-card, .chord-gallery')) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return node.parentElement.closest('pre') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }
+        });
+        const textNodes = [];
+        while (walker.nextNode()) {
+          textNodes.push(walker.currentNode);
+        }
+        textNodes.forEach((node) => {
+          const source = node.textContent;
+          const matches = Array.from(source.matchAll(chordPattern));
+          if (matches.length === 0) {
+            return;
+          }
+          const fragment = document.createDocumentFragment();
+          let lastIndex = 0;
+          matches.forEach((match) => {
+            const boundary = match[1] || '';
+            const chordName = match[2];
+            const chordStart = match.index + boundary.length;
+            const chord = chordLookup.get(chordName);
+            fragment.append(source.slice(lastIndex, chordStart));
+            if (!chord) {
+              fragment.append(chordName);
+            } else {
+              const token = document.createElement('span');
+              token.className = 'chord-token';
+              token.textContent = chordName;
+              token.tabIndex = 0;
+              token.dataset.chordName = chord.name;
+              token.addEventListener('mouseenter', (event) => {
+                showHoverCard(token, chord, { x: event.clientX, y: event.clientY });
+              });
+              token.addEventListener('mousemove', (event) => {
+                positionHoverCard(event.clientX, event.clientY);
+              });
+              token.addEventListener('mouseleave', hideHoverCard);
+              token.addEventListener('focus', () => {
+                showHoverCard(token, chord);
+              });
+              token.addEventListener('blur', hideHoverCard);
+              fragment.append(token);
+            }
+            lastIndex = chordStart + chordName.length;
+          });
+          fragment.append(source.slice(lastIndex));
+          node.parentNode.replaceChild(fragment, node);
+        });
+      };
+
+      document.querySelectorAll('main section').forEach((section) => {
+        enhanceChordText(section);
+      });
+
+      if (forroQuickChords) {
+        const quickChordNames = ['G', 'D7', 'Em', 'C', 'F#', 'C#', 'D#m', 'B', 'C#m', 'G#m', 'E', 'G#'];
+        quickChordNames.forEach((name) => {
+          const chord = chordLookup.get(name);
+          if (!chord) {
+            return;
+          }
+          const card = document.createElement('article');
+          const title = document.createElement('strong');
+          const diagram = document.createElement('div');
+          const caption = document.createElement('p');
+
+          card.className = 'chord-card';
+          title.textContent = chord.name;
+          diagram.className = 'chord-diagram';
+          caption.className = 'chord-caption';
+          caption.textContent = chord.caption;
+          renderChordDiagram(diagram, chord);
+          card.append(title, diagram, caption);
+          forroQuickChords.append(card);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
