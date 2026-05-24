@@ -135,6 +135,51 @@
       color: var(--cream);
     }
 
+    .instrument-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+      border: 1px solid rgba(232, 184, 75, 0.18);
+      border-radius: 999px;
+      background: rgba(17, 12, 9, 0.35);
+      position: fixed;
+      top: calc(max(14px, env(safe-area-inset-top)) + 58px);
+      right: max(14px, env(safe-area-inset-right));
+      z-index: 1190;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+    }
+
+    .instrument-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 78px;
+      padding: 6px 12px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: .78rem;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: background-color .2s, color .2s;
+    }
+
+    .instrument-link:hover,
+    .instrument-link:focus-visible {
+      background: rgba(201, 149, 42, 0.14);
+      color: var(--gold-lt);
+      outline: none;
+    }
+
+    .instrument-link.is-active {
+      background: rgba(201, 149, 42, 0.18);
+      color: var(--cream);
+    }
+
     h1 {
       font-family: 'Playfair Display', Georgia, serif;
       font-size: clamp(2.4rem, 6vw, 4.8rem);
@@ -386,6 +431,11 @@
         right: max(10px, env(safe-area-inset-right));
       }
 
+      .instrument-switcher {
+        top: calc(max(10px, env(safe-area-inset-top)) + 58px);
+        right: max(10px, env(safe-area-inset-right));
+      }
+
       .wrapper {
         width: min(100% - 28px, 1180px);
       }
@@ -407,6 +457,7 @@
       <span></span><span></span><span></span>
     </div>
     <div class="language-switcher"></div>
+    <div class="instrument-switcher"></div>
     <div id="index-hero-copy">
       <span class="eyebrow">Percorsi di Studio</span>
       <h1>Cavaquinho Brasiliano, due strade da scegliere</h1>
@@ -496,9 +547,12 @@
     Scegli il percorso, entra nella pagina dedicata e studia per famiglie musicali, non per pagine isolate.
   </footer>
   <script src="js/i18n.js"></script>
+  <script src="js/instruments.js"></script>
   <script src="js/site-content.js"></script>
   <script>
     (() => {
+      const lang = window.CavaquinhoI18n.getCurrentLanguage();
+      window.CavaquinhoInstruments.initInstrumentSwitchers(lang);
       const result = window.CavaquinhoI18n.applyBasicPageLocalization('index', {
         heroSelector: '#index-hero-copy',
         mainSelector: '#index-main-content',

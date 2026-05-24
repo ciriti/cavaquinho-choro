@@ -1,5 +1,6 @@
 (function () {
   const STORAGE_KEY = 'cavaquinho-site-language';
+  const SCROLL_RESTORE_KEY = 'cavaquinho-site-scroll-restore';
   const SUPPORTED = ['it', 'en', 'pt'];
   const NATIVE_LABELS = {
     it: 'Italiano',
@@ -162,6 +163,127 @@
     }
   };
 
+  const getScrollRestoreState = function () {
+    try {
+      const rawState = window.sessionStorage.getItem(SCROLL_RESTORE_KEY);
+      if (!rawState) {
+        return null;
+      }
+      return JSON.parse(rawState);
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const clearScrollRestoreState = function () {
+    try {
+      window.sessionStorage.removeItem(SCROLL_RESTORE_KEY);
+    } catch (error) {
+      // Ignore persistence failures.
+    }
+  };
+
+  const getHeadingCandidates = function () {
+    return Array.from(
+      document.querySelectorAll('main section[id], main [id][data-toc-title], h1[id], h2[id], h3[id]')
+    ).filter((node) => node.id);
+  };
+
+  const getCurrentViewportAnchor = function () {
+    const activeTocLink = document.querySelector('.toc-link[aria-current="true"]');
+    if (activeTocLink) {
+      const activeSectionId = activeTocLink.getAttribute('href')?.replace(/^#/, '');
+      if (activeSectionId) {
+        const activeSection = document.getElementById(activeSectionId);
+        if (activeSection) {
+          return activeSection;
+        }
+      }
+    }
+
+    const scrollTop = window.scrollY;
+    const headingCandidates = getHeadingCandidates();
+    let currentAnchor = null;
+
+    headingCandidates.forEach((node) => {
+      if (node.getBoundingClientRect().top + window.scrollY <= scrollTop + 12) {
+        currentAnchor = node;
+      }
+    });
+
+    return currentAnchor;
+  };
+
+  const saveScrollRestoreState = function (targetLang) {
+    if (!SUPPORTED.includes(targetLang)) {
+      return;
+    }
+
+    const anchor = getCurrentViewportAnchor();
+    const anchorTop = anchor ? anchor.getBoundingClientRect().top + window.scrollY : 0;
+    const restoreState = {
+      pathname: window.location.pathname,
+      targetLang,
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+      anchorId: anchor ? anchor.id : null,
+      offsetWithinAnchor: anchor ? Math.max(0, window.scrollY - anchorTop) : null
+    };
+
+    try {
+      window.sessionStorage.setItem(SCROLL_RESTORE_KEY, JSON.stringify(restoreState));
+    } catch (error) {
+      // Ignore persistence failures.
+    }
+  };
+
+  const restoreScrollPosition = function () {
+    const restoreState = getScrollRestoreState();
+    if (!restoreState || restoreState.pathname !== window.location.pathname) {
+      return;
+    }
+
+    const scrollToSavedPosition = function () {
+      let targetY = Number.isFinite(restoreState.scrollY) ? restoreState.scrollY : 0;
+
+      if (restoreState.anchorId) {
+        const anchor = document.getElementById(restoreState.anchorId);
+        if (anchor) {
+          const anchorTop = anchor.getBoundingClientRect().top + window.scrollY;
+          const offsetWithinAnchor = Number.isFinite(restoreState.offsetWithinAnchor)
+            ? restoreState.offsetWithinAnchor
+            : 0;
+          targetY = anchorTop + offsetWithinAnchor;
+        }
+      }
+
+      const maxScrollY = Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight
+      );
+
+      window.scrollTo({
+        left: Number.isFinite(restoreState.scrollX) ? restoreState.scrollX : 0,
+        top: Math.min(Math.max(0, targetY), maxScrollY)
+      });
+    };
+
+    [0, 80, 220, 450].forEach((delay) => {
+      window.setTimeout(scrollToSavedPosition, delay);
+    });
+
+    window.setTimeout(clearScrollRestoreState, 900);
+
+    window.addEventListener(
+      'load',
+      () => {
+        scrollToSavedPosition();
+        window.setTimeout(clearScrollRestoreState, 600);
+      },
+      { once: true }
+    );
+  };
+
   const buildUrlForLanguage = function (href, lang) {
     if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) {
       return href;
@@ -205,6 +327,9 @@
           link.setAttribute('aria-current', 'true');
         }
         link.addEventListener('click', () => {
+          if (targetLang !== lang) {
+            saveScrollRestoreState(targetLang);
+          }
           setCurrentLanguage(targetLang);
         });
         container.append(link);
@@ -282,6 +407,7 @@
 
     const translation = getPageTranslation(pageName, lang);
     if (!translation) {
+      restoreScrollPosition();
       return { lang, translation: null };
     }
 
@@ -352,6 +478,7 @@
     }
 
     decorateLocalLinks(document, lang);
+    restoreScrollPosition();
     return { lang, translation };
   };
 
@@ -366,6 +493,8 @@
     setDocumentLanguage,
     getPageTranslation,
     describeChord,
+    saveScrollRestoreState,
+    restoreScrollPosition,
     applyBasicPageLocalization
   };
 })();

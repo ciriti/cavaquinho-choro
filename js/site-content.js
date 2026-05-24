@@ -315,6 +315,17 @@ In E:  | E  | C#7 | F#m | B7  | E  |</pre>
           <h3>Guided exercise</h3>
           <pre>Base:       | G | D | Em | C |
 With push:  | G | D | B7 | Em | C | D7 | G |</pre>
+          <h3>Cadence 1 — Square and Lift</h3>
+          <pre>Key of C — Square:  | C  | A7 | Dm | G7 |
+                     | C  | A7 | Dm | G7 |
+Key of C — Lift 1: | Em | A7 | Dm | G7 |
+Key of C — Lift 2: | Gm | C7 | F  | Fm |</pre>
+          <pre>Key of G — Square:  | G  | E7 | Am | D7 |
+Key of G — Lift 1: | Bm | E7 | Am | D7 |
+Key of G — Lift 2: | Dm | G7 | C  | Cm |</pre>
+          <pre>Key of D — Square:  | D   | B7 | Em | A7 |
+Key of D — Lift 1: | F#m | B7 | Em | A7 |
+Key of D — Lift 2: | Am  | D7 | G  | Gm |</pre>
           <p>As soon as you hear an outside chord, ask where it wants to go. That question turns a strummer into a real accompanist.</p>
         </section>
 
@@ -545,6 +556,17 @@ Em E:  | E  | C#7 | F#m | B7  | E  |</pre>
           <h3>Exercício guiado</h3>
           <pre>Base:      | G | D | Em | C |
 Com impulso: | G | D | B7 | Em | C | D7 | G |</pre>
+          <h3>Cadência 1 — Quadrado e Subida</h3>
+          <pre>Tom C — Quadrado: | C  | A7 | Dm | G7 |
+                  | C  | A7 | Dm | G7 |
+Tom C — Subida 1: | Em | A7 | Dm | G7 |
+Tom C — Subida 2: | Gm | C7 | F  | Fm |</pre>
+          <pre>Tom G — Quadrado: | G  | E7 | Am | D7 |
+Tom G — Subida 1: | Bm | E7 | Am | D7 |
+Tom G — Subida 2: | Dm | G7 | C  | Cm |</pre>
+          <pre>Tom D — Quadrado: | D   | B7 | Em | A7 |
+Tom D — Subida 1: | F#m | B7 | Em | A7 |
+Tom D — Subida 2: | Am  | D7 | G  | Gm |</pre>
           <p>Quando aparecer um acorde de fora, pergunte sempre para onde ele quer ir. Essa pergunta transforma batida em acompanhamento real.</p>
         </section>
 

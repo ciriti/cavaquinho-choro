@@ -142,6 +142,51 @@
       color: var(--cream);
     }
 
+    .instrument-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(232, 184, 75, 0.18);
+      background: rgba(15, 11, 8, 0.34);
+      position: fixed;
+      top: calc(max(14px, env(safe-area-inset-top)) + 58px);
+      right: max(14px, env(safe-area-inset-right));
+      z-index: 1190;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+    }
+
+    .instrument-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 78px;
+      padding: 6px 12px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: .78rem;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: background-color .2s, color .2s;
+    }
+
+    .instrument-link:hover,
+    .instrument-link:focus-visible {
+      background: rgba(201, 149, 42, 0.14);
+      color: var(--gold-lt);
+      outline: none;
+    }
+
+    .instrument-link.is-active {
+      background: rgba(201, 149, 42, 0.18);
+      color: var(--cream);
+    }
+
     .genre-link {
       display: inline-flex;
       align-items: center;
@@ -621,6 +666,11 @@
         right: max(10px, env(safe-area-inset-right));
       }
 
+      .instrument-switcher {
+        top: calc(max(10px, env(safe-area-inset-top)) + 58px);
+        right: max(10px, env(safe-area-inset-right));
+      }
+
       .toc-toggle {
         display: inline-flex;
       }
@@ -664,6 +714,7 @@
       <a class="genre-link is-active" data-nav="forro" href="forro.html" aria-current="page">Forró</a>
     </nav>
     <div class="language-switcher"></div>
+    <div class="instrument-switcher"></div>
     <h1 id="page-title">Cavaquinho &amp; Forró</h1>
     <p class="subtitle" id="page-subtitle">Sistema di apprendimento progressivo per xote, baião e accompagnamento da palco, costruito con lo stesso spirito didattico del percorso Choro ma orientato al repertorio popolare tipo Falamansa.</p>
   </header>
@@ -828,6 +879,20 @@ In Mi:  | E  | C#7 | F#m | B7  | E  |</pre>
           <pre>Base:       | G | D | Em | C |
 Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
 
+          <h3>Cadência 1 — Quadrado e Subida</h3>
+          <pre>Tom C — Quadrado: | C  | A7 | Dm | G7 |
+                  | C  | A7 | Dm | G7 |
+Tom C — Subida 1: | Em | A7 | Dm | G7 |
+Tom C — Subida 2: | Gm | C7 | F  | Fm |</pre>
+
+          <pre>Tom G — Quadrado: | G  | E7 | Am | D7 |
+Tom G — Subida 1: | Bm | E7 | Am | D7 |
+Tom G — Subida 2: | Dm | G7 | C  | Cm |</pre>
+
+          <pre>Tom D — Quadrado: | D   | B7 | Em | A7 |
+Tom D — Subida 1: | F#m | B7 | Em | A7 |
+Tom D — Subida 2: | Am  | D7 | G  | Gm |</pre>
+
           <p>Appena senti un accordo fuori campo, chiediti sempre dove vuole andare. Questo è il salto da suonatore di sigle a musicista che accompagna davvero.</p>
         </section>
 
@@ -935,6 +1000,7 @@ Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
   <a class="back-to-top" id="back-to-top" href="#top" aria-label="Torna all'inizio">↑</a>
 
   <script src="js/i18n.js"></script>
+  <script src="js/instruments.js"></script>
   <script src="js/site-content.js"></script>
   <script>
     (() => {
@@ -948,6 +1014,7 @@ Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
         backToTopSelector: '#back-to-top'
       });
       const lang = localization.lang;
+      window.CavaquinhoInstruments.initInstrumentSwitchers(lang);
       const pageData = localization.translation || {};
       const uiText = pageData.ui || {
         tocTitle: 'Indice',
@@ -1073,6 +1140,13 @@ Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
         'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11
       };
       const referenceOpenPitches = [2, 7, 11, 2];
+      const guitarOpenPitches = window.CavaquinhoInstruments.openPitches.guitar;
+      const getSelectedInstrument = () => window.CavaquinhoInstruments.getCurrentInstrument();
+      const optionLabelMap = {
+        it: { open: 'Forma aperta', barre: 'Forma barré' },
+        en: { open: 'Open shape', barre: 'Barre shape' },
+        pt: { open: 'Forma aberta', barre: 'Forma com pestana' }
+      }[lang] || { open: 'Open shape', barre: 'Barre shape' };
       const getChordDescriptor = (chordName) => {
         const match = chordName.match(/^([A-G](?:#|b)?)(.*)$/);
         if (!match) {
@@ -1131,6 +1205,8 @@ Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
         ring.setAttribute('class', className);
         svg.append(ring);
       };
+
+      const getFirstPlayedStringIndex = (frets) => frets.findIndex((fret) => typeof fret === 'number' && fret >= 0);
 
       const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260523g';
       const chordCaption = (chordName) => window.CavaquinhoI18n.describeChord(chordName, lang);
@@ -1217,6 +1293,163 @@ Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
       hoverCaption.className = 'chord-hover-caption';
       hoverCard.append(hoverBanner, hoverTitle, hoverDiagram, hoverCaption);
       document.body.append(hoverCard);
+
+      const createGuitarChordSvg = (shape, chordName) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const stringsX = [18, 36, 54, 72, 90, 108];
+        const lineY = [20, 48, 76, 104, 132];
+        const frets = shape.frets || [];
+        const positiveFrets = frets.filter((fret) => typeof fret === 'number' && fret > 0);
+        const minFret = positiveFrets.length ? Math.min(...positiveFrets) : 1;
+        const maxFret = positiveFrets.length ? Math.max(...positiveFrets) : 1;
+        const baseFret = shape.baseFret || ((maxFret > 4 || minFret > 3) ? minFret : 1);
+        const markers = getRoleMarkers(frets, chordName, guitarOpenPitches);
+        const firstPlayedString = getFirstPlayedStringIndex(frets);
+
+        svg.setAttribute('viewBox', '0 0 126 198');
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chordName} per chitarra`);
+
+        const append = (node) => {
+          svg.append(node);
+          return node;
+        };
+        const line = (x1, y1, x2, y2, stroke, width) => {
+          const element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          element.setAttribute('x1', x1);
+          element.setAttribute('y1', y1);
+          element.setAttribute('x2', x2);
+          element.setAttribute('y2', y2);
+          element.setAttribute('stroke', stroke);
+          element.setAttribute('stroke-width', width);
+          element.setAttribute('stroke-linecap', 'round');
+          append(element);
+        };
+
+        stringsX.forEach((x) => {
+          line(x, lineY[0], x, lineY[4], 'rgba(240, 230, 208, 0.92)', 2.1);
+        });
+        lineY.forEach((y, index) => {
+          line(stringsX[0], y, stringsX[5], y, 'rgba(240, 230, 208, 0.92)', index === 0 && baseFret === 1 ? 4.6 : 2.1);
+        });
+
+        if (baseFret > 1 && !shape.hideBaseFretLabel) {
+          const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          label.setAttribute('x', '10');
+          label.setAttribute('y', '17');
+          label.setAttribute('text-anchor', 'end');
+          label.setAttribute('fill', 'rgba(240, 230, 208, 0.82)');
+          label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+          label.setAttribute('font-size', '11');
+          label.setAttribute('font-weight', '700');
+          label.textContent = `${baseFret}ª`;
+          append(label);
+        }
+
+        if (shape.barre) {
+          const relativeBarreFret = baseFret === 1 ? shape.barre.fret : shape.barre.fret - baseFret + 1;
+          if (relativeBarreFret > 0 && relativeBarreFret < lineY.length) {
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            const y = (lineY[relativeBarreFret - 1] + lineY[relativeBarreFret]) / 2 - 6;
+            rect.setAttribute('x', stringsX[shape.barre.from - 1] - 8);
+            rect.setAttribute('y', y);
+            rect.setAttribute('width', stringsX[shape.barre.to - 1] - stringsX[shape.barre.from - 1] + 16);
+            rect.setAttribute('height', '12');
+            rect.setAttribute('rx', '6');
+            rect.setAttribute('fill', '#3c4040');
+            append(rect);
+          }
+        }
+
+        frets.forEach((fret, index) => {
+          if (typeof fret !== 'number' || fret <= 0) {
+            return;
+          }
+          const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
+          if (relativeFret <= 0 || relativeFret >= lineY.length) {
+            return;
+          }
+          const cy = (lineY[relativeFret - 1] + lineY[relativeFret]) / 2;
+          if (markers.root.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'root');
+          } else if (markers.third.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'third');
+          } else if (markers.fifth.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'fifth');
+          }
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', stringsX[index]);
+          circle.setAttribute('cy', cy);
+          circle.setAttribute('r', '8.5');
+          circle.setAttribute('fill', 'rgba(255,255,255,0.96)');
+          circle.setAttribute('stroke', 'rgba(34, 28, 22, 0.78)');
+          circle.setAttribute('stroke-width', '1.1');
+          append(circle);
+
+          let finger = shape.fingers && shape.fingers[index];
+          if (!finger && shape.barre && shape.barre.finger && shape.barre.fret === fret) {
+            const labelIndex = (shape.barre.labelString || shape.barre.from) - 1;
+            if (index === labelIndex) {
+              finger = shape.barre.finger;
+            }
+          }
+          if (finger) {
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', stringsX[index]);
+            label.setAttribute('y', cy + 3.4);
+            label.setAttribute('fill', '#6a6a6a');
+            label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+            label.setAttribute('font-size', '9.4');
+            label.setAttribute('font-weight', '700');
+            label.setAttribute('text-anchor', 'middle');
+            label.textContent = `${finger}`;
+            append(label);
+          }
+        });
+
+        stringsX.forEach((x, index) => {
+          const fret = frets[index];
+          if (typeof fret !== 'number' || fret < 0) {
+            const muted = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            muted.setAttribute('x', x);
+            muted.setAttribute('y', '182');
+            muted.setAttribute('fill', 'rgba(220, 214, 201, 0.88)');
+            muted.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+            muted.setAttribute('font-size', '12');
+            muted.setAttribute('font-weight', '700');
+            muted.setAttribute('text-anchor', 'middle');
+            muted.textContent = '×';
+            append(muted);
+            return;
+          }
+          if (fret === 0) {
+            if (markers.root.has(index)) {
+              appendRoleRing(svg, x, 178, 'root');
+            } else if (markers.third.has(index)) {
+              appendRoleRing(svg, x, 178, 'third');
+            } else if (markers.fifth.has(index)) {
+              appendRoleRing(svg, x, 178, 'fifth');
+            }
+          }
+          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          dot.setAttribute('cx', x);
+          dot.setAttribute('cy', '178');
+          dot.setAttribute('r', '5.3');
+          dot.setAttribute('stroke', 'rgba(240, 230, 208, 0.92)');
+          dot.setAttribute('stroke-width', '1.5');
+          dot.setAttribute('fill', index === firstPlayedString ? 'rgba(200, 200, 200, 0.92)' : 'transparent');
+          append(dot);
+        });
+
+        return svg;
+      };
+
+      const getInstrumentOptions = (chord) => {
+        if (getSelectedInstrument() === 'guitar') {
+          return window.CavaquinhoInstruments.getChordOptionsForInstrument(chord.name, 'guitar') || [];
+        }
+        return chord.options || [];
+      };
 
       const createReferenceChordSvg = (shape, chordName) => {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -1371,17 +1604,41 @@ Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
 
       const renderChordDiagram = (container, chord) => {
         container.replaceChildren();
-        if (!chord.options || chord.options.length === 0) {
+        const instrument = getSelectedInstrument();
+        const instrumentOptions = getInstrumentOptions(chord);
+        if (instrument === 'guitar') {
+          if (instrumentOptions.length === 0) {
+            return;
+          }
+          const stack = document.createElement('div');
+          stack.className = 'chord-diagram-stack';
+          instrumentOptions.forEach((option, index) => {
+            const variant = document.createElement('div');
+            const diagram = createGuitarChordSvg(option, chord.name);
+            variant.className = 'chord-diagram-variant';
+            if (instrumentOptions.length > 1) {
+              const variantLabel = document.createElement('span');
+              variantLabel.className = 'chord-diagram-variant-label';
+              variantLabel.textContent = optionLabelMap[option.label] || option.label || `Opzione ${index + 1}`;
+              variant.append(variantLabel);
+            }
+            variant.append(diagram);
+            stack.append(variant);
+          });
+          container.append(stack);
+          return;
+        }
+        if (instrumentOptions.length === 0) {
           container.append(createSpriteChordSvg(chord));
           return;
         }
         const stack = document.createElement('div');
         stack.className = 'chord-diagram-stack';
-        chord.options.forEach((option, index) => {
+        instrumentOptions.forEach((option, index) => {
           const variant = document.createElement('div');
           const diagram = createReferenceChordSvg(option, chord.name);
           variant.className = 'chord-diagram-variant';
-          if (chord.options.length > 1) {
+          if (instrumentOptions.length > 1) {
             const variantLabel = document.createElement('span');
             variantLabel.className = 'chord-diagram-variant-label';
             variantLabel.textContent = option.label || `Opzione ${index + 1}`;
@@ -1418,6 +1675,7 @@ Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
         hoverTitle.textContent = chord.name;
         hoverCaption.textContent = chord.caption;
         renderChordDiagram(hoverDiagram, chord);
+        hoverCard.classList.toggle('has-multiple-options', getInstrumentOptions(chord).length > 1);
         hoverCard.classList.add('is-visible');
         if (position) {
           positionHoverCard(position.x, position.y);
@@ -1493,7 +1751,18 @@ Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
         enhanceChordText(section);
       });
 
-      if (forroQuickChords) {
+      const renderQuickChordGallery = () => {
+        if (!forroQuickChords) {
+          return;
+        }
+        forroQuickChords.replaceChildren();
+        const instrument = getSelectedInstrument();
+        forroQuickChords.setAttribute(
+          'aria-label',
+          instrument === 'guitar'
+            ? (lang === 'en' ? 'Visual guitar chord shapes for forro' : lang === 'pt' ? 'Ditegiados visuais de violao para forro' : 'Diteggiature visive per chitarra del forro')
+            : (lang === 'en' ? 'Visual cavaquinho chord shapes for forro' : lang === 'pt' ? 'Ditegiados visuais de cavaco para forro' : 'Diteggiature visive per cavaquinho del forro')
+        );
         const quickChordNames = ['G', 'D7', 'Em', 'C', 'F#', 'C#', 'D#m', 'B', 'C#m', 'G#m', 'E', 'G#'];
         quickChordNames.forEach((name) => {
           const chord = chordLookup.get(name);
@@ -1514,7 +1783,14 @@ Con spinta: | G | D | B7 | Em | C | D7 | G |</pre>
           card.append(title, diagram, caption);
           forroQuickChords.append(card);
         });
-      }
+      };
+
+      renderQuickChordGallery();
+
+      window.addEventListener(window.CavaquinhoInstruments.eventName, () => {
+        renderQuickChordGallery();
+        hideHoverCard();
+      });
     })();
   </script>
 </body>
