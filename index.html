@@ -4,33 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ritmos do Brasil — Percorsi di Studio</title>
+  <link rel="stylesheet" href="css/shared.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0f0b08;
-      --surface: #18120d;
-      --card: #211912;
-      --card-alt: #191d18;
-      --border: #3a2e22;
-      --gold: #c9952a;
-      --gold-lt: #e8b84b;
-      --cream: #f0e6d0;
-      --muted: #a89780;
-      --green: #5f8b58;
+      --surface:    #18120d;
+      --card:       #211912;
+      --card-alt:   #191d18;
+      --muted:      #a89780;
+      --green:      #5f8b58;
       --green-soft: rgba(95, 139, 88, 0.14);
-      --blue: #5a7fa8;
-      --blue-soft: rgba(90, 127, 168, 0.16);
-      --gold-soft: rgba(201, 149, 42, 0.14);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
+      --blue:       #5a7fa8;
+      --blue-soft:  rgba(90, 127, 168, 0.16);
+      --gold-soft:  rgba(201, 149, 42, 0.14);
     }
 
     body {
@@ -44,10 +30,6 @@
       overflow-x: hidden;
     }
 
-    body.mobile-preferences-open {
-      overflow: hidden;
-    }
-
     body::before {
       content: '';
       position: fixed;
@@ -57,10 +39,6 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
     }
 
-    a {
-      color: inherit;
-    }
-
     .hero {
       position: relative;
       padding: 88px 24px 56px;
@@ -68,22 +46,8 @@
     }
 
     .flag-stripe {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
       margin-bottom: 24px;
     }
-
-    .flag-stripe span {
-      width: 28px;
-      height: 4px;
-      border-radius: 999px;
-      display: block;
-    }
-
-    .flag-stripe span:nth-child(1) { background: #009c3b; }
-    .flag-stripe span:nth-child(2) { background: #ffdf00; }
-    .flag-stripe span:nth-child(3) { background: #002776; }
 
     .eyebrow {
       display: inline-block;
@@ -96,193 +60,6 @@
       font-size: .82rem;
       letter-spacing: .18em;
       text-transform: uppercase;
-    }
-
-    .language-switcher {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px;
-      border: 1px solid rgba(232, 184, 75, 0.18);
-      border-radius: 999px;
-      background: rgba(17, 12, 9, 0.35);
-      position: fixed;
-      top: max(14px, env(safe-area-inset-top));
-      right: max(14px, env(safe-area-inset-right));
-      z-index: 1200;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
-    }
-
-    .language-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 46px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: .78rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      transition: background-color .2s, color .2s;
-    }
-
-    .language-link:hover,
-    .language-link:focus-visible {
-      background: rgba(201, 149, 42, 0.14);
-      color: var(--gold-lt);
-      outline: none;
-    }
-
-    .language-link.is-active {
-      background: rgba(201, 149, 42, 0.18);
-      color: var(--cream);
-    }
-
-    .instrument-switcher {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px;
-      border: 1px solid rgba(232, 184, 75, 0.18);
-      border-radius: 999px;
-      background: rgba(17, 12, 9, 0.35);
-      position: fixed;
-      top: calc(max(14px, env(safe-area-inset-top)) + 58px);
-      right: max(14px, env(safe-area-inset-right));
-      z-index: 1190;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
-    }
-
-    .instrument-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 78px;
-      padding: 6px 12px;
-      border: 0;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--muted);
-      font-family: inherit;
-      font-size: .78rem;
-      letter-spacing: .04em;
-      cursor: pointer;
-      transition: background-color .2s, color .2s;
-    }
-
-    .instrument-link:hover,
-    .instrument-link:focus-visible {
-      background: rgba(201, 149, 42, 0.14);
-      color: var(--gold-lt);
-      outline: none;
-    }
-
-    .instrument-link.is-active {
-      background: rgba(201, 149, 42, 0.18);
-      color: var(--cream);
-    }
-
-    .mobile-preferences {
-      display: none;
-    }
-
-    .mobile-preferences-trigger {
-      position: fixed;
-      left: max(14px, env(safe-area-inset-left));
-      bottom: max(14px, env(safe-area-inset-bottom));
-      z-index: 1300;
-      width: 52px;
-      height: 52px;
-      border: 1px solid rgba(232, 184, 75, 0.24);
-      border-radius: 999px;
-      background: rgba(15, 11, 8, 0.9);
-      color: var(--gold-lt);
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1rem;
-      letter-spacing: .08em;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
-      backdrop-filter: blur(10px);
-      cursor: pointer;
-    }
-
-    .mobile-preferences-sheet[hidden] {
-      display: none;
-    }
-
-    .mobile-preferences-sheet {
-      position: fixed;
-      inset: 0;
-      z-index: 1400;
-    }
-
-    .mobile-preferences-backdrop {
-      position: absolute;
-      inset: 0;
-      border: 0;
-      background: rgba(5, 4, 3, 0.62);
-    }
-
-    .mobile-preferences-panel {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 20px 18px calc(18px + env(safe-area-inset-bottom));
-      border-radius: 24px 24px 0 0;
-      border: 1px solid rgba(232, 184, 75, 0.16);
-      background:
-        linear-gradient(180deg, rgba(28, 21, 16, 0.98), rgba(15, 11, 8, 0.99)),
-        radial-gradient(circle at top, rgba(201, 149, 42, 0.08), transparent 48%);
-      box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.34);
-    }
-
-    .mobile-preferences-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-
-    .mobile-preferences-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.2rem;
-      color: var(--gold-lt);
-    }
-
-    .mobile-preferences-close {
-      border: 1px solid rgba(232, 184, 75, 0.2);
-      border-radius: 999px;
-      background: rgba(201, 149, 42, 0.08);
-      color: var(--cream);
-      padding: 8px 14px;
-      font: inherit;
-      cursor: pointer;
-    }
-
-    .mobile-preferences-group + .mobile-preferences-group {
-      margin-top: 14px;
-    }
-
-    .mobile-preferences-label {
-      margin-bottom: 8px;
-      color: var(--gold);
-      font-size: .78rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-
-    .mobile-preferences .language-switcher,
-    .mobile-preferences .instrument-switcher {
-      position: static;
-      width: 100%;
-      justify-content: flex-start;
-      box-shadow: none;
-      background: rgba(17, 12, 9, 0.58);
     }
 
     h1 {
@@ -405,13 +182,8 @@
       transform: translateY(3px);
     }
 
-    .genre-card.forro .card-points li::before {
-      color: #86b57d;
-    }
-
-    .genre-card.pagode .card-points li::before {
-      color: #8fb0d4;
-    }
+    .genre-card.forro .card-points li::before { color: #86b57d; }
+    .genre-card.pagode .card-points li::before { color: #8fb0d4; }
 
     .card-actions {
       display: flex;
@@ -555,14 +327,6 @@
         padding-top: 64px;
       }
 
-      .desktop-preferences {
-        display: none;
-      }
-
-      .mobile-preferences {
-        display: block;
-      }
-
       .wrapper {
         width: min(100% - 28px, 1180px);
       }
@@ -700,7 +464,7 @@
   </footer>
   <script src="js/i18n.js"></script>
   <script src="js/instruments.js"></script>
-  <script src="js/site-content.js"></script>
+  <script src="js/data/index-content.js"></script>
   <script>
     (() => {
       const lang = window.CavaquinhoI18n.getCurrentLanguage();

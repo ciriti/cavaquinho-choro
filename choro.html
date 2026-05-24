@@ -7,298 +7,34 @@
   <script>
     document.documentElement.classList.add('js-enabled');
   </script>
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/page.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Source+Serif+4:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg:        #0f0b08;
-      --surface:   #1a1410;
-      --card:      #221c16;
-      --border:    #3a2e22;
-      --gold:      #c9952a;
-      --gold-lt:   #e8b84b;
-      --cream:     #f0e6d0;
-      --muted:     #9a8870;
-      --green:     #4a7c59;
-      --red:       #8b3a3a;
-      --code-bg:   #130f0b;
+      --surface:  #1a1410;
+      --card:     #221c16;
+      --muted:    #9a8870;
+      --green:    #4a7c59;
+      --red:      #8b3a3a;
+      --code-bg:  #130f0b;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--bg);
-      color: var(--cream);
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-weight: 300;
-      line-height: 1.75;
-      font-size: 17px;
-    }
-
-    body.mobile-preferences-open {
-      overflow: hidden;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      section {
-        opacity: 1;
-        transform: none;
-        animation: none;
-      }
-    }
-
-    /* ── GRAIN OVERLAY ── */
     body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 999; opacity: .5;
+      z-index: 999;
+      opacity: .5;
     }
 
-    /* ── HERO ── */
-    header {
-      position: relative;
-      padding: 80px 40px 60px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-      overflow: hidden;
-    }
     header::after {
       content: '';
-      position: absolute; inset: 0;
+      position: absolute;
+      inset: 0;
       background: radial-gradient(ellipse 70% 60% at 50% 0%, #c9952a18 0%, transparent 70%);
       pointer-events: none;
     }
-    .flag-stripe {
-      display: flex; justify-content: center; gap: 6px;
-      margin-bottom: 32px;
-    }
-    .flag-stripe span {
-      display: block; width: 28px; height: 4px; border-radius: 2px;
-    }
-    .flag-stripe span:nth-child(1) { background: #009C3B; }
-    .flag-stripe span:nth-child(2) { background: #FFDF00; }
-    .flag-stripe span:nth-child(3) { background: #002776; }
 
-    h1 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(2rem, 5vw, 3.6rem);
-      font-weight: 700;
-      color: var(--gold-lt);
-      letter-spacing: -0.01em;
-      line-height: 1.15;
-    }
-    .subtitle {
-      margin-top: 14px;
-      font-size: 1.05rem;
-      color: var(--muted);
-      font-style: italic;
-    }
-    .genre-nav {
-      display: inline-flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-    .language-switcher {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(232, 184, 75, 0.18);
-      background: rgba(15, 11, 8, 0.34);
-      position: fixed;
-      top: max(14px, env(safe-area-inset-top));
-      right: max(14px, env(safe-area-inset-right));
-      z-index: 1200;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
-    }
-    .language-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 46px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: .78rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      transition: background-color .2s, color .2s;
-    }
-    .language-link:hover,
-    .language-link:focus-visible {
-      background: rgba(201, 149, 42, 0.14);
-      color: var(--gold-lt);
-      outline: none;
-    }
-    .language-link.is-active {
-      background: rgba(201, 149, 42, 0.18);
-      color: var(--cream);
-    }
-    .instrument-switcher {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(232, 184, 75, 0.18);
-      background: rgba(15, 11, 8, 0.34);
-      position: fixed;
-      top: calc(max(14px, env(safe-area-inset-top)) + 58px);
-      right: max(14px, env(safe-area-inset-right));
-      z-index: 1190;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
-    }
-    .instrument-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 78px;
-      padding: 6px 12px;
-      border: 0;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--muted);
-      font-family: inherit;
-      font-size: .78rem;
-      letter-spacing: .04em;
-      cursor: pointer;
-      transition: background-color .2s, color .2s;
-    }
-    .instrument-link:hover,
-    .instrument-link:focus-visible {
-      background: rgba(201, 149, 42, 0.14);
-      color: var(--gold-lt);
-      outline: none;
-    }
-    .instrument-link.is-active {
-      background: rgba(201, 149, 42, 0.18);
-      color: var(--cream);
-    }
-    .mobile-preferences {
-      display: none;
-    }
-    .mobile-preferences-trigger {
-      position: fixed;
-      left: max(14px, env(safe-area-inset-left));
-      bottom: max(14px, env(safe-area-inset-bottom));
-      z-index: 1300;
-      width: 52px;
-      height: 52px;
-      border: 1px solid rgba(232, 184, 75, 0.24);
-      border-radius: 999px;
-      background: rgba(15, 11, 8, 0.9);
-      color: var(--gold-lt);
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1rem;
-      letter-spacing: .08em;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
-      backdrop-filter: blur(10px);
-      cursor: pointer;
-    }
-    .mobile-preferences-sheet[hidden] {
-      display: none;
-    }
-    .mobile-preferences-sheet {
-      position: fixed;
-      inset: 0;
-      z-index: 1400;
-    }
-    .mobile-preferences-backdrop {
-      position: absolute;
-      inset: 0;
-      border: 0;
-      background: rgba(5, 4, 3, 0.62);
-    }
-    .mobile-preferences-panel {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 20px 18px calc(18px + env(safe-area-inset-bottom));
-      border-radius: 24px 24px 0 0;
-      border: 1px solid rgba(232, 184, 75, 0.16);
-      background:
-        linear-gradient(180deg, rgba(28, 21, 16, 0.98), rgba(15, 11, 8, 0.99)),
-        radial-gradient(circle at top, rgba(201, 149, 42, 0.08), transparent 48%);
-      box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.34);
-    }
-    .mobile-preferences-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-    .mobile-preferences-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 1.2rem;
-      color: var(--gold-lt);
-    }
-    .mobile-preferences-close {
-      border: 1px solid rgba(232, 184, 75, 0.2);
-      border-radius: 999px;
-      background: rgba(201, 149, 42, 0.08);
-      color: var(--cream);
-      padding: 8px 14px;
-      font: inherit;
-      cursor: pointer;
-    }
-    .mobile-preferences-group + .mobile-preferences-group {
-      margin-top: 14px;
-    }
-    .mobile-preferences-label {
-      margin-bottom: 8px;
-      color: var(--gold);
-      font-size: .78rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-    .mobile-preferences .language-switcher,
-    .mobile-preferences .instrument-switcher {
-      position: static;
-      width: 100%;
-      justify-content: flex-start;
-      box-shadow: none;
-      background: rgba(15, 11, 8, 0.58);
-    }
-    .genre-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 138px;
-      padding: 10px 18px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(15, 11, 8, 0.35);
-      color: var(--cream);
-      text-decoration: none;
-      font-size: .92rem;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      transition: transform .2s, border-color .2s, background-color .2s, color .2s;
-    }
-    .genre-link:hover,
-    .genre-link:focus-visible {
-      border-color: var(--gold);
-      background: rgba(201, 149, 42, 0.1);
-      color: var(--gold-lt);
-      transform: translateY(-1px);
-      outline: none;
-    }
+    .flag-stripe { margin-bottom: 32px; }
+
     .genre-link.is-active {
       border-color: rgba(232, 184, 75, 0.5);
       background: rgba(201, 149, 42, 0.18);
@@ -306,128 +42,8 @@
       box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.12);
     }
 
-    /* ── LAYOUT ── */
-    .wrapper {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    .page-layout {
-      display: grid;
-      gap: 32px;
-      align-items: start;
-    }
-
-    .content-column {
-      min-width: 0;
-    }
-
-    /* ── TOC ── */
-    .toc {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--gold);
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.16);
-    }
-    .toc-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 10px;
-    }
-    .toc h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      color: var(--gold);
-      margin-bottom: 0;
-    }
-    .toc-summary {
-      color: var(--muted);
-      font-size: .92rem;
-      margin: 0 0 18px;
-    }
-    .toc-toggle {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: transparent;
-      color: var(--cream);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 8px 14px;
-      font: inherit;
-      cursor: pointer;
-      transition: border-color .2s, color .2s, background-color .2s;
-    }
-    .toc-toggle:hover,
-    .toc-toggle:focus-visible {
-      border-color: var(--gold);
-      color: var(--gold-lt);
-      background: rgba(201, 149, 42, 0.08);
-      outline: none;
-    }
-    .toc-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      gap: 10px;
-    }
-    .toc-item {
-      margin: 0;
-    }
-    .toc-link {
-      display: block;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid transparent;
-      background: rgba(15, 11, 8, 0.22);
-      color: var(--cream);
-      text-decoration: none;
-      transition: border-color .2s, background-color .2s, transform .2s;
-    }
-    .toc-link:hover,
-    .toc-link:focus-visible {
-      border-color: var(--gold);
-      background: rgba(201, 149, 42, 0.08);
-      transform: translateX(2px);
-      outline: none;
-    }
-    .toc-link[aria-current="true"] {
-      border-color: var(--gold);
-      background: rgba(201, 149, 42, 0.14);
-      box-shadow: inset 0 0 0 1px rgba(232, 184, 75, 0.12);
-    }
-    .toc-meta {
-      display: block;
-      font-size: .72rem;
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      margin-bottom: 4px;
-    }
-    .toc-title {
-      display: block;
-      color: var(--cream);
-      font-weight: 600;
-      line-height: 1.4;
-    }
-    .toc-description {
-      display: block;
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: .86rem;
-      line-height: 1.5;
-    }
-
     /* ── SECTIONS ── */
+
     section {
       margin-bottom: 64px;
       scroll-margin-top: 28px;
@@ -435,6 +51,7 @@
       transform: translateY(18px);
       animation: fadeUp .5s forwards;
     }
+
     section:nth-child(1)  { animation-delay: .05s }
     section:nth-child(2)  { animation-delay: .10s }
     section:nth-child(3)  { animation-delay: .15s }
@@ -451,29 +68,24 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      section { opacity: 1; transform: none; animation: none; }
+    }
+
     h2.section-title {
-      font-family: 'Playfair Display', serif;
       font-size: 1.75rem;
-      color: var(--gold-lt);
-      margin-bottom: 6px;
       padding-bottom: 10px;
       border-bottom: 1px solid var(--border);
     }
-    .section-num {
-      font-size: .8rem;
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      margin-bottom: 4px;
-      display: block;
-    }
+
+    .section-num { display: block; }
 
     h3 {
       font-family: 'Playfair Display', serif;
       font-size: 1.15rem;
-      color: var(--cream);
       margin: 28px 0 10px;
     }
+
     h4 {
       font-size: .95rem;
       color: var(--gold);
@@ -484,19 +96,21 @@
 
     p { margin: 10px 0; color: #d4c8b4; }
 
+    ul, ol { padding-left: 22px; margin: 10px 0; }
+    li { margin: 5px 0; color: #d4c8b4; }
+
     /* ── CODE BLOCKS ── */
+
     pre {
       background: var(--code-bg);
-      border: 1px solid var(--border);
       border-radius: 4px;
       padding: 18px 20px;
-      overflow-x: auto;
       margin: 14px 0;
       font-family: 'Courier New', monospace;
       font-size: .82rem;
-      line-height: 1.6;
       color: #c8b99a;
     }
+
     code {
       font-family: 'Courier New', monospace;
       font-size: .85em;
@@ -506,45 +120,36 @@
       border-radius: 3px;
       color: var(--gold-lt);
     }
+
     pre code { background: none; border: none; padding: 0; font-size: inherit; color: inherit; }
 
     /* ── TABLES ── */
-    .table-wrap { overflow-x: auto; margin: 16px 0; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: .9rem;
-    }
+
     th {
       background: var(--card);
-      color: var(--gold);
-      text-align: left;
-      padding: 10px 14px;
       font-weight: 600;
       border-bottom: 2px solid var(--gold);
       white-space: nowrap;
     }
-    td {
-      padding: 9px 14px;
-      border-bottom: 1px solid var(--border);
-      color: #d4c8b4;
-    }
+
+    td { color: #d4c8b4; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: var(--card); }
 
-    /* ── CALLOUT / BLOCKQUOTE ── */
+    /* ── BLOCKQUOTE ── */
+
     blockquote {
-      border-left: 3px solid var(--gold);
-      padding: 12px 18px;
       margin: 16px 0;
       background: var(--card);
       border-radius: 0 4px 4px 0;
       font-style: italic;
       color: var(--muted);
     }
+
     blockquote strong { color: var(--gold-lt); font-style: normal; }
 
-    /* ── CARD (brani) ── */
+    /* ── SONG CARD ── */
+
     .song-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -553,150 +158,56 @@
       padding: 24px 28px;
       margin: 24px 0;
     }
+
+    .song-card + .song-card { margin-top: 24px; }
     .song-card h3 { margin-top: 0; color: var(--gold-lt); }
 
-    /* ── CHORD GALLERY ── */
     .song-card-intro {
       margin-bottom: 18px;
       color: #d8ccb7;
     }
+
+    /* ── CHORD GALLERY ── */
+
     .chord-gallery {
-      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 18px;
       margin: 20px 0 8px;
     }
+
     .chord-card {
-      background: rgba(15, 11, 8, 0.28);
       border: 1px solid var(--border);
-      border-radius: 16px;
       padding: 16px 12px 14px;
-      text-align: center;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
     }
+
     .chord-card strong {
-      display: block;
       font-family: 'Playfair Display', serif;
       font-size: 1.15rem;
-      color: var(--gold-lt);
       margin-bottom: 10px;
     }
+
     .chord-caption {
       margin-top: 10px;
       font-size: .8rem;
-      line-height: 1.45;
-      color: var(--muted);
     }
-    .chord-diagram-stack {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 10px;
-      width: 100%;
-    }
-    .chord-diagram-variant {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-    .chord-diagram-variant-label {
-      font-size: .68rem;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
+
     .chord-diagram {
       display: flex;
       justify-content: center;
       min-height: 170px;
     }
+
     .chord-diagram svg {
       width: 88px;
       height: 168px;
       overflow: visible;
     }
-    .chord-token {
-      color: var(--gold-lt);
-      font-weight: 600;
-      cursor: pointer;
-      transition: color .18s ease;
-    }
-    .chord-token:hover,
-    .chord-token:focus-visible {
-      color: #ffd27a;
-      outline: none;
-    }
-    .chord-hover-card {
-      position: fixed;
-      top: 0;
-      left: 0;
-      min-width: 188px;
-      max-width: 348px;
-      padding: 0 0 16px;
-      border: 1px solid rgba(240, 230, 208, 0.08);
-      border-radius: 18px;
-      background: rgba(22, 24, 24, 0.96);
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.38);
-      color: var(--cream);
-      opacity: 0;
-      transform: translate3d(0, 8px, 0) scale(.98);
-      pointer-events: none;
-      z-index: 1200;
-      transition: opacity .14s ease, transform .14s ease;
-    }
-    .chord-hover-card.is-visible {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-    .chord-hover-banner {
-      height: 14px;
-      border-radius: 18px 18px 0 0;
-      background:
-        linear-gradient(90deg, transparent 0 4px, rgba(255,255,255,.7) 4px 8px, transparent 8px 12px),
-        linear-gradient(rgba(0,0,0,.08), rgba(0,0,0,.08));
-      background-size: 12px 12px, auto;
-      background-color: #1b1b1a;
-      border-bottom: 1px solid rgba(240, 230, 208, 0.08);
-    }
-    .chord-hover-title {
-      padding: 14px 20px 8px;
-      text-align: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      color: var(--cream);
-    }
-    .chord-hover-diagram {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 4px 12px 2px;
-    }
-    .chord-hover-diagram svg {
-      width: 100px;
-      height: 182px;
-      overflow: visible;
-    }
-    .chord-hover-diagram .chord-diagram-stack {
-      gap: 12px;
-    }
-    .chord-hover-diagram .chord-diagram-variant-label {
-      font-size: .66rem;
-    }
-    .chord-hover-caption {
-      padding: 8px 16px 0;
-      text-align: center;
-      font-size: .76rem;
-      line-height: 1.4;
-      color: var(--muted);
-    }
 
     /* ── INVERSIONS ── */
-    .inversion-intro {
-      max-width: 72ch;
-      margin-bottom: 20px;
-    }
+
+    .inversion-intro { max-width: 72ch; margin-bottom: 20px; }
+
     .instrument-note {
       margin-bottom: 20px;
       padding: 14px 16px;
@@ -705,39 +216,43 @@
       background: rgba(201, 149, 42, 0.08);
       color: var(--muted);
     }
-    .inversion-note-list {
-      display: grid;
-      gap: 22px;
-    }
+
+    .inversion-note-list { display: grid; gap: 22px; }
+
     .inversion-note-card {
       background: rgba(15, 11, 8, 0.26);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 20px 18px;
     }
+
     .inversion-note-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.35rem;
       color: var(--gold-lt);
       margin-bottom: 6px;
     }
+
     .inversion-note-subtitle {
       color: var(--muted);
       font-size: .88rem;
       margin-bottom: 18px;
       max-width: 60ch;
     }
+
     .inversion-category-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 16px;
     }
+
     .inversion-chord-card {
       background: rgba(26, 20, 16, 0.72);
       border: 1px solid rgba(240, 230, 208, 0.08);
       border-radius: 14px;
       padding: 14px 12px 12px;
     }
+
     .inversion-chord-header {
       display: flex;
       justify-content: space-between;
@@ -745,21 +260,16 @@
       gap: 10px;
       margin-bottom: 12px;
     }
-    .inversion-chord-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: var(--cream);
-    }
-    .inversion-chord-subtitle {
-      color: var(--muted);
-      font-size: .78rem;
-      white-space: nowrap;
-    }
+
+    .inversion-chord-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cream); }
+    .inversion-chord-subtitle { color: var(--muted); font-size: .78rem; white-space: nowrap; }
+
     .inversion-voicing-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 12px;
     }
+
     .inversion-voicing-card {
       background: rgba(15, 11, 8, 0.32);
       border: 1px solid rgba(240, 230, 208, 0.07);
@@ -767,6 +277,7 @@
       padding: 12px 10px 10px;
       text-align: center;
     }
+
     .inversion-voicing-title {
       display: block;
       font-size: .82rem;
@@ -775,60 +286,17 @@
       color: var(--gold);
       margin-bottom: 10px;
     }
-    .inversion-diagram {
-      display: flex;
-      justify-content: center;
-      min-height: 166px;
-    }
-    .inversion-diagram svg {
-      width: 104px;
-      height: 166px;
-      overflow: visible;
-    }
-    .inversion-voicing-caption {
-      margin-top: 10px;
-      font-size: .8rem;
-      line-height: 1.4;
-      color: var(--muted);
-    }
-    @media (max-width: 640px) {
-      .inversion-category-grid {
-        grid-template-columns: 1fr;
-      }
-      .inversion-voicing-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-    .diagram-line {
-      stroke: rgba(240, 230, 208, 0.9);
-      stroke-width: 2.2;
-      stroke-linecap: round;
-    }
-    .diagram-nut {
-      stroke: var(--cream);
-      stroke-width: 5;
-      stroke-linecap: round;
-    }
-    .diagram-marker {
-      fill: rgba(240, 230, 208, 0.97);
-      stroke: rgba(34, 28, 22, 0.75);
-      stroke-width: 1.2;
-    }
-    .diagram-role-root {
-      fill: none;
-      stroke: #e8b84b;
-      stroke-width: 2.6;
-    }
-    .diagram-role-third {
-      fill: none;
-      stroke: #78c39c;
-      stroke-width: 2.6;
-    }
-    .diagram-role-fifth {
-      fill: none;
-      stroke: #6fa8dc;
-      stroke-width: 2.6;
-    }
+
+    .inversion-diagram { display: flex; justify-content: center; min-height: 166px; }
+    .inversion-diagram svg { width: 104px; height: 166px; overflow: visible; }
+
+    .inversion-voicing-caption { margin-top: 10px; font-size: .8rem; line-height: 1.4; color: var(--muted); }
+
+    /* ── SVG DIAGRAM CLASSES ── */
+
+    .diagram-line { stroke: rgba(240, 230, 208, 0.9); stroke-width: 2.2; stroke-linecap: round; }
+    .diagram-nut  { stroke: var(--cream); stroke-width: 5; stroke-linecap: round; }
+    .diagram-marker { fill: rgba(240, 230, 208, 0.97); stroke: rgba(34, 28, 22, 0.75); stroke-width: 1.2; }
     .diagram-fret-label {
       fill: var(--muted);
       font-family: 'Source Serif 4', Georgia, serif;
@@ -841,82 +309,40 @@
     }
 
     /* ── CHECKLIST ── */
-    .checklist { list-style: none; padding: 0; }
-    .checklist li {
-      padding: 8px 0 8px 32px;
-      position: relative;
-      border-bottom: 1px solid var(--border);
-      color: #d4c8b4;
-    }
-    .checklist li:last-child { border-bottom: none; }
-    .checklist li::before {
-      content: '○';
-      position: absolute; left: 0;
-      color: var(--gold);
-      font-size: 1.1rem;
-    }
 
-    /* ── STUDY TABLE ── */
-    .study-week {
-      margin: 24px 0;
-    }
-    .study-week h3 {
-      background: var(--card);
-      padding: 10px 14px;
-      border-left: 3px solid var(--green);
-      margin-bottom: 0;
-      font-size: 1rem;
-      color: var(--cream);
-    }
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: 8px 0 8px 32px; position: relative; border-bottom: 1px solid var(--border); color: #d4c8b4; }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before { content: '○'; position: absolute; left: 0; color: var(--gold); font-size: 1.1rem; }
+
+    /* ── STUDY WEEK ── */
+
+    .study-week { margin: 24px 0; }
+    .study-week h3 { background: var(--card); padding: 10px 14px; border-left: 3px solid var(--green); margin-bottom: 0; font-size: 1rem; }
 
     /* ── GLOSSARY ── */
-    .glossary dt {
-      color: var(--gold-lt);
-      font-weight: 600;
-      margin-top: 14px;
-      font-family: 'Playfair Display', serif;
-    }
+
+    .glossary dt { color: var(--gold-lt); font-weight: 600; margin-top: 14px; font-family: 'Playfair Display', serif; }
     .glossary dd { color: #d4c8b4; margin-left: 0; padding-left: 16px; border-left: 2px solid var(--border); }
 
-    /* ── LISTS ── */
-    ul, ol { padding-left: 22px; margin: 10px 0; }
-    li { margin: 5px 0; color: #d4c8b4; }
-    strong { color: var(--cream); font-weight: 600; }
-    em { color: var(--muted); }
+    /* ── FOOTER / HR ── */
 
-    /* ── FOOTER ── */
     footer {
-      text-align: center;
       padding: 32px;
       border-top: 1px solid var(--border);
-      color: var(--muted);
       font-size: .85rem;
     }
     footer .flag { font-size: 1.3rem; margin-bottom: 6px; display: block; }
 
-    /* ── HR ── */
     hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 
     /* ── BACK TO TOP ── */
+
     .back-to-top {
-      position: fixed;
       right: 24px;
       bottom: 24px;
-      width: 48px;
-      height: 48px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      border: 1px solid rgba(232, 184, 75, 0.2);
-      background: rgba(15, 11, 8, 0.9);
-      color: var(--gold-lt);
-      text-decoration: none;
       box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
-      opacity: 0;
-      transform: translateY(12px);
-      pointer-events: none;
-      transition: opacity .2s, transform .2s, border-color .2s, background-color .2s;
+      background: rgba(15, 11, 8, 0.9);
       z-index: 50;
     }
     .back-to-top:hover,
@@ -925,88 +351,29 @@
       background: rgba(34, 28, 22, 0.96);
       outline: none;
     }
-    .back-to-top.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
+
+    /* ── LAYOUT BREAKPOINTS ── */
 
     @media (min-width: 901px) {
-      .page-layout {
-        grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
-      }
-
-      .toc {
-        position: sticky;
-        top: 24px;
-      }
+      .page-layout { grid-template-columns: minmax(260px, 300px) minmax(0, 1fr); }
+      .toc { position: sticky; top: 24px; }
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .wrapper { padding: 32px 16px 60px; }
-
-      .language-switcher {
-        top: max(10px, env(safe-area-inset-top));
-        right: max(10px, env(safe-area-inset-right));
-      }
-      .instrument-switcher {
-        top: calc(max(10px, env(safe-area-inset-top)) + 58px);
-        right: max(10px, env(safe-area-inset-right));
-      }
-
-      .js-enabled .toc.toc-ready .toc-toggle {
-        display: inline-flex;
-      }
-
-      .js-enabled .toc.toc-ready .toc-list {
-        display: none;
-      }
-
-      .js-enabled .toc.toc-ready.is-open .toc-list {
-        display: grid;
-      }
+    @media (max-width: 640px) {
+      .inversion-category-grid { grid-template-columns: 1fr; }
+      .inversion-voicing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 600px) {
       header { padding: 50px 20px 40px; }
       pre { font-size: .75rem; padding: 12px 14px; }
-      .back-to-top {
-        right: 16px;
-        bottom: 16px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .desktop-preferences {
-        display: none;
-      }
-
-      .mobile-preferences {
-        display: block;
-      }
+      .back-to-top { right: 16px; bottom: 16px; }
     }
   </style>
 </head>
 <body>
 
-<header id="top">
-  <div class="flag-stripe">
-    <span></span><span></span><span></span>
-  </div>
-  <nav class="genre-nav" aria-label="Percorsi del sito">
-    <a class="genre-link" data-nav="choose" href="index.html">Scegli il percorso</a>
-    <a class="genre-link is-active" data-nav="choro" href="choro.html" aria-current="page">Choro</a>
-    <a class="genre-link" data-nav="forro" href="forro.html">Forró</a>
-    <a class="genre-link" data-nav="pagode" href="pagode.html">Pagode</a>
-  </nav>
-  <div class="desktop-preferences">
-    <div class="language-switcher"></div>
-    <div class="instrument-switcher"></div>
-  </div>
-  <h1 id="page-title">Ritmos do Brasil — Choro</h1>
-  <p class="subtitle" id="page-subtitle">Un percorso progressivo dentro Ritmos do Brasil: dalla prima sincope alla roda de choro, con mano destra, cadenze, trio e repertorio.</p>
-</header>
+<header id="top" data-page="choro"></header>
 
 <div class="wrapper">
   <div class="page-layout">
@@ -1473,9 +840,11 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
   ↑
 </a>
 
+<script src="js/layout.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/instruments.js"></script>
-<script src="js/site-content.js"></script>
+<script src="js/chords.js"></script>
+<script src="js/data/choro-content.js"></script>
 <script>
   (() => {
     const localization = window.CavaquinhoI18n.applyBasicPageLocalization('choro', {
@@ -1718,13 +1087,10 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     syncBackToTop();
     syncTocForViewport();
 
-    const notePitchClasses = {
-      C: 0, 'C#': 1, Db: 1, D: 2, 'D#': 3, Eb: 3, E: 4, F: 5,
-      'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11
-    };
+    const { referenceOpenPitches, getRoleMarkers, appendRoleRing, getFirstPlayedStringIndex,
+      createGuitarChordSvg, createReferenceChordSvg,
+      createSpriteChordSvg: _createSpriteChordSvg, createHoverCardSystem } = window.CavaquinhoChords;
     const inversionOpenPitches = [5, 9, 2, 7];
-    const referenceOpenPitches = [2, 7, 11, 2];
-    const guitarOpenPitches = window.CavaquinhoInstruments.openPitches.guitar;
     const getSelectedInstrument = () => window.CavaquinhoInstruments.getCurrentInstrument();
     const optionLabelMap = {
       it: { open: 'Forma aperta', barre: 'Forma barré' },
@@ -1732,225 +1098,6 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
       pt: { open: 'Forma aberta', barre: 'Forma com pestana' }
     }[lang] || { open: 'Open shape', barre: 'Barre shape' };
 
-    const getChordDescriptor = (chordName) => {
-      const match = chordName.match(/^([A-G](?:#|b)?)(.*)$/);
-      if (!match) {
-        return null;
-      }
-
-      const [, root, suffix] = match;
-      let thirdInterval = 4;
-      let fifthInterval = 7;
-
-      if (/^m(?!aj)/i.test(suffix) || /dim/i.test(suffix)) {
-        thirdInterval = 3;
-      }
-      if (/dim|b5|ø/i.test(suffix)) {
-        fifthInterval = 6;
-      } else if (/#5|aug/i.test(suffix)) {
-        fifthInterval = 8;
-      }
-
-      return {
-        root,
-        rootPc: notePitchClasses[root],
-        thirdPc: (notePitchClasses[root] + thirdInterval) % 12,
-        fifthPc: (notePitchClasses[root] + fifthInterval) % 12
-      };
-    };
-
-    const getRoleMarkers = (frets, chordName, openPitches) => {
-      const descriptor = getChordDescriptor(chordName);
-      if (!descriptor) {
-        return { root: new Set(), third: new Set(), fifth: new Set() };
-      }
-
-      const root = new Set();
-      const third = new Set();
-      const fifth = new Set();
-
-      frets.forEach((fret, index) => {
-        if (typeof fret !== 'number' || fret < 0) {
-          return;
-        }
-        const pitchClass = (openPitches[index] + fret) % 12;
-        if (pitchClass === descriptor.rootPc) {
-          root.add(index);
-        } else if (pitchClass === descriptor.thirdPc) {
-          third.add(index);
-        } else if (pitchClass === descriptor.fifthPc) {
-          fifth.add(index);
-        }
-      });
-
-      return { root, third, fifth };
-    };
-
-    const appendRoleRing = (svg, x, y, role) => {
-      const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      ring.setAttribute('cx', x);
-      ring.setAttribute('cy', y);
-      ring.setAttribute('r', '12.9');
-      const className = role === 'root'
-        ? 'diagram-role-root'
-        : role === 'third'
-          ? 'diagram-role-third'
-          : 'diagram-role-fifth';
-      ring.setAttribute('class', className);
-      svg.append(ring);
-    };
-
-    const getFirstPlayedStringIndex = (frets) => frets.findIndex((fret) => typeof fret === 'number' && fret >= 0);
-
-    const createGuitarChordSvg = (shape, chordName) => {
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      const stringsX = [18, 36, 54, 72, 90, 108];
-      const lineY = [20, 48, 76, 104, 132];
-      const frets = shape.frets || [];
-      const positiveFrets = frets.filter((fret) => typeof fret === 'number' && fret > 0);
-      const minFret = positiveFrets.length ? Math.min(...positiveFrets) : 1;
-      const maxFret = positiveFrets.length ? Math.max(...positiveFrets) : 1;
-      const baseFret = shape.baseFret || ((maxFret > 4 || minFret > 3) ? minFret : 1);
-      const markers = getRoleMarkers(frets, chordName, guitarOpenPitches);
-      const firstPlayedString = getFirstPlayedStringIndex(frets);
-
-      svg.setAttribute('viewBox', '0 0 126 198');
-      svg.setAttribute('role', 'img');
-      svg.setAttribute('aria-label', `Diagramma dell'accordo ${chordName} per chitarra`);
-
-      const append = (node) => {
-        svg.append(node);
-        return node;
-      };
-      const line = (x1, y1, x2, y2, stroke, width) => {
-        const element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        element.setAttribute('x1', x1);
-        element.setAttribute('y1', y1);
-        element.setAttribute('x2', x2);
-        element.setAttribute('y2', y2);
-        element.setAttribute('stroke', stroke);
-        element.setAttribute('stroke-width', width);
-        element.setAttribute('stroke-linecap', 'round');
-        append(element);
-      };
-
-      stringsX.forEach((x) => {
-        line(x, lineY[0], x, lineY[4], 'rgba(240, 230, 208, 0.92)', 2.1);
-      });
-      lineY.forEach((y, index) => {
-        line(stringsX[0], y, stringsX[5], y, 'rgba(240, 230, 208, 0.92)', index === 0 && baseFret === 1 ? 4.6 : 2.1);
-      });
-
-      if (baseFret > 1 && !shape.hideBaseFretLabel) {
-        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        label.setAttribute('x', '10');
-        label.setAttribute('y', '17');
-        label.setAttribute('text-anchor', 'end');
-        label.setAttribute('fill', 'rgba(240, 230, 208, 0.82)');
-        label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
-        label.setAttribute('font-size', '11');
-        label.setAttribute('font-weight', '700');
-        label.textContent = `${baseFret}ª`;
-        append(label);
-      }
-
-      if (shape.barre) {
-        const relativeBarreFret = baseFret === 1 ? shape.barre.fret : shape.barre.fret - baseFret + 1;
-        if (relativeBarreFret > 0 && relativeBarreFret < lineY.length) {
-          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-          const y = (lineY[relativeBarreFret - 1] + lineY[relativeBarreFret]) / 2 - 6;
-          rect.setAttribute('x', stringsX[shape.barre.from - 1] - 8);
-          rect.setAttribute('y', y);
-          rect.setAttribute('width', stringsX[shape.barre.to - 1] - stringsX[shape.barre.from - 1] + 16);
-          rect.setAttribute('height', '12');
-          rect.setAttribute('rx', '6');
-          rect.setAttribute('fill', '#3c4040');
-          append(rect);
-        }
-      }
-
-      frets.forEach((fret, index) => {
-        if (typeof fret !== 'number' || fret <= 0) {
-          return;
-        }
-        const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
-        if (relativeFret <= 0 || relativeFret >= lineY.length) {
-          return;
-        }
-        const cy = (lineY[relativeFret - 1] + lineY[relativeFret]) / 2;
-        if (markers.root.has(index)) {
-          appendRoleRing(svg, stringsX[index], cy, 'root');
-        } else if (markers.third.has(index)) {
-          appendRoleRing(svg, stringsX[index], cy, 'third');
-        } else if (markers.fifth.has(index)) {
-          appendRoleRing(svg, stringsX[index], cy, 'fifth');
-        }
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('cx', stringsX[index]);
-        circle.setAttribute('cy', cy);
-        circle.setAttribute('r', '8.5');
-        circle.setAttribute('fill', 'rgba(255,255,255,0.96)');
-        circle.setAttribute('stroke', 'rgba(34, 28, 22, 0.78)');
-        circle.setAttribute('stroke-width', '1.1');
-        append(circle);
-
-        let finger = shape.fingers && shape.fingers[index];
-        if (!finger && shape.barre && shape.barre.finger && shape.barre.fret === fret) {
-          const labelIndex = (shape.barre.labelString || shape.barre.from) - 1;
-          if (index === labelIndex) {
-            finger = shape.barre.finger;
-          }
-        }
-        if (finger) {
-          const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-          label.setAttribute('x', stringsX[index]);
-          label.setAttribute('y', cy + 3.4);
-          label.setAttribute('fill', '#6a6a6a');
-          label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
-          label.setAttribute('font-size', '9.4');
-          label.setAttribute('font-weight', '700');
-          label.setAttribute('text-anchor', 'middle');
-          label.textContent = `${finger}`;
-          append(label);
-        }
-      });
-
-      stringsX.forEach((x, index) => {
-        const fret = frets[index];
-        if (typeof fret !== 'number' || fret < 0) {
-          const muted = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-          muted.setAttribute('x', x);
-          muted.setAttribute('y', '182');
-          muted.setAttribute('fill', 'rgba(220, 214, 201, 0.88)');
-          muted.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
-          muted.setAttribute('font-size', '12');
-          muted.setAttribute('font-weight', '700');
-          muted.setAttribute('text-anchor', 'middle');
-          muted.textContent = '×';
-          append(muted);
-          return;
-        }
-        if (fret === 0) {
-          if (markers.root.has(index)) {
-            appendRoleRing(svg, x, 178, 'root');
-          } else if (markers.third.has(index)) {
-            appendRoleRing(svg, x, 178, 'third');
-          } else if (markers.fifth.has(index)) {
-            appendRoleRing(svg, x, 178, 'fifth');
-          }
-        }
-        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        dot.setAttribute('cx', x);
-        dot.setAttribute('cy', '178');
-        dot.setAttribute('r', '5.3');
-        dot.setAttribute('stroke', 'rgba(240, 230, 208, 0.92)');
-        dot.setAttribute('stroke-width', '1.5');
-        dot.setAttribute('fill', index === firstPlayedString ? 'rgba(200, 200, 200, 0.92)' : 'transparent');
-        append(dot);
-      });
-
-      return svg;
-    };
 
     const createFretDiagramSvg = (frets, chordName, options = {}) => {
       const fretted = frets.filter((fret) => fret > 0);
@@ -2194,6 +1341,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
 
     if (projectChords) {
       const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260523g';
+      const createSpriteChordSvg = (chord) => _createSpriteChordSvg(chord, chordSpritePath);
       const referenceChordOptions = {
         A: [{ frets: [2, 2, 2, 2], barre: { fret: 2, from: 1, to: 4, finger: 1, labelString: 2 } }],
         A7: [{ frets: [2, 0, 2, 2], fingers: [1, 0, 2, 3] }],
@@ -2475,20 +1623,6 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
       const chordLookup = new Map(chordSet.map((chord) => [chord.name, chord]));
       const hoverableChordNames = Array.from(chordLookup.keys()).sort((left, right) => right.length - left.length);
       const chordPattern = new RegExp(`(^|[^A-Za-z0-9#/])(${hoverableChordNames.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?=$|[^A-Za-z0-9#/])`, 'g');
-      const hoverCard = document.createElement('div');
-      const hoverBanner = document.createElement('div');
-      const hoverTitle = document.createElement('div');
-      const hoverDiagram = document.createElement('div');
-      const hoverCaption = document.createElement('div');
-
-      hoverCard.className = 'chord-hover-card';
-      hoverBanner.className = 'chord-hover-banner';
-      hoverTitle.className = 'chord-hover-title';
-      hoverDiagram.className = 'chord-hover-diagram';
-      hoverCaption.className = 'chord-hover-caption';
-      hoverCard.append(hoverBanner, hoverTitle, hoverDiagram, hoverCaption);
-      document.body.append(hoverCard);
-
       const getInstrumentOptions = (chord) => {
         if (getSelectedInstrument() === 'guitar') {
           return window.CavaquinhoInstruments.getChordOptionsForInstrument(chord.name, 'guitar') || [];
@@ -2496,158 +1630,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
         return chord.options || [];
       };
 
-      const createReferenceChordSvg = (shape, chordName) => {
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        const stringsX = [18, 36, 54, 72];
-        const lineY = [20, 46, 72, 98, 124];
-        const frets = shape.frets || [];
-        const markers = getRoleMarkers(frets, chordName, referenceOpenPitches);
-        const positiveFrets = frets.filter((fret) => fret > 0);
-        const minFret = positiveFrets.length ? Math.min(...positiveFrets) : 1;
-        const maxFret = positiveFrets.length ? Math.max(...positiveFrets) : 1;
-        const baseFret = shape.baseFret || ((maxFret > 4 || minFret > 3) ? minFret : 1);
 
-        svg.setAttribute('viewBox', '0 0 94 186');
-        svg.setAttribute('role', 'img');
-        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chordName} per cavaquinho`);
-
-        const append = (node) => {
-          svg.append(node);
-          return node;
-        };
-        const line = (x1, y1, x2, y2, stroke, width) => {
-          const element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-          element.setAttribute('x1', x1);
-          element.setAttribute('y1', y1);
-          element.setAttribute('x2', x2);
-          element.setAttribute('y2', y2);
-          element.setAttribute('stroke', stroke);
-          element.setAttribute('stroke-width', width);
-          element.setAttribute('stroke-linecap', 'round');
-          append(element);
-        };
-
-        stringsX.forEach((x) => {
-          line(x, lineY[0], x, lineY[4], 'rgba(240, 230, 208, 0.92)', 2.2);
-        });
-
-        lineY.forEach((y, index) => {
-          line(stringsX[0], y, stringsX[3], y, 'rgba(240, 230, 208, 0.92)', index === 0 && baseFret === 1 ? 5 : 2.2);
-        });
-
-        if (baseFret > 1 && !shape.hideBaseFretLabel) {
-          const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-          label.setAttribute('x', '8');
-          label.setAttribute('y', '16');
-          label.setAttribute('text-anchor', 'end');
-          label.setAttribute('fill', 'rgba(240, 230, 208, 0.82)');
-          label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
-          label.setAttribute('font-size', '11');
-          label.setAttribute('font-weight', '700');
-          label.setAttribute('paint-order', 'stroke');
-          label.setAttribute('stroke', 'rgba(22, 24, 24, 0.94)');
-          label.setAttribute('stroke-width', '3');
-          label.setAttribute('stroke-linejoin', 'round');
-          label.textContent = `${baseFret}ª`;
-          append(label);
-        }
-
-        if (shape.barre) {
-          const relativeBarreFret = baseFret === 1 ? shape.barre.fret : shape.barre.fret - baseFret + 1;
-          if (relativeBarreFret > 0 && relativeBarreFret < lineY.length) {
-            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-            const y = (lineY[relativeBarreFret - 1] + lineY[relativeBarreFret]) / 2 - 6;
-            rect.setAttribute('x', stringsX[shape.barre.from - 1] - 6);
-            rect.setAttribute('y', y);
-            rect.setAttribute('width', stringsX[shape.barre.to - 1] - stringsX[shape.barre.from - 1] + 12);
-            rect.setAttribute('height', '12');
-            rect.setAttribute('rx', '6');
-            rect.setAttribute('fill', '#3c4040');
-            append(rect);
-          }
-        }
-
-        frets.forEach((fret, index) => {
-          if (!fret) {
-            return;
-          }
-          const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
-          if (relativeFret <= 0 || relativeFret >= lineY.length) {
-            return;
-          }
-
-          const cy = (lineY[relativeFret - 1] + lineY[relativeFret]) / 2;
-          if (markers.root.has(index)) {
-            appendRoleRing(svg, stringsX[index], cy, 'root');
-          } else if (markers.third.has(index)) {
-            appendRoleRing(svg, stringsX[index], cy, 'third');
-          } else if (markers.fifth.has(index)) {
-            appendRoleRing(svg, stringsX[index], cy, 'fifth');
-          }
-          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-          circle.setAttribute('cx', stringsX[index]);
-          circle.setAttribute('cy', cy);
-          circle.setAttribute('r', '8.5');
-          circle.setAttribute('fill', 'rgba(255,255,255,0.96)');
-          circle.setAttribute('stroke', 'rgba(34, 28, 22, 0.78)');
-          circle.setAttribute('stroke-width', '1.1');
-          append(circle);
-
-          let finger = shape.fingers && shape.fingers[index];
-          if (!finger && shape.barre && shape.barre.finger && shape.barre.fret === fret) {
-            const labelIndex = (shape.barre.labelString || shape.barre.from) - 1;
-            if (index === labelIndex) {
-              finger = shape.barre.finger;
-            }
-          }
-          if (finger) {
-            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            label.setAttribute('x', stringsX[index]);
-            label.setAttribute('y', cy + 3.4);
-            label.setAttribute('fill', '#6a6a6a');
-            label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
-            label.setAttribute('font-size', '9.5');
-            label.setAttribute('font-weight', '700');
-            label.setAttribute('text-anchor', 'middle');
-            label.textContent = `${finger}`;
-            append(label);
-          }
-        });
-
-        [18, 36, 54, 72].forEach((x, index) => {
-          if (frets[index] === 0) {
-            if (markers.root.has(index)) {
-              appendRoleRing(svg, x, 168, 'root');
-            } else if (markers.third.has(index)) {
-              appendRoleRing(svg, x, 168, 'third');
-            } else if (markers.fifth.has(index)) {
-              appendRoleRing(svg, x, 168, 'fifth');
-            }
-          }
-          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-          dot.setAttribute('cx', x);
-          dot.setAttribute('cy', '168');
-          dot.setAttribute('r', '5.4');
-          dot.setAttribute('stroke', 'rgba(240, 230, 208, 0.92)');
-          dot.setAttribute('stroke-width', '1.5');
-          dot.setAttribute('fill', index === 0 ? 'rgba(200, 200, 200, 0.92)' : 'transparent');
-          append(dot);
-        });
-
-        return svg;
-      };
-
-      const createSpriteChordSvg = (chord) => {
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-        svg.setAttribute('viewBox', '0 0 94 168');
-        svg.setAttribute('role', 'img');
-        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chord.name} per cavaquinho`);
-        use.setAttribute('href', `${chordSpritePath}#${chord.symbolId}`);
-        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `${chordSpritePath}#${chord.symbolId}`);
-        svg.append(use);
-        return svg;
-      };
 
       const renderChordDiagram = (container, chord) => {
         container.replaceChildren();
@@ -2710,48 +1693,8 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
         container.append(stack);
       };
 
-      const positionHoverCard = (x, y) => {
-        const margin = 18;
-        const rect = hoverCard.getBoundingClientRect();
-        let left = x + 26;
-        let top = y - 22;
-
-        if (left + rect.width > window.innerWidth - margin) {
-          left = x - rect.width - 26;
-        }
-        if (top + rect.height > window.innerHeight - margin) {
-          top = window.innerHeight - rect.height - margin;
-        }
-        if (top < margin) {
-          top = margin;
-        }
-        if (left < margin) {
-          left = margin;
-        }
-
-        hoverCard.style.left = `${left}px`;
-        hoverCard.style.top = `${top}px`;
-      };
-
-      const showHoverCard = (trigger, chord, position) => {
-        hoverTitle.textContent = chord.name;
-        hoverCaption.textContent = chord.caption;
-        hoverCard.classList.toggle('has-multiple-options', getInstrumentOptions(chord).length > 1);
-        renderChordDiagram(hoverDiagram, chord);
-        hoverCard.classList.add('is-visible');
-
-        if (position) {
-          positionHoverCard(position.x, position.y);
-          return;
-        }
-
-        const rect = trigger.getBoundingClientRect();
-        positionHoverCard(rect.right, rect.top + rect.height / 2);
-      };
-
-      const hideHoverCard = () => {
-        hoverCard.classList.remove('is-visible');
-      };
+      const { show: showHoverCard, hide: hideHoverCard, position: positionHoverCard } =
+        createHoverCardSystem({ renderDiagram: renderChordDiagram, getInstrumentOptions });
 
       const enhanceChordText = (root) => {
         const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
