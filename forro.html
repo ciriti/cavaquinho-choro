@@ -103,13 +103,16 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 20px;
       padding: 6px;
       border-radius: 999px;
       border: 1px solid rgba(232, 184, 75, 0.18);
       background: rgba(15, 11, 8, 0.34);
-      position: relative;
-      z-index: 1;
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top));
+      right: max(14px, env(safe-area-inset-right));
+      z-index: 1200;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
     }
 
     .language-link {
@@ -611,6 +614,11 @@
     @media (max-width: 900px) {
       .toc {
         padding: 18px;
+      }
+
+      .language-switcher {
+        top: max(10px, env(safe-area-inset-top));
+        right: max(10px, env(safe-area-inset-right));
       }
 
       .toc-toggle {
