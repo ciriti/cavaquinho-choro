@@ -1,19 +1,16 @@
-# 🎵 Cavaquinho & Choro — Sistema di Apprendimento
+# 🎵 Ritmos do Brasil — Sistema di Apprendimento
 
-Sito didattico per imparare il cavaquinho nel contesto del choro brasiliano.
+Sito didattico per studiare il cavaquinho attraverso più linguaggi della musica brasiliana: choro, forró e pagode.
 
-👉 **[Apri il sito](https://TUO-USERNAME.github.io/cavaquinho-choro)**
+👉 **[Apri il sito](https://ciriti.github.io/ritmosdobrasil/)**
 
 ## Contenuti
 
-- Accordatura e ruolo del cavaquinho
-- Il pattern ritmico *Garfinho*
-- Progressioni nelle 5 tonalità principali (Do, Sol, Fa, La min., Re min.)
-- La Catena di Dominanti
-- Modulazioni e struttura AABBACCA
-- Accordi e schemi di 4 brani essenziali
-- Piano di studio su 8 settimane
-- Checklist pre-Jam Session
+- Home con tre percorsi dedicati: Choro, Forró e Pagode
+- Studio del *garfinho*, della levada e dei principali pattern di accompagnamento
+- Progressioni, cadenze e famiglie armoniche tipiche dei tre generi
+- Repertorio e giri pronti da portare in studio, in prova o in roda
+- Piani di studio guidati e checklist finali per ogni percorso
 
 ## Come usare
 

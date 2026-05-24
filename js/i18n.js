@@ -466,6 +466,7 @@
       const chooseLink = document.querySelector('[data-nav="choose"]');
       const choroLink = document.querySelector('[data-nav="choro"]');
       const forroLink = document.querySelector('[data-nav="forro"]');
+      const pagodeLink = document.querySelector('[data-nav="pagode"]');
       if (chooseLink && translation.nav.choose) {
         chooseLink.textContent = translation.nav.choose;
       }
@@ -474,6 +475,9 @@
       }
       if (forroLink && translation.nav.forro) {
         forroLink.textContent = translation.nav.forro;
+      }
+      if (pagodeLink && translation.nav.pagode) {
+        pagodeLink.textContent = translation.nav.pagode;
       }
     }
 

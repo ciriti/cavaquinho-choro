@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cavaquinho Brasiliano — Scegli il Percorso</title>
+  <title>Ritmos do Brasil — Percorsi di Studio</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -18,6 +18,8 @@
       --muted: #a89780;
       --green: #5f8b58;
       --green-soft: rgba(95, 139, 88, 0.14);
+      --blue: #5a7fa8;
+      --blue-soft: rgba(90, 127, 168, 0.16);
       --gold-soft: rgba(201, 149, 42, 0.14);
     }
 
@@ -205,7 +207,7 @@
 
     .chooser {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 22px;
       margin-bottom: 40px;
     }
@@ -233,6 +235,10 @@
       background: radial-gradient(circle, rgba(95, 139, 88, 0.18), transparent 68%);
     }
 
+    .genre-card.pagode::after {
+      background: radial-gradient(circle, rgba(90, 127, 168, 0.18), transparent 68%);
+    }
+
     .genre-badge {
       display: inline-flex;
       align-items: center;
@@ -255,6 +261,11 @@
     .genre-card.forro .genre-badge::before {
       background: var(--green);
       box-shadow: 0 0 0 6px var(--green-soft);
+    }
+
+    .genre-card.pagode .genre-badge::before {
+      background: var(--blue);
+      box-shadow: 0 0 0 6px var(--blue-soft);
     }
 
     .genre-card h2 {
@@ -295,6 +306,10 @@
       color: #86b57d;
     }
 
+    .genre-card.pagode .card-points li::before {
+      color: #8fb0d4;
+    }
+
     .card-actions {
       display: flex;
       flex-wrap: wrap;
@@ -333,6 +348,17 @@
     .genre-card.forro .button:focus-visible {
       border-color: rgba(134, 181, 125, 0.46);
       background: rgba(95, 139, 88, 0.22);
+    }
+
+    .genre-card.pagode .button {
+      border-color: rgba(90, 127, 168, 0.3);
+      background: rgba(90, 127, 168, 0.14);
+    }
+
+    .genre-card.pagode .button:hover,
+    .genre-card.pagode .button:focus-visible {
+      border-color: rgba(143, 176, 212, 0.5);
+      background: rgba(90, 127, 168, 0.22);
     }
 
     .button.secondary {
@@ -459,9 +485,9 @@
     <div class="language-switcher"></div>
     <div class="instrument-switcher"></div>
     <div id="index-hero-copy">
-      <span class="eyebrow">Percorsi di Studio</span>
-      <h1>Cavaquinho Brasiliano, due strade da scegliere</h1>
-      <p>Il sito adesso si apre come un piccolo studio guidato: puoi entrare nel mondo del <strong>Choro</strong>, con il suo lavoro di precisione, anticipazione e roda, oppure nel mondo del <strong>Forró</strong>, con levadas, giri armonici cantabili e repertorio vicino a gruppi come Falamansa.</p>
+      <span class="eyebrow">Ritmos do Brasil</span>
+      <h1>Tre percorsi brasiliani per studiare il cavaquinho con direzione</h1>
+      <p><strong>Ritmos do Brasil</strong> raccoglie più linguaggi della musica brasiliana dentro un unico studio guidato. Qui puoi entrare nel mondo del <strong>Choro</strong> per precisione e linguaggio di roda, nel <strong>Forró</strong> per levada e repertorio da ballo, oppure nel <strong>Pagode</strong> per accompagnamento, groove di gruppo e giri armonici cantabili.</p>
     </div>
   </header>
 
@@ -470,7 +496,7 @@
       <article class="genre-card choro">
         <span class="genre-badge">Percorso 1</span>
         <h2>Choro</h2>
-        <p>Il percorso già esistente: modulo dopo modulo, dalla mano destra fino ai giri in Do, Sol, Fa, La minore e Re minore, con cadenze, trio, repertorio e diteggiature.</p>
+        <p>Il percorso della precisione, dell'anticipazione e della lingua del choro: dal garfinho fino alle cadenze, al trio, alle inversioni e al repertorio classico.</p>
         <ul class="card-points">
           <li>Garfinho, anticipazione armonica e accompagnamento in 2/4.</li>
           <li>Progressioni classiche del choro: ii–V–I, catena di dominanti, trio e modulazioni.</li>
@@ -484,7 +510,7 @@
       <article class="genre-card forro">
         <span class="genre-badge">Percorso 2</span>
         <h2>Forró</h2>
-        <p>Una nuova sezione costruita con la stessa impostazione didattica del sito Choro, ma pensata come un tutor di forró: levada, xote, baião, cadute, tonalità ricorrenti e giri usatissimi nel repertorio popolare.</p>
+        <p>Il percorso della levada, dello xote, del baião e del repertorio da palco: giri pratici, tonalità ricorrenti e accompagnamento che funziona da subito.</p>
         <ul class="card-points">
           <li>Pattern di xote e baião spiegati con funzione ritmica e pratica quotidiana.</li>
           <li>Famiglie armoniche e giri tipici che tornano spesso nel repertorio tipo Falamansa.</li>
@@ -494,12 +520,26 @@
           <a class="button" href="forro.html">Apri il percorso Forró</a>
         </div>
       </article>
+
+      <article class="genre-card pagode">
+        <span class="genre-badge">Percorso 3</span>
+        <h2>Pagode</h2>
+        <p>Il percorso dell'accompagnamento in gruppo, della levada e del pagode/pop pagode: mano compatta, ritornelli che si aprono bene e repertorio da roda e da banda.</p>
+        <ul class="card-points">
+          <li>Levada base, ghost/chuck e sostegno ritmico stabile.</li>
+          <li>Linguaggio di I–VI7–ii–V, preparazione del ritornello e passaggi tipici del pagode.</li>
+          <li>Famiglie di canzoni e giri armonici da portare direttamente in prova.</li>
+        </ul>
+        <div class="card-actions">
+          <a class="button" href="pagode.html">Apri il percorso Pagode</a>
+        </div>
+      </article>
     </section>
 
-    <section class="overview" aria-label="Panoramica dei due percorsi">
+    <section class="overview" aria-label="Panoramica dei tre percorsi">
       <article class="panel">
         <h3>Come orientarsi</h3>
-        <p>Se stai costruendo la mano destra e vuoi un accompagnamento molto preciso, comincia da Choro. Se invece vuoi entrare subito nei giri armonici del repertorio di festa e canto, il percorso Forró è il posto giusto per partire.</p>
+        <p>Parti dalla funzione musicale che vuoi dare al cavaco. Choro affina mano destra e lettura armonica, Forró ti porta rapidamente nel repertorio ballabile, mentre Pagode allena l'accompagnamento che deve stare bene con voce, percussioni e dinamica di gruppo.</p>
         <table class="compare-table">
           <thead>
             <tr>
@@ -519,6 +559,11 @@
               <td>Levada, cicli armonici cantabili, dominanti che spingono, tonalità da palco.</td>
               <td>Accompagnare xote e baião con sicurezza e con un vocabolario utile da subito.</td>
             </tr>
+            <tr>
+              <td><strong>Pagode</strong></td>
+              <td>Levada, accompagnamento compatto, preparazione di ritornello, roda e pop pagode.</td>
+              <td>Più sicurezza nell'accompagnare canzoni, marcare le sezioni e sostenere il gruppo.</td>
+            </tr>
           </tbody>
         </table>
       </article>
@@ -535,8 +580,12 @@
             Entra in Forró e lavora sui giri più riconoscibili dello xote e del baião.
           </li>
           <li>
-            <strong>Se vuoi fare entrambi</strong>
-            Usa Choro per la disciplina della mano e Forró per l'uso pratico del repertorio.
+            <strong>Se vuoi sostenere voce e percussione in gruppo</strong>
+            Entra in Pagode e lavora su levada, giri armonici e preparazione del ritornello.
+          </li>
+          <li>
+            <strong>Se vuoi un quadro completo</strong>
+            Usa Choro per la disciplina, Forró per il ballo e Pagode per il linguaggio di accompagnamento.
           </li>
         </ul>
       </aside>
@@ -544,7 +593,7 @@
   </main>
 
   <footer id="index-footer-text">
-    Scegli il percorso, entra nella pagina dedicata e studia per famiglie musicali, non per pagine isolate.
+    Scegli il percorso, entra nella pagina dedicata e studia il cavaquinho per famiglie musicali brasiliane, non per pagine isolate.
   </footer>
   <script src="js/i18n.js"></script>
   <script src="js/instruments.js"></script>
