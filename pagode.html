@@ -552,6 +552,137 @@
       margin-top: 18px;
     }
 
+    .chord-diagram-stack {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .chord-diagram-variant {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chord-diagram-variant-label {
+      font-size: .68rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .chord-token {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--gold-lt);
+      font: inherit;
+      line-height: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color .18s ease;
+    }
+
+    .chord-token:hover,
+    .chord-token:focus-visible {
+      color: #ffd27a;
+      outline: none;
+    }
+
+    .chord-hover-card {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 188px;
+      max-width: 348px;
+      padding: 0 0 16px;
+      border: 1px solid rgba(240, 230, 208, 0.08);
+      border-radius: 18px;
+      background: rgba(22, 24, 24, 0.96);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.38);
+      color: var(--cream);
+      opacity: 0;
+      transform: translate3d(0, 8px, 0) scale(.98);
+      pointer-events: none;
+      z-index: 1200;
+      transition: opacity .14s ease, transform .14s ease;
+    }
+
+    .chord-hover-card.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    .chord-hover-banner {
+      height: 14px;
+      border-radius: 18px 18px 0 0;
+      background:
+        linear-gradient(90deg, transparent 0 4px, rgba(255,255,255,.7) 4px 8px, transparent 8px 12px),
+        linear-gradient(rgba(0,0,0,.08), rgba(0,0,0,.08));
+      background-size: 12px 12px, auto;
+      background-color: #1b1b1a;
+      border-bottom: 1px solid rgba(240, 230, 208, 0.08);
+    }
+
+    .chord-hover-title {
+      padding: 14px 20px 8px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--cream);
+    }
+
+    .chord-hover-diagram {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4px 12px 2px;
+    }
+
+    .chord-hover-diagram svg {
+      width: 100px;
+      height: 182px;
+      overflow: visible;
+    }
+
+    .chord-hover-diagram .chord-diagram-stack {
+      gap: 12px;
+    }
+
+    .chord-hover-diagram .chord-diagram-variant-label {
+      font-size: .66rem;
+    }
+
+    .chord-hover-caption {
+      padding: 8px 16px 0;
+      text-align: center;
+      font-size: .76rem;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .diagram-role-root {
+      fill: none;
+      stroke: #e8b84b;
+      stroke-width: 2.6;
+    }
+
+    .diagram-role-third {
+      fill: none;
+      stroke: #78c39c;
+      stroke-width: 2.6;
+    }
+
+    .diagram-role-fifth {
+      fill: none;
+      stroke: #6fa8dc;
+      stroke-width: 2.6;
+    }
+
     .study-week {
       padding: 22px 20px;
       border-radius: 16px;
@@ -988,6 +1119,475 @@ In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
       setTocOpen(false);
       syncBackToTop();
       syncTocForViewport();
+
+      const notePitchClasses = {
+        C: 0, 'C#': 1, Db: 1, D: 2, 'D#': 3, Eb: 3, E: 4, F: 5,
+        'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11
+      };
+      const referenceOpenPitches = [2, 7, 11, 2];
+      const guitarOpenPitches = window.CavaquinhoInstruments.openPitches.guitar;
+      const getSelectedInstrument = () => window.CavaquinhoInstruments.getCurrentInstrument();
+      const optionLabelMap = {
+        it: { open: 'Forma aperta', barre: 'Forma barré' },
+        en: { open: 'Open shape', barre: 'Barre shape' },
+        pt: { open: 'Forma aberta', barre: 'Forma com pestana' }
+      }[lang] || { open: 'Open shape', barre: 'Barre shape' };
+      const chordCaption = (chordName) => window.CavaquinhoI18n.describeChord(chordName, lang);
+
+      const getChordDescriptor = (chordName) => {
+        const match = chordName.match(/^([A-G](?:#|b)?)(.*)$/);
+        if (!match) {
+          return null;
+        }
+        const [, root, suffix] = match;
+        let thirdInterval = 4;
+        let fifthInterval = 7;
+        if (/^m(?!aj)/i.test(suffix) || /dim/i.test(suffix)) {
+          thirdInterval = 3;
+        }
+        if (/dim|b5|ø/i.test(suffix)) {
+          fifthInterval = 6;
+        } else if (/#5|aug/i.test(suffix)) {
+          fifthInterval = 8;
+        }
+        return {
+          rootPc: notePitchClasses[root],
+          thirdPc: (notePitchClasses[root] + thirdInterval) % 12,
+          fifthPc: (notePitchClasses[root] + fifthInterval) % 12
+        };
+      };
+
+      const getRoleMarkers = (frets, chordName, openPitches = referenceOpenPitches) => {
+        const descriptor = getChordDescriptor(chordName);
+        if (!descriptor) {
+          return { root: new Set(), third: new Set(), fifth: new Set() };
+        }
+        const root = new Set();
+        const third = new Set();
+        const fifth = new Set();
+        frets.forEach((fret, index) => {
+          if (typeof fret !== 'number' || fret < 0) {
+            return;
+          }
+          const pitchClass = (openPitches[index] + fret) % 12;
+          if (pitchClass === descriptor.rootPc) {
+            root.add(index);
+          } else if (pitchClass === descriptor.thirdPc) {
+            third.add(index);
+          } else if (pitchClass === descriptor.fifthPc) {
+            fifth.add(index);
+          }
+        });
+        return { root, third, fifth };
+      };
+
+      const appendRoleRing = (svg, x, y, role) => {
+        const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        ring.setAttribute('cx', x);
+        ring.setAttribute('cy', y);
+        ring.setAttribute('r', '10.2');
+        const className = role === 'root'
+          ? 'diagram-role-root'
+          : role === 'third'
+            ? 'diagram-role-third'
+            : 'diagram-role-fifth';
+        ring.setAttribute('class', className);
+        svg.append(ring);
+      };
+
+      const getFirstPlayedStringIndex = (frets) => frets.findIndex((fret) => typeof fret === 'number' && fret >= 0);
+
+      const chordOptions = {
+        A7: [{ frets: [2, 0, 2, 2], fingers: [1, 0, 2, 3] }],
+        Am7: [{ frets: [2, 0, 1, 0], fingers: [2, 0, 1, 0] }],
+        B7: [{ frets: [7, 8, 7, 9], fingers: [2, 3, 1, 4], baseFret: 7 }],
+        Bm7: [{ frets: [4, 2, 2, 2], barre: { fret: 2, from: 2, to: 4, finger: 1, labelString: 2 }, fingers: [3, 1, 1, 1], baseFret: 2 }],
+        C: [{ frets: [2, 0, 1, 2], fingers: [2, 0, 1, 3] }],
+        C7: [{ frets: [2, 3, 1, 2], fingers: [2, 3, 1, 4] }],
+        Cmaj7: [{ frets: [2, 0, 0, 2], fingers: [2, 0, 0, 3] }],
+        D: [{ frets: [4, 2, 3, 4], fingers: [3, 1, 2, 4] }],
+        D7: [{ frets: [4, 2, 1, 4], fingers: [3, 2, 1, 4] }],
+        Dm7: [{ frets: [3, 2, 1, 3], fingers: [3, 2, 1, 4] }],
+        E7: [{ frets: [2, 1, 0, 0], fingers: [2, 1, 0, 0] }],
+        Em7: [{ frets: [0, 4, 3, 2], fingers: [0, 3, 2, 1] }],
+        F: [{ frets: [3, 2, 1, 3], fingers: [3, 2, 1, 4] }],
+        'F#m7': [{ frets: [1, 1, 2, 2], fingers: [1, 1, 3, 4] }],
+        'F#m7b5': [{ frets: [1, 1, 2, 0], fingers: [1, 2, 3, 0] }],
+        G: [{ frets: [5, 4, 3, 5], fingers: [3, 2, 1, 4], baseFret: 3, hideBaseFretLabel: true }],
+        G7: [{ frets: [3, 4, 3, 5], fingers: [0, 3, 0, 4], barre: { fret: 3, from: 1, to: 4, finger: 1, labelString: 1 }, baseFret: 3, hideBaseFretLabel: true }],
+        Gmaj7: [{ frets: [5, 4, 3, 2], fingers: [4, 3, 2, 1], baseFret: 2 }]
+      };
+
+      const chordSet = [
+        'A7', 'Am7', 'B7', 'Bm7', 'C', 'C7', 'Cmaj7', 'D', 'D7', 'Dm7',
+        'E7', 'Em7', 'F', 'F#m7', 'F#m7b5', 'G', 'G7', 'Gmaj7'
+      ].map((name) => ({
+        name,
+        caption: chordCaption(name),
+        options: chordOptions[name] || []
+      }));
+
+      const chordLookup = new Map(chordSet.map((chord) => [chord.name, chord]));
+      const hoverableChordNames = Array.from(chordLookup.keys()).sort((left, right) => right.length - left.length);
+      const chordPattern = new RegExp(`(^|[^A-Za-z0-9#/])(${hoverableChordNames.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?=$|[^A-Za-z0-9#/])`, 'g');
+
+      const hoverCard = document.createElement('div');
+      const hoverBanner = document.createElement('div');
+      const hoverTitle = document.createElement('div');
+      const hoverDiagram = document.createElement('div');
+      const hoverCaption = document.createElement('div');
+      hoverCard.className = 'chord-hover-card';
+      hoverBanner.className = 'chord-hover-banner';
+      hoverTitle.className = 'chord-hover-title';
+      hoverDiagram.className = 'chord-hover-diagram';
+      hoverCaption.className = 'chord-hover-caption';
+      hoverCard.append(hoverBanner, hoverTitle, hoverDiagram, hoverCaption);
+      document.body.append(hoverCard);
+
+      const createReferenceChordSvg = (shape, chordName) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const stringsX = [18, 36, 54, 72];
+        const lineY = [20, 46, 72, 98, 124];
+        const frets = shape.frets || [];
+        const markers = getRoleMarkers(frets, chordName);
+        const positiveFrets = frets.filter((fret) => fret > 0);
+        const minFret = positiveFrets.length ? Math.min(...positiveFrets) : 1;
+        const maxFret = positiveFrets.length ? Math.max(...positiveFrets) : 1;
+        const baseFret = shape.baseFret || ((maxFret > 4 || minFret > 3) ? minFret : 1);
+
+        svg.setAttribute('viewBox', '0 0 94 186');
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chordName} per cavaquinho`);
+
+        const append = (node) => {
+          svg.append(node);
+          return node;
+        };
+        const line = (x1, y1, x2, y2, stroke, width) => {
+          const element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          element.setAttribute('x1', x1);
+          element.setAttribute('y1', y1);
+          element.setAttribute('x2', x2);
+          element.setAttribute('y2', y2);
+          element.setAttribute('stroke', stroke);
+          element.setAttribute('stroke-width', width);
+          element.setAttribute('stroke-linecap', 'round');
+          append(element);
+        };
+
+        stringsX.forEach((x) => {
+          line(x, lineY[0], x, lineY[4], 'rgba(240, 230, 208, 0.92)', 2.2);
+        });
+        lineY.forEach((y, index) => {
+          line(stringsX[0], y, stringsX[3], y, 'rgba(240, 230, 208, 0.92)', index === 0 && baseFret === 1 ? 5 : 2.2);
+        });
+
+        if (baseFret > 1 && !shape.hideBaseFretLabel) {
+          const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          label.setAttribute('x', '8');
+          label.setAttribute('y', '16');
+          label.setAttribute('text-anchor', 'end');
+          label.setAttribute('fill', 'rgba(240, 230, 208, 0.82)');
+          label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+          label.setAttribute('font-size', '11');
+          label.setAttribute('font-weight', '700');
+          label.textContent = `${baseFret}ª`;
+          append(label);
+        }
+
+        if (shape.barre) {
+          const relativeBarreFret = baseFret === 1 ? shape.barre.fret : shape.barre.fret - baseFret + 1;
+          if (relativeBarreFret > 0 && relativeBarreFret < lineY.length) {
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            const y = (lineY[relativeBarreFret - 1] + lineY[relativeBarreFret]) / 2 - 6;
+            rect.setAttribute('x', stringsX[shape.barre.from - 1] - 6);
+            rect.setAttribute('y', y);
+            rect.setAttribute('width', stringsX[shape.barre.to - 1] - stringsX[shape.barre.from - 1] + 12);
+            rect.setAttribute('height', '12');
+            rect.setAttribute('rx', '6');
+            rect.setAttribute('fill', '#3c4040');
+            append(rect);
+          }
+        }
+
+        frets.forEach((fret, index) => {
+          if (!fret) {
+            return;
+          }
+          const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
+          if (relativeFret <= 0 || relativeFret >= lineY.length) {
+            return;
+          }
+          const cy = (lineY[relativeFret - 1] + lineY[relativeFret]) / 2;
+          if (markers.root.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'root');
+          } else if (markers.third.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'third');
+          } else if (markers.fifth.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'fifth');
+          }
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', stringsX[index]);
+          circle.setAttribute('cy', cy);
+          circle.setAttribute('r', '8.5');
+          circle.setAttribute('fill', 'rgba(255,255,255,0.96)');
+          circle.setAttribute('stroke', 'rgba(34, 28, 22, 0.78)');
+          circle.setAttribute('stroke-width', '1.1');
+          append(circle);
+
+          let finger = shape.fingers && shape.fingers[index];
+          if (!finger && shape.barre && shape.barre.finger && shape.barre.fret === fret) {
+            const labelIndex = (shape.barre.labelString || shape.barre.from) - 1;
+            if (index === labelIndex) {
+              finger = shape.barre.finger;
+            }
+          }
+          if (finger) {
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', stringsX[index]);
+            label.setAttribute('y', cy + 3.4);
+            label.setAttribute('fill', '#6a6a6a');
+            label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+            label.setAttribute('font-size', '9.5');
+            label.setAttribute('font-weight', '700');
+            label.setAttribute('text-anchor', 'middle');
+            label.textContent = `${finger}`;
+            append(label);
+          }
+        });
+
+        stringsX.forEach((x, index) => {
+          if (frets[index] === 0) {
+            if (markers.root.has(index)) {
+              appendRoleRing(svg, x, 168, 'root');
+            } else if (markers.third.has(index)) {
+              appendRoleRing(svg, x, 168, 'third');
+            } else if (markers.fifth.has(index)) {
+              appendRoleRing(svg, x, 168, 'fifth');
+            }
+          }
+          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          dot.setAttribute('cx', x);
+          dot.setAttribute('cy', '168');
+          dot.setAttribute('r', '5.4');
+          dot.setAttribute('stroke', 'rgba(240, 230, 208, 0.92)');
+          dot.setAttribute('stroke-width', '1.5');
+          dot.setAttribute('fill', index === getFirstPlayedStringIndex(frets) ? 'rgba(200, 200, 200, 0.92)' : 'transparent');
+          append(dot);
+        });
+
+        return svg;
+      };
+
+      const createGuitarChordSvg = (shape, chordName) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const stringsX = [18, 36, 54, 72, 90, 108];
+        const lineY = [20, 48, 76, 104, 132];
+        const frets = shape.frets || [];
+        const positiveFrets = frets.filter((fret) => typeof fret === 'number' && fret > 0);
+        const minFret = positiveFrets.length ? Math.min(...positiveFrets) : 1;
+        const maxFret = positiveFrets.length ? Math.max(...positiveFrets) : 1;
+        const baseFret = shape.baseFret || ((maxFret > 4 || minFret > 3) ? minFret : 1);
+        const markers = getRoleMarkers(frets, chordName, guitarOpenPitches);
+
+        svg.setAttribute('viewBox', '0 0 126 198');
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', `Diagramma dell'accordo ${chordName} per chitarra`);
+
+        const append = (node) => {
+          svg.append(node);
+          return node;
+        };
+        const line = (x1, y1, x2, y2, stroke, width) => {
+          const element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          element.setAttribute('x1', x1);
+          element.setAttribute('y1', y1);
+          element.setAttribute('x2', x2);
+          element.setAttribute('y2', y2);
+          element.setAttribute('stroke', stroke);
+          element.setAttribute('stroke-width', width);
+          element.setAttribute('stroke-linecap', 'round');
+          append(element);
+        };
+
+        stringsX.forEach((x) => line(x, lineY[0], x, lineY[4], 'rgba(240, 230, 208, 0.92)', 2.1));
+        lineY.forEach((y, index) => line(stringsX[0], y, stringsX[5], y, 'rgba(240, 230, 208, 0.92)', index === 0 && baseFret === 1 ? 4.6 : 2.1));
+
+        if (baseFret > 1 && !shape.hideBaseFretLabel) {
+          const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          label.setAttribute('x', '10');
+          label.setAttribute('y', '17');
+          label.setAttribute('text-anchor', 'end');
+          label.setAttribute('fill', 'rgba(240, 230, 208, 0.82)');
+          label.setAttribute('font-family', 'Source Serif 4, Georgia, serif');
+          label.setAttribute('font-size', '11');
+          label.setAttribute('font-weight', '700');
+          label.textContent = `${baseFret}ª`;
+          append(label);
+        }
+
+        frets.forEach((fret, index) => {
+          if (typeof fret !== 'number' || fret <= 0) {
+            return;
+          }
+          const relativeFret = baseFret === 1 ? fret : fret - baseFret + 1;
+          if (relativeFret <= 0 || relativeFret >= lineY.length) {
+            return;
+          }
+          const cy = (lineY[relativeFret - 1] + lineY[relativeFret]) / 2;
+          if (markers.root.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'root');
+          } else if (markers.third.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'third');
+          } else if (markers.fifth.has(index)) {
+            appendRoleRing(svg, stringsX[index], cy, 'fifth');
+          }
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', stringsX[index]);
+          circle.setAttribute('cy', cy);
+          circle.setAttribute('r', '8.5');
+          circle.setAttribute('fill', 'rgba(255,255,255,0.96)');
+          circle.setAttribute('stroke', 'rgba(34, 28, 22, 0.78)');
+          circle.setAttribute('stroke-width', '1.1');
+          append(circle);
+        });
+
+        return svg;
+      };
+
+      const getInstrumentOptions = (chord) => {
+        if (getSelectedInstrument() === 'guitar') {
+          return window.CavaquinhoInstruments.getChordOptionsForInstrument(chord.name, 'guitar') || [];
+        }
+        return chord.options || [];
+      };
+
+      const renderChordDiagram = (container, chord) => {
+        container.replaceChildren();
+        const instrumentOptions = getInstrumentOptions(chord);
+        if (instrumentOptions.length === 0) {
+          return;
+        }
+        const stack = document.createElement('div');
+        stack.className = 'chord-diagram-stack';
+        instrumentOptions.forEach((option, index) => {
+          const variant = document.createElement('div');
+          variant.className = 'chord-diagram-variant';
+          if (instrumentOptions.length > 1) {
+            const variantLabel = document.createElement('span');
+            variantLabel.className = 'chord-diagram-variant-label';
+            variantLabel.textContent = optionLabelMap[option.label] || option.label || `Opzione ${index + 1}`;
+            variant.append(variantLabel);
+          }
+          variant.append(getSelectedInstrument() === 'guitar'
+            ? createGuitarChordSvg(option, chord.name)
+            : createReferenceChordSvg(option, chord.name));
+          stack.append(variant);
+        });
+        container.append(stack);
+      };
+
+      const positionHoverCard = (x, y) => {
+        const margin = 18;
+        const rect = hoverCard.getBoundingClientRect();
+        let left = x + 26;
+        let top = y - 22;
+        if (left + rect.width > window.innerWidth - margin) {
+          left = x - rect.width - 26;
+        }
+        if (top + rect.height > window.innerHeight - margin) {
+          top = window.innerHeight - rect.height - margin;
+        }
+        if (top < margin) {
+          top = margin;
+        }
+        if (left < margin) {
+          left = margin;
+        }
+        hoverCard.style.left = `${left}px`;
+        hoverCard.style.top = `${top}px`;
+      };
+
+      const showHoverCard = (trigger, chord, position) => {
+        hoverTitle.textContent = chord.name;
+        hoverCaption.textContent = chord.caption;
+        renderChordDiagram(hoverDiagram, chord);
+        hoverCard.classList.add('is-visible');
+        if (position) {
+          positionHoverCard(position.x, position.y);
+          return;
+        }
+        const rect = trigger.getBoundingClientRect();
+        positionHoverCard(rect.right, rect.top + rect.height / 2);
+      };
+
+      const hideHoverCard = () => {
+        hoverCard.classList.remove('is-visible');
+      };
+
+      const enhanceChordText = (root) => {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node) {
+            if (!node.textContent || !node.textContent.trim()) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            if (!node.parentElement || node.parentElement.closest('.chord-hover-card')) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return node.parentElement.closest('pre') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }
+        });
+        const textNodes = [];
+        while (walker.nextNode()) {
+          textNodes.push(walker.currentNode);
+        }
+        textNodes.forEach((node) => {
+          const source = node.textContent;
+          const matches = Array.from(source.matchAll(chordPattern));
+          if (matches.length === 0) {
+            return;
+          }
+          const fragment = document.createDocumentFragment();
+          let lastIndex = 0;
+          matches.forEach((match) => {
+            const boundary = match[1] || '';
+            const chordName = match[2];
+            const chordStart = match.index + boundary.length;
+            const chord = chordLookup.get(chordName);
+            fragment.append(source.slice(lastIndex, chordStart));
+            if (!chord) {
+              fragment.append(chordName);
+            } else {
+              const token = document.createElement('button');
+              token.type = 'button';
+              token.className = 'chord-token';
+              token.textContent = chordName;
+              token.setAttribute('aria-label', `Mostra diteggiatura ${chordName}`);
+              token.addEventListener('mouseenter', () => showHoverCard(token, chord));
+              token.addEventListener('focus', () => showHoverCard(token, chord));
+              token.addEventListener('mouseleave', hideHoverCard);
+              token.addEventListener('blur', hideHoverCard);
+              token.addEventListener('click', (event) => {
+                event.preventDefault();
+                const rect = token.getBoundingClientRect();
+                showHoverCard(token, chord, {
+                  x: rect.left + rect.width / 2,
+                  y: rect.top + rect.height / 2
+                });
+              });
+              fragment.append(token);
+            }
+            lastIndex = chordStart + chordName.length;
+          });
+          fragment.append(source.slice(lastIndex));
+          node.parentNode.replaceChild(fragment, node);
+        });
+      };
+
+      enhanceChordText(document.querySelector('main.content-column'));
+      window.addEventListener('scroll', hideHoverCard, { passive: true });
+      window.addEventListener('resize', hideHoverCard);
+      window.addEventListener(window.CavaquinhoInstruments.eventName, hideHoverCard);
     })();
   </script>
 </body>
