@@ -104,6 +104,42 @@
       gap: 12px;
       margin-bottom: 28px;
     }
+    .language-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(232, 184, 75, 0.18);
+      background: rgba(15, 11, 8, 0.34);
+      position: relative;
+      z-index: 1;
+    }
+    .language-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: background-color .2s, color .2s;
+    }
+    .language-link:hover,
+    .language-link:focus-visible {
+      background: rgba(201, 149, 42, 0.14);
+      color: var(--gold-lt);
+      outline: none;
+    }
+    .language-link.is-active {
+      background: rgba(201, 149, 42, 0.18);
+      color: var(--cream);
+    }
     .genre-link {
       display: inline-flex;
       align-items: center;
@@ -797,12 +833,13 @@
     <span></span><span></span><span></span>
   </div>
   <nav class="genre-nav" aria-label="Percorsi del sito">
-    <a class="genre-link" href="index.html">Scegli il percorso</a>
-    <a class="genre-link is-active" href="choro.html" aria-current="page">Choro</a>
-    <a class="genre-link" href="forro.html">Forró</a>
+    <a class="genre-link" data-nav="choose" href="index.html">Scegli il percorso</a>
+    <a class="genre-link is-active" data-nav="choro" href="choro.html" aria-current="page">Choro</a>
+    <a class="genre-link" data-nav="forro" href="forro.html">Forró</a>
   </nav>
-  <h1>Cavaquinho &amp; Choro</h1>
-  <p class="subtitle">Sistema di Apprendimento Progressivo — dalla prima sincope alla Roda de Choro</p>
+  <div class="language-switcher"></div>
+  <h1 id="page-title">Cavaquinho &amp; Choro</h1>
+  <p class="subtitle" id="page-subtitle">Sistema di Apprendimento Progressivo — dalla prima sincope alla Roda de Choro</p>
 </header>
 
 <div class="wrapper">
@@ -811,7 +848,7 @@
     <!-- TOC -->
     <nav class="toc" id="toc" aria-label="Indice dei contenuti">
       <div class="toc-header">
-        <h2>Indice</h2>
+        <h2 id="toc-title">Indice</h2>
         <button class="toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list">
           Apri
         </button>
@@ -1088,7 +1125,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
   <section id="s10-inversions" data-toc-description="Diteggiature chiuse organizzate per categorie armoniche, con inversioni essenziali per il cavaquinho.">
     <span class="section-num">Modulo H</span>
     <h2 class="section-title">Inversioni Essenziali degli Accordi</h2>
-    <p class="inversion-intro">Qui trovi un riferimento rapido organizzato per <strong>famiglia armonica</strong>, non per singola nota. Ho raccolto forme <strong>chiuse</strong> e pratiche per <strong>maggiori</strong>, <strong>minori</strong>, <strong>7</strong>, <strong>Maj7</strong>, <strong>m7</strong> e <strong>diminuiti</strong>, così puoi confrontare subito accordi simili e studiare le inversioni più utili sul cavaquinho. Nei diagrammi, l'<strong>anello oro</strong> segna la <strong>root</strong> e l'<strong>anello verde</strong> indica la <strong>terza</strong>.</p>
+    <p class="inversion-intro">Qui trovi un riferimento rapido organizzato per <strong>famiglia armonica</strong>, non per singola nota. Ho raccolto forme <strong>chiuse</strong> e pratiche per <strong>maggiori</strong>, <strong>minori</strong>, <strong>7</strong>, <strong>Maj7</strong>, <strong>m7</strong> e <strong>diminuiti</strong>, così puoi confrontare subito accordi simili e studiare le inversioni più utili sul cavaquinho. Nei diagrammi, l'<strong>anello oro</strong> segna la <strong>root</strong>, l'<strong>anello verde</strong> indica la <strong>terza</strong> e l'<strong>anello blu</strong> evidenzia la <strong>quinta</strong>.</p>
     <div class="inversion-note-list" id="inversion-groups" aria-label="Inversioni essenziali del cavaquinho"></div>
   </section>
 
@@ -1269,8 +1306,131 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
   ↑
 </a>
 
+<script src="js/i18n.js"></script>
+<script src="js/site-content.js"></script>
 <script>
   (() => {
+    const localization = window.CavaquinhoI18n.applyBasicPageLocalization('choro', {
+      titleSelector: '#page-title',
+      subtitleSelector: '#page-subtitle',
+      tocTitleSelector: '#toc-title',
+      tocSummarySelector: '#toc-summary',
+      mainSelector: 'main.content-column',
+      footerSelector: 'footer',
+      backToTopSelector: '#back-to-top'
+    });
+    const lang = localization.lang;
+    const pageData = localization.translation || {};
+    const uiText = pageData.ui || {
+      tocTitle: 'Indice',
+      tocSummary: 'Scorri i moduli, salta al punto che ti serve e torna subito alla sezione giusta.',
+      tocReadySummary: '{count} sezioni per navigare tra ritmo, armonia e repertorio.',
+      open: 'Apri',
+      close: 'Chiudi',
+      backToTop: 'Torna all\'inizio'
+    };
+    const chordCaption = (chordName) => window.CavaquinhoI18n.describeChord(chordName, lang);
+    const inversionLabels = {
+      it: {
+        category: {
+          'Maggiori': 'Maggiori',
+          'Minori': 'Minori',
+          '7': '7',
+          'Maj7': 'Maj7',
+          'm7': 'm7',
+          'Diminuiti': 'Diminuiti'
+        },
+        subtitle: {
+          'Triadi maggiori compatte per il collegamento melodico e armonico.': 'Triadi maggiori compatte per il collegamento melodico e armonico.',
+          'Triadi minori chiuse per studiare i passaggi verso dominanti e relativi.': 'Triadi minori chiuse per studiare i passaggi verso dominanti e relativi.',
+          'Dominanti utili per cadenze, preparazioni e modulazioni nel repertorio.': 'Dominanti utili per cadenze, preparazioni e modulazioni nel repertorio.',
+          'Due famiglie guida: una con root sulla 2ª corda e una con root sulla 1ª corda.': 'Due famiglie guida: una con root sulla 2ª corda e una con root sulla 1ª corda.',
+          'Minori settima utili nelle cadenze II-V-I e nei passaggi modali più frequenti.': 'Minori settima utili nelle cadenze II-V-I e nei passaggi modali più frequenti.',
+          'Forme tese e simmetriche per dominanti sostitutive e passaggi cromatici.': 'Forme tese e simmetriche per dominanti sostitutive e passaggi cromatici.'
+        },
+        voicing: {
+          'Fondamentale': 'Fondamentale',
+          '1ª inv.': '1ª inv.',
+          '2ª inv.': '2ª inv.',
+          '3ª inv.': '3ª inv.',
+          'Root 2ª corda': 'Root 2ª corda',
+          'Root 1ª corda': 'Root 1ª corda'
+        },
+        description: {
+          'Fondamentale': 'Basso sulla tonica',
+          '1ª inv.': 'Basso sulla terza',
+          '2ª inv.': 'Basso sulla quinta',
+          '3ª inv.': 'Basso sulla settima'
+        },
+        closedVoicing: 'Voicing chiuso'
+      },
+      en: {
+        category: {
+          'Maggiori': 'Major',
+          'Minori': 'Minor',
+          '7': '7',
+          'Maj7': 'Maj7',
+          'm7': 'm7',
+          'Diminuiti': 'Diminished'
+        },
+        subtitle: {
+          'Triadi maggiori compatte per il collegamento melodico e armonico.': 'Compact major triads for melodic and harmonic connection.',
+          'Triadi minori chiuse per studiare i passaggi verso dominanti e relativi.': 'Closed minor triads to study motion toward dominants and relatives.',
+          'Dominanti utili per cadenze, preparazioni e modulazioni nel repertorio.': 'Dominants useful for cadences, preparation and modulation.',
+          'Due famiglie guida: una con root sulla 2ª corda e una con root sulla 1ª corda.': 'Two guide families: one with the root on the 2nd string and one on the 1st string.',
+          'Minori settima utili nelle cadenze II-V-I e nei passaggi modali più frequenti.': 'Minor seventh families for ii–V–I cadences and common modal passages.',
+          'Forme tese e simmetriche per dominanti sostitutive e passaggi cromatici.': 'Tense, symmetrical shapes for substitute dominants and chromatic motion.'
+        },
+        voicing: {
+          'Fondamentale': 'Root position',
+          '1ª inv.': '1st inv.',
+          '2ª inv.': '2nd inv.',
+          '3ª inv.': '3rd inv.',
+          'Root 2ª corda': 'Root on 2nd string',
+          'Root 1ª corda': 'Root on 1st string'
+        },
+        description: {
+          'Fondamentale': 'Bass on the tonic',
+          '1ª inv.': 'Bass on the third',
+          '2ª inv.': 'Bass on the fifth',
+          '3ª inv.': 'Bass on the seventh'
+        },
+        closedVoicing: 'Closed voicing'
+      },
+      pt: {
+        category: {
+          'Maggiori': 'Maiores',
+          'Minori': 'Menores',
+          '7': '7',
+          'Maj7': 'Maj7',
+          'm7': 'm7',
+          'Diminuiti': 'Diminutos'
+        },
+        subtitle: {
+          'Triadi maggiori compatte per il collegamento melodico e armonico.': 'Tríades maiores compactas para ligação melódica e harmônica.',
+          'Triadi minori chiuse per studiare i passaggi verso dominanti e relativi.': 'Tríades menores fechadas para estudar a passagem para dominantes e relativas.',
+          'Dominanti utili per cadenze, preparazioni e modulazioni nel repertorio.': 'Dominantes úteis para cadências, preparações e modulações no repertório.',
+          'Due famiglie guida: una con root sulla 2ª corda e una con root sulla 1ª corda.': 'Duas famílias-guia: uma com a root na 2ª corda e outra na 1ª corda.',
+          'Minori settima utili nelle cadenze II-V-I e nei passaggi modali più frequenti.': 'Famílias de menor com sétima para cadências II–V–I e passagens modais frequentes.',
+          'Forme tese e simmetriche per dominanti sostitutive e passaggi cromatici.': 'Formas tensas e simétricas para dominantes substitutas e passagens cromáticas.'
+        },
+        voicing: {
+          'Fondamentale': 'Fundamental',
+          '1ª inv.': '1ª inv.',
+          '2ª inv.': '2ª inv.',
+          '3ª inv.': '3ª inv.',
+          'Root 2ª corda': 'Root na 2ª corda',
+          'Root 1ª corda': 'Root na 1ª corda'
+        },
+        description: {
+          'Fondamentale': 'Baixo na tônica',
+          '1ª inv.': 'Baixo na terça',
+          '2ª inv.': 'Baixo na quinta',
+          '3ª inv.': 'Baixo na sétima'
+        },
+        closedVoicing: 'Voicing fechado'
+      }
+    }[lang] || null;
     const toc = document.getElementById('toc');
     const tocList = document.getElementById('toc-list');
     const tocToggle = document.getElementById('toc-toggle');
@@ -1289,7 +1449,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     const setTocOpen = (isOpen) => {
       toc.classList.toggle('is-open', isOpen);
       tocToggle.setAttribute('aria-expanded', String(isOpen));
-      tocToggle.textContent = isOpen ? 'Chiudi' : 'Apri';
+      tocToggle.textContent = isOpen ? uiText.close : uiText.open;
     };
 
     const setActiveSection = (sectionId) => {
@@ -1345,7 +1505,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
       linksBySection.set(section.id, link);
     });
 
-    tocSummary.textContent = `${linksBySection.size} sezioni navigabili, con evidenziazione automatica della sezione attiva.`;
+    tocSummary.textContent = (uiText.tocReadySummary || '{count} sections').replace('{count}', linksBySection.size);
     toc.classList.add('toc-ready');
 
     const observer = new IntersectionObserver((entries) => {
@@ -1530,20 +1690,18 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
     };
 
     if (inversionGroups) {
+      const translateVoicingLabel = (label) => {
+        if (!label || !inversionLabels) {
+          return label;
+        }
+        return inversionLabels.voicing[label] || label;
+      };
+
       const describeVoicing = (label) => {
-        if (label === 'Fondamentale') {
-          return 'Basso sulla tonica';
+        if (inversionLabels && inversionLabels.description[label]) {
+          return inversionLabels.description[label];
         }
-        if (label === '1ª inv.') {
-          return 'Basso sulla terza';
-        }
-        if (label === '2ª inv.') {
-          return 'Basso sulla quinta';
-        }
-        if (label === '3ª inv.') {
-          return 'Basso sulla settima';
-        }
-        return 'Voicing chiuso';
+        return inversionLabels ? inversionLabels.closedVoicing : 'Voicing chiuso';
       };
 
       const inversionSet = [
@@ -1638,8 +1796,8 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
         subtitle.className = 'inversion-note-subtitle';
         categoryGrid.className = 'inversion-category-grid';
 
-        title.textContent = group.category;
-        subtitle.textContent = group.subtitle;
+        title.textContent = inversionLabels ? (inversionLabels.category[group.category] || group.category) : group.category;
+        subtitle.textContent = inversionLabels ? (inversionLabels.subtitle[group.subtitle] || group.subtitle) : group.subtitle;
 
         group.chords.forEach((chord) => {
           const chordCard = document.createElement('section');
@@ -1655,7 +1813,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
           voicingGrid.className = 'inversion-voicing-grid';
 
           chordTitle.textContent = chord.name;
-          chordSubtitle.textContent = chord.caption;
+          chordSubtitle.textContent = chordCaption(chord.name);
 
           chord.voicings.forEach((voicing) => {
             const voicingCard = document.createElement('div');
@@ -1668,7 +1826,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
             diagramWrap.className = 'inversion-diagram';
             caption.className = 'inversion-voicing-caption';
 
-            voicingTitle.textContent = voicing.label;
+            voicingTitle.textContent = translateVoicingLabel(voicing.label);
             caption.textContent = voicing.caption || describeVoicing(voicing.label);
             diagramWrap.append(createFretDiagramSvg(voicing.frets, chord.name, { openPitches: voicing.openPitches || inversionOpenPitches }));
 
@@ -1959,6 +2117,7 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
         }
       ];
       chordSet.forEach((chord) => {
+        chord.caption = chordCaption(chord.name);
         if (referenceChordOptions[chord.name]) {
           chord.options = referenceChordOptions[chord.name];
         } else if (generatedChordOptions[chord.name]) {
@@ -2154,7 +2313,9 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
           if (chord.options.length > 1) {
             const variantLabel = document.createElement('span');
             variantLabel.className = 'chord-diagram-variant-label';
-            variantLabel.textContent = option.label || `Opzione ${index + 1}`;
+            variantLabel.textContent = inversionLabels
+              ? (inversionLabels.voicing[option.label] || option.label || `Option ${index + 1}`)
+              : (option.label || `Opzione ${index + 1}`);
             variant.append(variantLabel);
           }
 

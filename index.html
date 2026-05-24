@@ -92,6 +92,44 @@
       text-transform: uppercase;
     }
 
+    .language-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 6px;
+      border: 1px solid rgba(232, 184, 75, 0.18);
+      border-radius: 999px;
+      background: rgba(17, 12, 9, 0.35);
+    }
+
+    .language-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: background-color .2s, color .2s;
+    }
+
+    .language-link:hover,
+    .language-link:focus-visible {
+      background: rgba(201, 149, 42, 0.14);
+      color: var(--gold-lt);
+      outline: none;
+    }
+
+    .language-link.is-active {
+      background: rgba(201, 149, 42, 0.18);
+      color: var(--cream);
+    }
+
     h1 {
       font-family: 'Playfair Display', Georgia, serif;
       font-size: clamp(2.4rem, 6vw, 4.8rem);
@@ -358,12 +396,15 @@
     <div class="flag-stripe" aria-hidden="true">
       <span></span><span></span><span></span>
     </div>
-    <span class="eyebrow">Percorsi di Studio</span>
-    <h1>Cavaquinho Brasiliano, due strade da scegliere</h1>
-    <p>Il sito adesso si apre come un piccolo studio guidato: puoi entrare nel mondo del <strong>Choro</strong>, con il suo lavoro di precisione, anticipazione e roda, oppure nel mondo del <strong>Forró</strong>, con levadas, giri armonici cantabili e repertorio vicino a gruppi come Falamansa.</p>
+    <div class="language-switcher"></div>
+    <div id="index-hero-copy">
+      <span class="eyebrow">Percorsi di Studio</span>
+      <h1>Cavaquinho Brasiliano, due strade da scegliere</h1>
+      <p>Il sito adesso si apre come un piccolo studio guidato: puoi entrare nel mondo del <strong>Choro</strong>, con il suo lavoro di precisione, anticipazione e roda, oppure nel mondo del <strong>Forró</strong>, con levadas, giri armonici cantabili e repertorio vicino a gruppi come Falamansa.</p>
+    </div>
   </header>
 
-  <main class="wrapper">
+  <main class="wrapper" id="index-main-content">
     <section class="chooser" aria-label="Scegli il percorso musicale">
       <article class="genre-card choro">
         <span class="genre-badge">Percorso 1</span>
@@ -441,8 +482,20 @@
     </section>
   </main>
 
-  <footer>
+  <footer id="index-footer-text">
     Scegli il percorso, entra nella pagina dedicata e studia per famiglie musicali, non per pagine isolate.
   </footer>
+  <script src="js/i18n.js"></script>
+  <script src="js/site-content.js"></script>
+  <script>
+    (() => {
+      const result = window.CavaquinhoI18n.applyBasicPageLocalization('index', {
+        heroSelector: '#index-hero-copy',
+        mainSelector: '#index-main-content',
+        footerSelector: '#index-footer-text'
+      });
+      window.CavaquinhoI18n.decorateLocalLinks(document, result.lang);
+    })();
+  </script>
 </body>
 </html>
