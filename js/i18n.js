@@ -12,6 +12,32 @@
     en: 'Language switcher',
     pt: 'Seletor de idioma'
   };
+  const MOBILE_PREFERENCES_LABELS = {
+    it: {
+      trigger: 'Aa',
+      triggerAria: 'Apri lingua e strumento',
+      title: 'Lingua e strumento',
+      close: 'Chiudi',
+      language: 'Lingua',
+      instrument: 'Strumento'
+    },
+    en: {
+      trigger: 'Aa',
+      triggerAria: 'Open language and instrument',
+      title: 'Language and instrument',
+      close: 'Close',
+      language: 'Language',
+      instrument: 'Instrument'
+    },
+    pt: {
+      trigger: 'Aa',
+      triggerAria: 'Abrir idioma e instrumento',
+      title: 'Idioma e instrumento',
+      close: 'Fechar',
+      language: 'Idioma',
+      instrument: 'Instrumento'
+    }
+  };
 
   const NOTE_NAMES = {
     it: {
@@ -337,6 +363,108 @@
     });
   };
 
+  const setupMobilePreferenceSheet = function (lang) {
+    const locale = SUPPORTED.includes(lang) ? lang : getCurrentLanguage();
+    const labels = MOBILE_PREFERENCES_LABELS[locale] || MOBILE_PREFERENCES_LABELS.it;
+    let root = document.querySelector('.mobile-preferences');
+    if (!root) {
+      root = document.createElement('div');
+      root.className = 'mobile-preferences';
+      root.innerHTML = `
+        <button
+          class="mobile-preferences-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-preferences-sheet"
+        ></button>
+        <div class="mobile-preferences-sheet" id="mobile-preferences-sheet" hidden>
+          <button class="mobile-preferences-backdrop" type="button" tabindex="-1" aria-hidden="true"></button>
+          <div class="mobile-preferences-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-preferences-title">
+            <div class="mobile-preferences-header">
+              <h2 class="mobile-preferences-title" id="mobile-preferences-title"></h2>
+              <button class="mobile-preferences-close" type="button"></button>
+            </div>
+            <div class="mobile-preferences-group">
+              <p class="mobile-preferences-label" id="mobile-preferences-language-label"></p>
+              <div class="language-switcher mobile-preferences-switcher" aria-labelledby="mobile-preferences-language-label"></div>
+            </div>
+            <div class="mobile-preferences-group">
+              <p class="mobile-preferences-label" id="mobile-preferences-instrument-label"></p>
+              <div class="instrument-switcher mobile-preferences-switcher" aria-labelledby="mobile-preferences-instrument-label"></div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.append(root);
+    }
+
+    const trigger = root.querySelector('.mobile-preferences-trigger');
+    const sheet = root.querySelector('.mobile-preferences-sheet');
+    const closeButton = root.querySelector('.mobile-preferences-close');
+    const backdrop = root.querySelector('.mobile-preferences-backdrop');
+    const title = root.querySelector('.mobile-preferences-title');
+    const languageLabel = root.querySelector('#mobile-preferences-language-label');
+    const instrumentLabel = root.querySelector('#mobile-preferences-instrument-label');
+    const mobileQuery = window.matchMedia('(max-width: 640px)');
+
+    const setOpen = (isOpen) => {
+      if (!trigger || !sheet) {
+        return;
+      }
+      trigger.setAttribute('aria-expanded', String(isOpen));
+      sheet.hidden = !isOpen;
+      document.body.classList.toggle('mobile-preferences-open', isOpen);
+    };
+
+    if (trigger) {
+      trigger.textContent = labels.trigger;
+      trigger.setAttribute('aria-label', labels.triggerAria);
+    }
+    if (title) {
+      title.textContent = labels.title;
+    }
+    if (closeButton) {
+      closeButton.textContent = labels.close;
+      closeButton.setAttribute('aria-label', labels.close);
+    }
+    if (languageLabel) {
+      languageLabel.textContent = labels.language;
+    }
+    if (instrumentLabel) {
+      instrumentLabel.textContent = labels.instrument;
+    }
+
+    if (!root.dataset.bound) {
+      trigger?.addEventListener('click', () => {
+        const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+        setOpen(!isOpen);
+      });
+      closeButton?.addEventListener('click', () => setOpen(false));
+      backdrop?.addEventListener('click', () => setOpen(false));
+      root.addEventListener('click', (event) => {
+        if (event.target.closest('.instrument-link')) {
+          window.setTimeout(() => setOpen(false), 80);
+        }
+      });
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          setOpen(false);
+        }
+      });
+      mobileQuery.addEventListener('change', (event) => {
+        if (!event.matches) {
+          setOpen(false);
+        }
+      });
+      root.dataset.bound = 'true';
+    }
+
+    renderLanguageSwitchers(locale);
+    if (window.CavaquinhoInstruments?.renderInstrumentSwitchers) {
+      window.CavaquinhoInstruments.renderInstrumentSwitchers(locale);
+    }
+  };
+
   const setDocumentLanguage = function (lang) {
     document.documentElement.lang = lang;
     document.body.dataset.lang = lang;
@@ -497,6 +625,7 @@
     setDocumentLanguage,
     getPageTranslation,
     describeChord,
+    setupMobilePreferenceSheet,
     saveScrollRestoreState,
     restoreScrollPosition,
     applyBasicPageLocalization
