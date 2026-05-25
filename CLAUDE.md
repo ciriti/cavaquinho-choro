@@ -199,6 +199,64 @@ const chordPattern = new RegExp(
 
 Use `'\\$&'` (single escape in the replacement string). Double-escaping (`'\\\\$&'`) breaks matching for chord names containing special characters.
 
+## Known bugs — rules derived from past fixes
+
+### `<header id="top">` must come before `.bpm-bar`
+
+`layout.js` uses `document.body.insertBefore(siteNav, header)` where `header = document.getElementById('top')`. If `.bpm-bar` appears before `<header id="top">` in the HTML, the nav is injected after the BPM bar instead of at the top.
+
+Correct order in `<body>`:
+```html
+<header id="top" data-page="PAGE_ID"></header>
+<div class="bpm-bar"> ... </div>
+```
+
+### Never pass selectors to `applyBasicPageLocalization` for elements that don't exist
+
+The `options` object passed to `applyBasicPageLocalization` only contains `titleSelector`, `subtitleSelector`, `mainSelector`, `footerSelector`, `backToTopSelector`. Do not add other selectors (e.g. `tocTitleSelector`, `tocSummarySelector`) — they pointed to elements removed in an earlier refactor and were silently ignored, masking the fact that the elements were gone.
+
+### IT translations belong in data files, not in `layout.js`
+
+When Italian is selected, `applyBasicPageLocalization` reads the `it` entry from `js/data/<page>-content.js` and fills `#page-title` / `#page-subtitle`. If the `it` entry is missing, the title will be empty. The fix is always to add the `it` entry to the data file — never to add a fallback in `layout.js` or the inline script.
+
+### Language navigation must use programmatic navigation, not `<a>` href update
+
+On mobile browsers (especially Brave), updating `link.href` in a click handler is unreliable: the browser may capture the href at `touchstart` before the handler runs, or strip URL parameters as a privacy feature. Always use:
+
+```js
+link.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (targetLang === lang) return;
+  // ... build url ...
+  saveScrollRestoreState(targetLang);
+  setCurrentLanguage(targetLang);
+  window.location.href = url;
+});
+```
+
+### Language persistence requires both localStorage and sessionStorage
+
+Brave and some privacy browsers strip `?lang=` URL parameters before the page loads. `setCurrentLanguage` writes to **both** `localStorage` and `sessionStorage`. `getCurrentLanguage` must read in order: URL param → localStorage → sessionStorage → `navigator.language`. If you modify the language persistence logic, keep all three sources.
+
+### Scroll anchor detection uses `.sidebar-item.active`, not `.toc-link`
+
+`getCurrentViewportAnchor()` in `i18n.js` reads `.sidebar-item.active[data-target]` (the progress sidebar). The old `.toc-link[aria-current="true"]` selector referred to a TOC component that was removed. Never reference `.toc-link` anywhere in the codebase.
+
+### `buildSidebar()` and `initScrollSpy()` must be called explicitly before `applyBasicPageLocalization`
+
+Each page needs an explicit inline script block before the `applyBasicPageLocalization` call:
+
+```html
+<script>
+  if (window.RitmosProgress) {
+    window.RitmosProgress.buildSidebar();
+    window.RitmosProgress.initScrollSpy();
+  }
+</script>
+```
+
+`progress.js` also calls these on `DOMContentLoaded` — that second call handles EN/PT language switches that replace `main.content-column` innerHTML. Both calls are needed.
+
 ## What not to do
 
 - Do not add `<nav>` or title elements directly to the HTML — `layout.js` generates them.
