@@ -109,6 +109,7 @@
   </style>
 </head>
 <body>
+  <header id="top" data-page="pagode"></header>
   <div class="bpm-bar">
     <label class="bpm-label" for="bpm-slider">Tempo</label>
     <input type="range" id="bpm-slider" min="50" max="160" value="80"
@@ -116,7 +117,6 @@
     <span class="bpm-value" id="bpm-value">80 BPM</span>
     <button class="stop-all-btn" onclick="window.RitmosAudio && window.RitmosAudio.stopActive()">&#9632; Stop</button>
   </div>
-  <header id="top" data-page="pagode"></header>
 
   <div class="wrapper">
     <div class="page-layout">
@@ -362,8 +362,6 @@ In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
       const localization = window.CavaquinhoI18n.applyBasicPageLocalization('pagode', {
         titleSelector: '#page-title',
         subtitleSelector: '#page-subtitle',
-        tocTitleSelector: '#toc-title',
-        tocSummarySelector: '#toc-summary',
         mainSelector: 'main.content-column',
         footerSelector: 'footer',
         backToTopSelector: '#back-to-top'
