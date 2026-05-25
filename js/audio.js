@@ -23,6 +23,8 @@
     return entry ? entry.split(',') : ['C4'];
   }
 
+  const METRONOME_ID = '__metronome__';
+
   let synth = null;
   let activeId = null;
   let activeLoop = null;
@@ -37,21 +39,50 @@
     }
   }
 
+  function syncMetronomeBtn(active) {
+    const btn = document.getElementById('metronome-btn');
+    if (btn) btn.classList.toggle('active', active);
+  }
+
   function stopActive() {
     if (activeLoop) { activeLoop.stop(); activeLoop.dispose(); activeLoop = null; }
     Tone.Transport.stop();
     Tone.Transport.cancel();
     if (synth) { try { synth.releaseAll(); } catch(e){} }
     if (activeId) {
-      const prev = document.querySelector('[data-prog-id="' + activeId + '"]');
-      if (prev) {
-        prev.classList.remove('playing');
-        const btn = prev.querySelector('.play-btn');
-        if (btn) btn.classList.remove('active');
-        prev.querySelectorAll('.chord-pill').forEach(function(p) { p.classList.remove('lit'); });
+      if (activeId === METRONOME_ID) {
+        syncMetronomeBtn(false);
+      } else {
+        const prev = document.querySelector('[data-prog-id="' + activeId + '"]');
+        if (prev) {
+          prev.classList.remove('playing');
+          const btn = prev.querySelector('.play-btn');
+          if (btn) btn.classList.remove('active');
+          prev.querySelectorAll('.chord-pill').forEach(function(p) { p.classList.remove('lit'); });
+        }
       }
       activeId = null;
     }
+  }
+
+  async function toggleMetronome() {
+    if (typeof Tone === 'undefined') return;
+    if (activeId === METRONOME_ID) { stopActive(); return; }
+    stopActive();
+    await Tone.start();
+    ensureSynth();
+    const bpmEl = document.getElementById('bpm-value');
+    Tone.Transport.bpm.value = parseInt(bpmEl ? bpmEl.textContent : '80', 10);
+    activeId = METRONOME_ID;
+    let beat = 0;
+    activeLoop = new Tone.Sequence(function(time) {
+      const note = beat === 0 ? 'C5' : 'G4';
+      synth.triggerAttackRelease(note, '32n', time);
+      beat = (beat + 1) % 4;
+    }, [0, 1, 2, 3], '4n');
+    activeLoop.start(0);
+    Tone.Transport.start();
+    syncMetronomeBtn(true);
   }
 
   async function toggleProg(header) {
@@ -109,7 +140,7 @@
     });
   }
 
-  window.RitmosAudio = { toggleProg, stopActive, updateBpm, buildChordStrips };
+  window.RitmosAudio = { toggleProg, toggleMetronome, stopActive, updateBpm, buildChordStrips };
 
   document.addEventListener('DOMContentLoaded', function() {
     buildChordStrips();
