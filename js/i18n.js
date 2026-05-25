@@ -216,15 +216,10 @@
   };
 
   const getCurrentViewportAnchor = function () {
-    const activeTocLink = document.querySelector('.toc-link[aria-current="true"]');
-    if (activeTocLink) {
-      const activeSectionId = activeTocLink.getAttribute('href')?.replace(/^#/, '');
-      if (activeSectionId) {
-        const activeSection = document.getElementById(activeSectionId);
-        if (activeSection) {
-          return activeSection;
-        }
-      }
+    const activeSidebarItem = document.querySelector('.sidebar-item.active');
+    if (activeSidebarItem && activeSidebarItem.dataset.target) {
+      const activeSection = document.getElementById(activeSidebarItem.dataset.target);
+      if (activeSection) return activeSection;
     }
 
     const scrollTop = window.scrollY;
@@ -354,6 +349,13 @@
         }
         link.addEventListener('click', () => {
           if (targetLang !== lang) {
+            const anchor = getCurrentViewportAnchor();
+            if (anchor && anchor.id) {
+              const base = buildUrlForLanguage(
+                window.location.pathname + window.location.search, targetLang
+              );
+              link.href = base + '#' + anchor.id;
+            }
             saveScrollRestoreState(targetLang);
           }
           setCurrentLanguage(targetLang);

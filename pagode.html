@@ -162,11 +162,14 @@ Idea:     | appoggio    | risposta   |</pre>
           <h3>Ghost e chuck</h3>
           <pre>| ↓   x   ↑ | ↓   x   ↑ |
 Il colpo spento deve essere corto e asciutto, non pesante.</pre>
-          <ol>
-            <li>Pratica la mano sulle corde stoppate per alcuni minuti.</li>
-            <li>Poi tieni un accordo solo e mantieni la levada per tre minuti di fila.</li>
-            <li>Solo dopo passa ai giri armonici veri.</li>
-          </ol>
+          <div class="exercise-block">
+            <span class="zone-tag">Esercizio</span>
+            <ol>
+              <li>Pratica la mano sulle corde stoppate per alcuni minuti.</li>
+              <li>Poi tieni un accordo solo e mantieni la levada per tre minuti di fila.</li>
+              <li>Solo dopo passa ai giri armonici veri.</li>
+            </ol>
+          </div>
         </section>
 
         <section id="s3" data-toc-description="Il linguaggio di base del pagode in tonalità comuni: I, VI7, ii e V7.">
@@ -265,12 +268,15 @@ Il colpo spento deve essere corto e asciutto, non pesante.</pre>
         <section id="s5" data-toc-description="Dominanti secondarie, diminuiti di passaggio e preparazione della sezione successiva.">
           <span class="section-num">Modulo C</span>
           <h2 class="section-title">Dominanti Secondarie e Colore di Passaggio</h2>
-          <h3>Dominanti che spingono in avanti</h3>
-          <pre>In C: | C | E7 | Am7 | A7 | Dm7 | G7 | C |
+          <div class="exercise-block">
+            <span class="zone-tag">Esercizio</span>
+            <h3>Dominanti che spingono in avanti</h3>
+            <pre>In C: | C | E7 | Am7 | A7 | Dm7 | G7 | C |
 In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
-          <h3>Diminuito di passaggio</h3>
-          <pre>| C | C#dim7 | Dm7 | G7 |
+            <h3>Diminuito di passaggio</h3>
+            <pre>| C | C#dim7 | Dm7 | G7 |
 | G | G#dim7 | Am7 | D7 |</pre>
+          </div>
           <h3>Regola pratica</h3>
           <p>Usa il colore per condurre da qualche parte. Nel pagode una dominante secondaria o un diminuito devono chiarire la prossima destinazione, non solo abbellire il giro.</p>
         </section>
@@ -278,25 +284,28 @@ In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
         <section id="s6" data-toc-description="Famiglie di brani e loop rappresentativi per roda, prove e accompagnamento reale.">
           <span class="section-num">Repertorio</span>
           <h2 class="section-title">Famiglie di Brani da Praticare</h2>
-          <div class="song-card">
-            <h3>Famiglia 1 — Giro classico in Do</h3>
-            <pre>| C | A7 | Dm7 | G7 |
+          <div class="repertoire-block">
+            <span class="zone-tag">Repertorio</span>
+            <div class="song-card">
+              <h3>Famiglia 1 — Giro classico in Do</h3>
+              <pre>| C | A7 | Dm7 | G7 |
 | Em7 | A7 | Dm7 | G7 |</pre>
-          </div>
-          <div class="song-card">
-            <h3>Famiglia 2 — Ritornello che sale in Sol</h3>
-            <pre>| G | E7 | Am7 | D7 |
+            </div>
+            <div class="song-card">
+              <h3>Famiglia 2 — Ritornello che sale in Sol</h3>
+              <pre>| G | E7 | Am7 | D7 |
 | Bm7 | E7 | Am7 | D7 | G |</pre>
-          </div>
-          <div class="song-card">
-            <h3>Famiglia 3 — Verso più morbido in La minore</h3>
-            <pre>| Am7 | D7 | Gmaj7 | Cmaj7 |
+            </div>
+            <div class="song-card">
+              <h3>Famiglia 3 — Verso più morbido in La minore</h3>
+              <pre>| Am7 | D7 | Gmaj7 | Cmaj7 |
 | F#m7b5 | B7 | Em7 | E7 |</pre>
-          </div>
-          <div class="song-card">
-            <h3>Famiglia 4 — Ritornello pop pagode in Re</h3>
-            <pre>| D | B7 | Em7 | A7 |
+            </div>
+            <div class="song-card">
+              <h3>Famiglia 4 — Ritornello pop pagode in Re</h3>
+              <pre>| D | B7 | Em7 | A7 |
 | D | B7 | Em7 | A7 | D |</pre>
+            </div>
           </div>
         </section>
 
@@ -357,6 +366,12 @@ In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
   <script src="js/data/pagode-content.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/audio.js"></script>
+  <script>
+    if (window.RitmosProgress) {
+      window.RitmosProgress.buildSidebar();
+      window.RitmosProgress.initScrollSpy();
+    }
+  </script>
   <script>
     (() => {
       const localization = window.CavaquinhoI18n.applyBasicPageLocalization('pagode', {
