@@ -347,18 +347,17 @@
         if (targetLang === lang) {
           link.setAttribute('aria-current', 'true');
         }
-        link.addEventListener('click', () => {
-          if (targetLang !== lang) {
-            const anchor = getCurrentViewportAnchor();
-            if (anchor && anchor.id) {
-              const base = buildUrlForLanguage(
-                window.location.pathname + window.location.search, targetLang
-              );
-              link.href = base + '#' + anchor.id;
-            }
-            saveScrollRestoreState(targetLang);
-          }
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (targetLang === lang) return;
+          const anchor = getCurrentViewportAnchor();
+          let url = buildUrlForLanguage(
+            window.location.pathname + window.location.search, targetLang
+          );
+          if (anchor && anchor.id) url += '#' + anchor.id;
+          saveScrollRestoreState(targetLang);
           setCurrentLanguage(targetLang);
+          window.location.href = url;
         });
         container.append(link);
       });
