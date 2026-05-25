@@ -551,7 +551,7 @@ Tom D — Subida 2: | Am  | D7 | G  | Gm |</pre>
 
       const chordLookup = new Map(chordSet.map((chord) => [chord.name, chord]));
       const hoverableChordNames = Array.from(chordLookup.keys()).sort((left, right) => right.length - left.length);
-      const chordPattern = new RegExp(`(^|[^A-Za-z0-9#/])(${hoverableChordNames.map((name) => name.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')).join('|')})(?=$|[^A-Za-z0-9#/])`, 'g');
+      const chordPattern = new RegExp(`(^|[^A-Za-z0-9#/])(${hoverableChordNames.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?=$|[^A-Za-z0-9#/])`, 'g');
 
       const forroQuickChords = document.getElementById('forro-quick-chords');
 

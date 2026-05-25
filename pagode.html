@@ -7,10 +7,10 @@
   <script>
     document.documentElement.classList.add('js-enabled');
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" defer></script>
   <link rel="stylesheet" href="css/shared.css" />
   <link rel="stylesheet" href="css/page.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" defer></script>
   <style>
     :root {
       --surface: #1a1410;
@@ -403,13 +403,16 @@ In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
       syncBackToTop();
 
       const { referenceOpenPitches, getRoleMarkers, appendRoleRing, getFirstPlayedStringIndex,
-        createGuitarChordSvg, createReferenceChordSvg, createHoverCardSystem } = window.CavaquinhoChords;
+        createGuitarChordSvg, createReferenceChordSvg,
+        createSpriteChordSvg: _createSpriteChordSvg, createHoverCardSystem } = window.CavaquinhoChords;
       const getSelectedInstrument = () => window.CavaquinhoInstruments.getCurrentInstrument();
       const optionLabelMap = {
         it: { open: 'Forma aperta', barre: 'Forma barré' },
         en: { open: 'Open shape', barre: 'Barre shape' },
         pt: { open: 'Forma aberta', barre: 'Forma com pestana' }
       }[lang] || { open: 'Open shape', barre: 'Barre shape' };
+      const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260523g';
+      const createSpriteChordSvg = (chord) => _createSpriteChordSvg(chord, chordSpritePath);
       const chordCaption = (chordName) => window.CavaquinhoI18n.describeChord(chordName, lang);
 
       const chordOptions = {
@@ -455,31 +458,54 @@ In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
 
       const renderChordDiagram = (container, chord) => {
         container.replaceChildren();
+        const instrument = getSelectedInstrument();
         const instrumentOptions = getInstrumentOptions(chord);
+        if (instrument === 'guitar') {
+          if (instrumentOptions.length === 0) {
+            return;
+          }
+          const stack = document.createElement('div');
+          stack.className = 'chord-diagram-stack';
+          instrumentOptions.forEach((option, index) => {
+            const variant = document.createElement('div');
+            const diagram = createGuitarChordSvg(option, chord.name);
+            variant.className = 'chord-diagram-variant';
+            if (instrumentOptions.length > 1) {
+              const variantLabel = document.createElement('span');
+              variantLabel.className = 'chord-diagram-variant-label';
+              variantLabel.textContent = optionLabelMap[option.label] || option.label || `Opzione ${index + 1}`;
+              variant.append(variantLabel);
+            }
+            variant.append(diagram);
+            stack.append(variant);
+          });
+          container.append(stack);
+          return;
+        }
         if (instrumentOptions.length === 0) {
+          container.append(createSpriteChordSvg(chord));
           return;
         }
         const stack = document.createElement('div');
         stack.className = 'chord-diagram-stack';
         instrumentOptions.forEach((option, index) => {
           const variant = document.createElement('div');
+          const diagram = createReferenceChordSvg(option, chord.name);
           variant.className = 'chord-diagram-variant';
           if (instrumentOptions.length > 1) {
             const variantLabel = document.createElement('span');
             variantLabel.className = 'chord-diagram-variant-label';
-            variantLabel.textContent = optionLabelMap[option.label] || option.label || `Opzione ${index + 1}`;
+            variantLabel.textContent = option.label || `Opzione ${index + 1}`;
             variant.append(variantLabel);
           }
-          variant.append(getSelectedInstrument() === 'guitar'
-            ? createGuitarChordSvg(option, chord.name)
-            : createReferenceChordSvg(option, chord.name));
+          variant.append(diagram);
           stack.append(variant);
         });
         container.append(stack);
       };
 
       const { show: showHoverCard, hide: hideHoverCard, position: positionHoverCard } =
-        createHoverCardSystem({ renderDiagram: renderChordDiagram });
+        createHoverCardSystem({ renderDiagram: renderChordDiagram, getInstrumentOptions });
 
       const enhanceChordText = (root) => {
         const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
@@ -514,23 +540,22 @@ In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
             if (!chord) {
               fragment.append(chordName);
             } else {
-              const token = document.createElement('button');
-              token.type = 'button';
+              const token = document.createElement('span');
               token.className = 'chord-token';
               token.textContent = chordName;
-              token.setAttribute('aria-label', `Mostra diteggiatura ${chordName}`);
-              token.addEventListener('mouseenter', () => showHoverCard(token, chord));
-              token.addEventListener('focus', () => showHoverCard(token, chord));
-              token.addEventListener('mouseleave', hideHoverCard);
-              token.addEventListener('blur', hideHoverCard);
-              token.addEventListener('click', (event) => {
-                event.preventDefault();
-                const rect = token.getBoundingClientRect();
-                showHoverCard(token, chord, {
-                  x: rect.left + rect.width / 2,
-                  y: rect.top + rect.height / 2
-                });
+              token.tabIndex = 0;
+              token.dataset.chordName = chord.name;
+              token.addEventListener('mouseenter', (event) => {
+                showHoverCard(token, chord, { x: event.clientX, y: event.clientY });
               });
+              token.addEventListener('mousemove', (event) => {
+                positionHoverCard(event.clientX, event.clientY);
+              });
+              token.addEventListener('mouseleave', hideHoverCard);
+              token.addEventListener('focus', () => {
+                showHoverCard(token, chord);
+              });
+              token.addEventListener('blur', hideHoverCard);
               fragment.append(token);
             }
             lastIndex = chordStart + chordName.length;
@@ -540,7 +565,9 @@ In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
         });
       };
 
-      enhanceChordText(document.querySelector('main.content-column'));
+      document.querySelectorAll('main section').forEach((section) => {
+        enhanceChordText(section);
+      });
       window.addEventListener('scroll', hideHoverCard, { passive: true });
       window.addEventListener('resize', hideHoverCard);
       window.addEventListener(window.CavaquinhoInstruments.eventName, hideHoverCard);
