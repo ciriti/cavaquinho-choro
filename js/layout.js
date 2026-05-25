@@ -1,15 +1,50 @@
-/* Shared page header for choro.html, forro.html, pagode.html */
 (function () {
   'use strict';
 
   const NAV_PAGES = [
-    { id: 'choose', href: 'index.html',  labelIt: 'Scegli il percorso' },
-    { id: 'choro',  href: 'choro.html',  labelIt: 'Choro' },
-    { id: 'forro',  href: 'forro.html',  labelIt: 'Forró' },
-    { id: 'pagode', href: 'pagode.html', labelIt: 'Pagode' }
+    { id: 'choro',  href: 'choro.html',  label: 'Choro' },
+    { id: 'forro',  href: 'forro.html',  label: 'Forró' },
+    { id: 'pagode', href: 'pagode.html', label: 'Pagode' }
   ];
 
-  const renderPageHeader = function (pageId) {
+  const renderSiteNav = function (pageId) {
+    const nav = document.createElement('header');
+    nav.className = 'site-nav';
+
+    const brand = document.createElement('a');
+    brand.className = 'nav-brand';
+    brand.href = 'index.html';
+    brand.textContent = 'Ritmos do Brasil';
+
+    const paths = document.createElement('nav');
+    paths.className = 'nav-paths';
+    paths.setAttribute('aria-label', 'Percorsi del sito');
+
+    NAV_PAGES.forEach(function (page) {
+      const link = document.createElement('a');
+      link.className = 'nav-link' + (page.id === pageId ? ' active' : '');
+      link.href = page.href;
+      link.setAttribute('data-path', page.id);
+      link.textContent = page.label;
+      if (page.id === pageId) link.setAttribute('aria-current', 'page');
+      paths.append(link);
+    });
+
+    const controls = document.createElement('div');
+    controls.className = 'nav-controls';
+
+    const langSwitcher = document.createElement('div');
+    langSwitcher.className = 'language-switcher';
+
+    const instrSwitcher = document.createElement('div');
+    instrSwitcher.className = 'instrument-switcher';
+
+    controls.append(langSwitcher, instrSwitcher);
+    nav.append(brand, paths, controls);
+    return nav;
+  };
+
+  const renderPageHero = function (pageId) {
     const header = document.getElementById('top');
     if (!header) return;
 
@@ -18,25 +53,6 @@
     flagStripe.setAttribute('aria-hidden', 'true');
     flagStripe.innerHTML = '<span></span><span></span><span></span>';
 
-    const nav = document.createElement('nav');
-    nav.className = 'genre-nav';
-    nav.setAttribute('aria-label', 'Percorsi del sito');
-    NAV_PAGES.forEach(function (page) {
-      const link = document.createElement('a');
-      link.className = 'genre-link' + (page.id === pageId ? ' is-active' : '');
-      link.href = page.href;
-      link.setAttribute('data-nav', page.id);
-      link.textContent = page.labelIt;
-      if (page.id === pageId) {
-        link.setAttribute('aria-current', 'page');
-      }
-      nav.append(link);
-    });
-
-    const desktopPrefs = document.createElement('div');
-    desktopPrefs.className = 'desktop-preferences';
-    desktopPrefs.innerHTML = '<div class="language-switcher"></div><div class="instrument-switcher"></div>';
-
     const h1 = document.createElement('h1');
     h1.id = 'page-title';
 
@@ -44,14 +60,16 @@
     subtitle.className = 'subtitle';
     subtitle.id = 'page-subtitle';
 
-    header.replaceChildren(flagStripe, nav, desktopPrefs, h1, subtitle);
+    header.replaceChildren(flagStripe, h1, subtitle);
   };
 
-  /* Auto-init: read pageId from <header id="top" data-page="..."> */
   const header = document.getElementById('top');
   if (header && header.dataset.page) {
-    renderPageHeader(header.dataset.page);
+    const pageId = header.dataset.page;
+    const siteNav = renderSiteNav(pageId);
+    document.body.insertBefore(siteNav, header);
+    renderPageHero(pageId);
   }
 
-  window.CavaquinhoLayout = { renderPageHeader };
+  window.CavaquinhoLayout = { renderSiteNav, renderPageHero };
 })();

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/shared.css" />
   <link rel="stylesheet" href="css/page.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Source+Serif+4:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" defer></script>
   <style>
     :root {
       --surface:  #1a1410;
@@ -373,22 +374,21 @@
 </head>
 <body>
 
+<div class="bpm-bar">
+  <label class="bpm-label" for="bpm-slider">Tempo</label>
+  <input type="range" id="bpm-slider" min="50" max="160" value="80"
+         oninput="window.RitmosAudio && window.RitmosAudio.updateBpm(this.value)">
+  <span class="bpm-value" id="bpm-value">80 BPM</span>
+  <button class="stop-all-btn" onclick="window.RitmosAudio && window.RitmosAudio.stopActive()">&#9632; Stop</button>
+</div>
+
 <header id="top" data-page="choro"></header>
 
 <div class="wrapper">
   <div class="page-layout">
 
-    <!-- TOC -->
-    <nav class="toc" id="toc" aria-label="Indice dei contenuti">
-      <div class="toc-header">
-        <h2 id="toc-title">Indice</h2>
-        <button class="toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list">
-          Apri
-        </button>
-      </div>
-      <p class="toc-summary" id="toc-summary">Scorri i moduli, salta al punto che ti serve e torna subito alla sezione giusta.</p>
-      <ol class="toc-list" id="toc-list"></ol>
-    </nav>
+    <aside class="progress-sidebar" id="progress-sidebar" aria-label="Progresso dei moduli">
+    </aside>
 
     <main class="content-column">
 
@@ -472,24 +472,65 @@ Notazione: | G  _  S  G  |  _  S  G  _ |</pre>
   G: 0               G: 0                 G: 2 (fret 2)        G: 0
   D: 2 (fret 2)      D: 0                 D: 0                 D: 0</pre>
 
-    <h4>Progressione 1 — I – V7 – I (base assoluta)</h4>
-    <pre>| C    | G7   | C    | G7   | C    |</pre>
-    <p><em>10 minuti/giorno a 70 BPM con garfinho.</em></p>
+    <div class="prog-card" data-chords="C,G7,C,G7,C">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">I – V7 – I</span>
+          <span class="prog-sub">base assoluta · 10 minuti/giorno a 70 BPM con garfinho</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
-    <h4>Progressione 2 — ii – V – I</h4>
-    <pre>| Dm7  | G7   | Cmaj7 |  (ripeti)
+    <div class="prog-card" data-chords="Dm7,G7,Cmaj7">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">ii – V – I</span>
+          <span class="prog-sub">una battuta per accordo, poi mezza battuta</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
-Espandi: | Dm7 | Dm7 | G7 | G7 | Cmaj7 | Cmaj7 |
-Poi: una battuta per accordo → mezza battuta</pre>
+    <div class="prog-card" data-chords="Dm7,G7,Cmaj7,A7">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">ii – V – I – VI7 (circolare)</span>
+          <span class="prog-sub">Il A7 (VI7) "tira" verso Dm7 — progressione circolare del choro</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
-    <h4>Progressione 3 — ii – V – I – VI7 (circolare)</h4>
-    <pre>| Dm7 | G7 | Cmaj7 | A7 | Dm7 | G7 | Cmaj7 | ...</pre>
-    <p>Il <strong>A7</strong> (VI7) "tira" di nuovo verso Dm7 — questa è la progressione circolare del choro!</p>
-
-    <h4>Progressione 4 — Diminuito di passaggio</h4>
-    <pre>| C | C#dim7 | Dm7 | G7 | C |
-
-C#dim7:  D: 2  B: 1  G: 2  D: 1</pre>
+    <div class="prog-card" data-chords="C,Dm7,G7,C">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">Diminuito di passaggio</span>
+          <span class="prog-sub">C#dim7: D:2 B:1 G:2 D:1</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
     <h3>Schema AABBACCA in Do maggiore</h3>
     <pre>Sezione A → Do maggiore
@@ -509,11 +550,65 @@ Sezione C → Fa maggiore (trio / sottodominante)</pre>
   G: 0               G: 2 (fret 2)        G: 0                 G: 0
   D: 0               D: 0                 D: 2 (fret 2)        D: 1 (fret 1)</pre>
 
-    <h4>Progressioni</h4>
-    <pre>I – V7 – I:         | G   | D7  | G   |
-ii – V – I:         | Am7 | D7  | Gmaj7 |
-ii – V – I – VI7:   | Am7 | D7  | Gmaj7 | E7 | Am7 | ...
-Cadenza andalusa:   | Em  | D   | C   | B7  | Em  |</pre>
+    <div class="prog-card" data-chords="G,D7,G">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">I – V7 – I</span>
+          <span class="prog-sub">Sol maggiore</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
+
+    <div class="prog-card" data-chords="Am7,D7,Gmaj7">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">ii – V – I in Sol</span>
+          <span class="prog-sub">Am7 → D7 → Gmaj7</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
+
+    <div class="prog-card" data-chords="Am7,D7,Gmaj7,E7">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">ii – V – I – VI7 (circolare)</span>
+          <span class="prog-sub">Sol maggiore</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
+
+    <div class="prog-card" data-chords="Em,D,C,B7,Em">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">Cadenza andalusa</span>
+          <span class="prog-sub">Em – D – C – B7 – Em</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
     <h4>Esercizio A→B→A</h4>
     <pre>Sezione A (Sol): | G  | Am7 | D7 | G  | (×4)
@@ -539,14 +634,50 @@ Sezione C → Do maggiore (trio)</pre>
   G: 2 (fret 2)      G: 3 (fret 3)        G: 0                 G: 2 (fret 2)
   D: 0               D: 0                 D: 1 (fret 1)        D: 0</pre>
 
-    <h4>Progressioni</h4>
-    <pre>ii – V – I:     | Gm7 | C7  | Fmaj7 |
-Con diminuito:  | F   | F#dim7 | Gm7 | C7 | F |
+    <div class="prog-card" data-chords="Gm7,C7,Fmaj7">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">ii – V – I in Fa</span>
+          <span class="prog-sub">Gm7 → C7 → Fmaj7</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
-Carinhoso (schema):
-| F    | F#dim7 | Gm7  | C7   |
-| F    | D7     | Gm7  | C7   |
-| F    | Bb     | F/C  | C7   | F |</pre>
+    <div class="prog-card" data-chords="F,Gm7,C7,F">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">Con diminuito di passaggio</span>
+          <span class="prog-sub">F – Gm7 – C7 – F (con F#dim7 di passaggio)</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
+
+    <div class="prog-card" data-chords="F,Gm7,C7,F,D7,Gm7,C7,F,Bb,F,C7,F">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">Carinhoso (schema)</span>
+          <span class="prog-sub">Schema armonico completo di Carinhoso — Pixinguinha</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
     <h4>Esercizio — Transizione Do → Fa (il Trio)</h4>
     <pre>Ultimi 2 bar sez. A:  | C  | C7 |   ← C7 = V7 di Fa!
@@ -565,11 +696,50 @@ Primo bar del Trio:   | F  | ...</pre>
   G: 1 (fret 1)      G: 1 (fret 1)        G: 0                 G: 1 (fret 1)
   D: 0               D: 0                 D: 0                 D: 2 (fret 2)</pre>
 
-    <h4>Progressioni</h4>
-    <pre>i – V7 – i:         | Am | E7 | Am |
-ii° – V – i:        | Bm7b5 | E7 | Am |
-Cadenza frigia:     | Am | G  | F  | E7 | Am |
-Con cromatismi:     | Bm7b5 | E7b9 | Am | A7 | Dm | Bm7b5 | E7 | Am |</pre>
+    <div class="prog-card" data-chords="Am,E7,Am">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">i – V7 – i in La minore</span>
+          <span class="prog-sub">Am → E7 → Am</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
+
+    <div class="prog-card" data-chords="Am,G,F,E7,Am">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">Cadenza frigia</span>
+          <span class="prog-sub">Am – G – F – E7 – Am</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
+
+    <div class="prog-card" data-chords="Am,A7,Dm,E7,Am">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">Con cromatismi — La minore</span>
+          <span class="prog-sub">Am → A7 → Dm → E7 → Am</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
     <blockquote>⚠️ Il <strong>Bm7b5</strong> (semidiminuito) è l'accordo ii in minore — fondamentale per il choro!</blockquote>
 
@@ -591,14 +761,35 @@ Con cromatismi:     | Bm7b5 | E7b9 | Am | A7 | Dm | Bm7b5 | E7 | Am |</pre>
   G: 2 (fret 2)      G: 1 (fret 1)        G: 3 (fret 3)        G: 3 (fret 3)
   D: 0               D: 0                 D: 1 (fret 1)        D: 1 (fret 1)</pre>
 
-    <h4>Progressioni</h4>
-    <pre>ii° – V – i:    | Em7b5 | A7 | Dm |
-Con IV:         | Dm    | Gm | A7 | Dm |
+    <div class="prog-card" data-chords="Dm,A7,Dm">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">i – V7 – i in Re minore</span>
+          <span class="prog-sub">Dm → A7 → Dm</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
-Lamento (Pixinguinha):
-| Dm   | A7   | Dm   | A7   |
-| Dm   | Gm   | A7   | Dm   |
-| F    | C7   | F    | C7   | F |  ← trio in Fa magg.</pre>
+    <div class="prog-card" data-chords="Dm,Gm,A7,Dm">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">Con IV — Lamento (Pixinguinha)</span>
+          <span class="prog-sub">Dm – Gm – A7 – Dm</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
   </section>
 
   <!-- SECTION 8 -->
@@ -610,11 +801,35 @@ Lamento (Pixinguinha):
     <h3>La catena completa</h3>
     <pre>B7 → E7 → A7 → D7 → G7 → C</pre>
 
-    <h4>Esercizio base (60 BPM → aumenta)</h4>
-    <pre>| E7 | A7 | D7 | G7 | C  |</pre>
+    <div class="prog-card" data-chords="E7,A7,D7,G7,C">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">Catena di dominanti — esercizio base</span>
+          <span class="prog-sub">60 BPM → aumenta progressivamente</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
-    <h4>Versione avanzata — ii-V per ogni anello</h4>
-    <pre>| F#m7b5 | B7 | Bm7b5 | E7 | Em7b5 | A7 | Am7 | D7 | G7 | C |</pre>
+    <div class="prog-card" data-chords="Am7,D7,G7,C">
+      <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+        <button class="play-btn" aria-label="Suona questa progressione">
+          <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+          <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+        </button>
+        <div class="prog-meta">
+          <span class="prog-name">Catena — versione avanzata ii-V</span>
+          <span class="prog-sub">ii-V concatenati per ogni anello della catena</span>
+        </div>
+        <span class="pulse-dot"></span>
+      </div>
+      <div class="chord-strip"></div>
+    </div>
 
     <h4>Simulazione Roda de Choro</h4>
     <pre>Inizio Do magg.:  | C    | C    | G7   | C    |
@@ -845,6 +1060,15 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
 <script src="js/instruments.js"></script>
 <script src="js/chords.js"></script>
 <script src="js/data/choro-content.js"></script>
+<script src="js/progress.js"></script>
+<script src="js/audio.js"></script>
+<script>
+  // Init progress sidebar after page JS runs
+  if (window.RitmosProgress) {
+    window.RitmosProgress.buildSidebar();
+    window.RitmosProgress.initScrollSpy();
+  }
+</script>
 <script>
   (() => {
     const localization = window.CavaquinhoI18n.applyBasicPageLocalization('choro', {
@@ -970,122 +1194,18 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
         closedVoicing: 'Voicing fechado'
       }
     }[lang] || null;
-    const toc = document.getElementById('toc');
-    const tocList = document.getElementById('toc-list');
-    const tocToggle = document.getElementById('toc-toggle');
-    const tocSummary = document.getElementById('toc-summary');
     const backToTop = document.getElementById('back-to-top');
     const projectChords = document.getElementById('project-chords');
     const inversionGroups = document.getElementById('inversion-groups');
     const inversionInstrumentNote = document.getElementById('inversion-instrument-note');
-    const mobileQuery = window.matchMedia('(max-width: 900px)');
-    const sections = Array.from(document.querySelectorAll('main section[id]'));
-    const linksBySection = new Map();
-
-    if (!toc || !tocList || !tocToggle || !tocSummary || !backToTop || sections.length === 0) {
-      return;
-    }
-
-    const setTocOpen = (isOpen) => {
-      toc.classList.toggle('is-open', isOpen);
-      tocToggle.setAttribute('aria-expanded', String(isOpen));
-      tocToggle.textContent = isOpen ? uiText.close : uiText.open;
-    };
-
-    const setActiveSection = (sectionId) => {
-      linksBySection.forEach((link, id) => {
-        if (id === sectionId) {
-          link.setAttribute('aria-current', 'true');
-        } else {
-          link.removeAttribute('aria-current');
-        }
-      });
-    };
-
-    sections.forEach((section, index) => {
-      const title = section.querySelector('.section-title')?.textContent?.trim();
-      if (!title) {
-        return;
-      }
-
-      const meta = section.querySelector('.section-num')?.textContent?.trim() || `Sezione ${index + 1}`;
-      const description = section.dataset.tocDescription?.trim() || section.querySelector('h3')?.textContent?.trim() || '';
-      const item = document.createElement('li');
-      const link = document.createElement('a');
-      const metaSpan = document.createElement('span');
-      const titleSpan = document.createElement('span');
-      const descriptionSpan = document.createElement('span');
-
-      item.className = 'toc-item';
-      link.className = 'toc-link';
-      link.href = `#${section.id}`;
-
-      metaSpan.className = 'toc-meta';
-      metaSpan.textContent = meta;
-
-      titleSpan.className = 'toc-title';
-      titleSpan.textContent = title;
-
-      descriptionSpan.className = 'toc-description';
-      descriptionSpan.textContent = description;
-
-      link.append(metaSpan, titleSpan);
-      if (description) {
-        link.append(descriptionSpan);
-      }
-
-      link.addEventListener('click', () => {
-        if (mobileQuery.matches) {
-          setTocOpen(false);
-        }
-      });
-
-      item.append(link);
-      tocList.append(item);
-      linksBySection.set(section.id, link);
-    });
-
-    tocSummary.textContent = (uiText.tocReadySummary || '{count} sections').replace('{count}', linksBySection.size);
-    toc.classList.add('toc-ready');
-
-    const observer = new IntersectionObserver((entries) => {
-      const visibleEntries = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((left, right) => right.intersectionRatio - left.intersectionRatio);
-
-      if (visibleEntries.length > 0) {
-        setActiveSection(visibleEntries[0].target.id);
-      }
-    }, {
-      rootMargin: '-20% 0px -55% 0px',
-      threshold: [0.2, 0.35, 0.5, 0.7]
-    });
-
-    sections.forEach((section) => observer.observe(section));
 
     const syncBackToTop = () => {
       const shouldShow = window.scrollY > 480;
       backToTop.classList.toggle('is-visible', shouldShow);
     };
 
-    const syncTocForViewport = () => {
-      if (!mobileQuery.matches) {
-        setTocOpen(false);
-      }
-    };
-
-    tocToggle.addEventListener('click', () => {
-      const isOpen = tocToggle.getAttribute('aria-expanded') === 'true';
-      setTocOpen(!isOpen);
-    });
-
     window.addEventListener('scroll', syncBackToTop, { passive: true });
-    mobileQuery.addEventListener('change', syncTocForViewport);
-
-    setActiveSection(sections[0].id);
-    setTocOpen(false);
     syncBackToTop();
-    syncTocForViewport();
 
     const { referenceOpenPitches, getRoleMarkers, appendRoleRing, getFirstPlayedStringIndex,
       createGuitarChordSvg, createReferenceChordSvg,

@@ -8,6 +8,7 @@
     document.documentElement.classList.add('js-enabled');
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" defer></script>
   <link rel="stylesheet" href="css/shared.css" />
   <link rel="stylesheet" href="css/page.css" />
   <style>
@@ -108,18 +109,19 @@
   </style>
 </head>
 <body>
+  <div class="bpm-bar">
+    <label class="bpm-label" for="bpm-slider">Tempo</label>
+    <input type="range" id="bpm-slider" min="50" max="160" value="80"
+           oninput="window.RitmosAudio && window.RitmosAudio.updateBpm(this.value)">
+    <span class="bpm-value" id="bpm-value">80 BPM</span>
+    <button class="stop-all-btn" onclick="window.RitmosAudio && window.RitmosAudio.stopActive()">&#9632; Stop</button>
+  </div>
   <header id="top" data-page="pagode"></header>
 
   <div class="wrapper">
     <div class="page-layout">
-      <nav class="toc" id="toc" aria-label="Indice dei contenuti">
-        <div class="toc-header">
-          <h2 id="toc-title">Indice</h2>
-          <button class="toc-toggle" id="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-list">Apri</button>
-        </div>
-        <p class="toc-summary" id="toc-summary">Un percorso guidato di pagode tra levada, armonia, repertorio e accompagnamento.</p>
-        <ol class="toc-list" id="toc-list"></ol>
-      </nav>
+      <aside class="progress-sidebar" id="progress-sidebar" aria-label="Progresso dei moduli">
+      </aside>
 
       <main class="content-column">
         <section id="s1" data-toc-description="Accordatura, ruolo del cavaco e relazione con voce e percussione nel pagode.">
@@ -170,12 +172,36 @@ Il colpo spento deve essere corto e asciutto, non pesante.</pre>
         <section id="s3" data-toc-description="Il linguaggio di base del pagode in tonalità comuni: I, VI7, ii e V7.">
           <span class="section-num">Modulo A</span>
           <h2 class="section-title">Il Nucleo del Pagode: I – VI7 – ii – V7</h2>
-          <h3>Ciclo in Do</h3>
-          <pre>| C | A7 | Dm7 | G7 |
-| C | A7 | Dm7 | G7 |</pre>
-          <h3>Ciclo in Sol</h3>
-          <pre>| G | E7 | Am7 | D7 |
-| G | E7 | Am7 | D7 |</pre>
+          <div class="prog-card" data-chords="C,A7,Dm7,G7">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – VI7 – ii – V7 in Do</span>
+                <span class="prog-sub">Il motore classico del pagode</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+
+          <div class="prog-card" data-chords="G,E7,Am7,D7">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – VI7 – ii – V7 in Sol</span>
+                <span class="prog-sub">Trasposizione in Sol — stessa funzione</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+
           <h3>Funzione dei quattro accordi</h3>
           <ul>
             <li><strong>I</strong> assesta e chiarisce il centro tonale.</li>
@@ -188,15 +214,51 @@ Il colpo spento deve essere corto e asciutto, non pesante.</pre>
         <section id="s4" data-toc-description="Cadenze, elevazioni e chiusure che fanno funzionare il ritornello nel pagode.">
           <span class="section-num">Modulo B</span>
           <h2 class="section-title">Cadenze che Aprono il Ritornello</h2>
-          <h3>Chiusura diretta di ritornello</h3>
-          <pre>| F | G7 | Em7 | A7 |
-| Dm7 | G7 | C | C7 |</pre>
-          <h3>Salita prima del ritornello</h3>
-          <pre>| Am7 | D7 | G7 | C7 |
-| F | G7 | C | G7 |</pre>
-          <h3>Movimento tipico di pop pagode in Re</h3>
-          <pre>| D | B7 | Em7 | A7 |
-| F#m7 | B7 | Em7 | A7 |</pre>
+          <div class="prog-card" data-chords="F,G7,Em7,A7,Dm7,G7,C,C7">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">Chiusura diretta di ritornello</span>
+                <span class="prog-sub">F – G7 – Em7 – A7 – Dm7 – G7 – C</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+
+          <div class="prog-card" data-chords="Am7,D7,G7,C7,F,G7,C,G7">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">Salita prima del ritornello</span>
+                <span class="prog-sub">Am7 – D7 – G7 – C7 – F – G7 – C</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+
+          <div class="prog-card" data-chords="D,B7,Em7,A7">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">Pop pagode in Re</span>
+                <span class="prog-sub">D – B7 – Em7 – A7</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+
           <p>Nel pagode le cadenze devono cantare quasi da sole. Il compito del cavaco è renderle evidenti senza irrigidire la levada.</p>
         </section>
 
@@ -293,6 +355,8 @@ In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
   <script src="js/instruments.js"></script>
   <script src="js/chords.js"></script>
   <script src="js/data/pagode-content.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/audio.js"></script>
   <script>
     (() => {
       const localization = window.CavaquinhoI18n.applyBasicPageLocalization('pagode', {
@@ -316,116 +380,14 @@ In G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
         close: 'Chiudi',
         backToTop: 'Torna all\'inizio'
       };
-      const toc = document.getElementById('toc');
-      const tocList = document.getElementById('toc-list');
-      const tocToggle = document.getElementById('toc-toggle');
-      const tocSummary = document.getElementById('toc-summary');
       const backToTop = document.getElementById('back-to-top');
-      const mobileQuery = window.matchMedia('(max-width: 900px)');
-      const sections = Array.from(document.querySelectorAll('main section[id]'));
-      const linksBySection = new Map();
-
-      if (!toc || !tocList || !tocToggle || !tocSummary || !backToTop || sections.length === 0) {
-        return;
-      }
-
-      const setTocOpen = (isOpen) => {
-        toc.classList.toggle('is-open', isOpen);
-        tocToggle.setAttribute('aria-expanded', String(isOpen));
-        tocToggle.textContent = isOpen ? uiText.close : uiText.open;
-      };
-
-      const setActiveSection = (sectionId) => {
-        linksBySection.forEach((link, id) => {
-          if (id === sectionId) {
-            link.setAttribute('aria-current', 'true');
-          } else {
-            link.removeAttribute('aria-current');
-          }
-        });
-      };
-
-      sections.forEach((section, index) => {
-        const title = section.querySelector('.section-title')?.textContent?.trim();
-        if (!title) {
-          return;
-        }
-
-        const meta = section.querySelector('.section-num')?.textContent?.trim() || `Sezione ${index + 1}`;
-        const description = section.dataset.tocDescription?.trim() || '';
-        const item = document.createElement('li');
-        const link = document.createElement('a');
-        const metaSpan = document.createElement('span');
-        const titleSpan = document.createElement('span');
-        const descriptionSpan = document.createElement('span');
-
-        item.className = 'toc-item';
-        link.href = `#${section.id}`;
-        link.className = 'toc-link';
-        metaSpan.className = 'toc-meta';
-        titleSpan.className = 'toc-title';
-        descriptionSpan.className = 'toc-description';
-
-        metaSpan.textContent = meta;
-        titleSpan.textContent = title;
-        descriptionSpan.textContent = description;
-
-        link.append(metaSpan, titleSpan);
-        if (description) {
-          link.append(descriptionSpan);
-        }
-
-        link.addEventListener('click', () => {
-          if (mobileQuery.matches) {
-            setTocOpen(false);
-          }
-        });
-
-        item.append(link);
-        tocList.append(item);
-        linksBySection.set(section.id, link);
-      });
-
-      tocSummary.textContent = (uiText.tocReadySummary || '{count} sections').replace('{count}', linksBySection.size);
-      toc.classList.add('toc-ready');
-
-      const observer = new IntersectionObserver((entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((left, right) => right.intersectionRatio - left.intersectionRatio);
-
-        if (visibleEntries.length > 0) {
-          setActiveSection(visibleEntries[0].target.id);
-        }
-      }, {
-        rootMargin: '-18% 0px -55% 0px',
-        threshold: [0.2, 0.35, 0.5, 0.7]
-      });
-
-      sections.forEach((section) => observer.observe(section));
 
       const syncBackToTop = () => {
         backToTop.classList.toggle('is-visible', window.scrollY > 420);
       };
 
-      const syncTocForViewport = () => {
-        if (!mobileQuery.matches) {
-          setTocOpen(false);
-        }
-      };
-
-      tocToggle.addEventListener('click', () => {
-        const isOpen = tocToggle.getAttribute('aria-expanded') === 'true';
-        setTocOpen(!isOpen);
-      });
-
       window.addEventListener('scroll', syncBackToTop, { passive: true });
-      mobileQuery.addEventListener('change', syncTocForViewport);
-
-      setActiveSection(sections[0].id);
-      setTocOpen(false);
       syncBackToTop();
-      syncTocForViewport();
 
       const { referenceOpenPitches, getRoleMarkers, appendRoleRing, getFirstPlayedStringIndex,
         createGuitarChordSvg, createReferenceChordSvg, createHoverCardSystem } = window.CavaquinhoChords;

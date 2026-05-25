@@ -360,7 +360,7 @@
 
   <main class="wrapper" id="index-main-content">
     <section class="chooser" aria-label="Scegli il percorso musicale">
-      <article class="genre-card choro">
+      <article class="genre-card choro" data-path-card="choro">
         <span class="genre-badge">Percorso 1</span>
         <h2>Choro</h2>
         <p>Il percorso della precisione, dell'anticipazione e della lingua del choro: dal garfinho fino alle cadenze, al trio, alle inversioni e al repertorio classico.</p>
@@ -372,9 +372,10 @@
         <div class="card-actions">
           <a class="button" href="choro.html">Apri il percorso Choro</a>
         </div>
+        <span class="path-progress"></span>
       </article>
 
-      <article class="genre-card forro">
+      <article class="genre-card forro" data-path-card="forro">
         <span class="genre-badge">Percorso 2</span>
         <h2>Forró</h2>
         <p>Il percorso della levada, dello xote, del baião e del repertorio da palco: giri pratici, tonalità ricorrenti e accompagnamento che funziona da subito.</p>
@@ -386,9 +387,10 @@
         <div class="card-actions">
           <a class="button" href="forro.html">Apri il percorso Forró</a>
         </div>
+        <span class="path-progress"></span>
       </article>
 
-      <article class="genre-card pagode">
+      <article class="genre-card pagode" data-path-card="pagode">
         <span class="genre-badge">Percorso 3</span>
         <h2>Pagode</h2>
         <p>Il percorso dell'accompagnamento in gruppo, della levada e del pagode/pop pagode: mano compatta, ritornelli che si aprono bene e repertorio da roda e da banda.</p>
@@ -400,8 +402,19 @@
         <div class="card-actions">
           <a class="button" href="pagode.html">Apri il percorso Pagode</a>
         </div>
+        <span class="path-progress"></span>
       </article>
     </section>
+
+    <div class="entry-quiz" id="entry-quiz" style="margin: 40px 0;">
+      <p style="font-size: 16px; font-weight: 500; margin-bottom: 14px; color: var(--cream);">Da dove vuoi iniziare oggi?</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <button onclick="location.href='choro.html#s2'" style="text-align:left;background:rgba(26,20,16,0.92);border:0.5px solid #3a2e22;border-radius:10px;padding:14px 16px;color:var(--cream);font-size:14px;cursor:pointer;font-family:inherit;transition:border-color 0.15s,background 0.15s;" onmouseover="this.style.borderColor='#c9952a';this.style.background='rgba(201,149,42,0.06)'" onmouseout="this.style.borderColor='#3a2e22';this.style.background='rgba(26,20,16,0.92)'">Voglio studiare il cavaco in modo completo</button>
+        <button onclick="location.href='forro.html#s3'" style="text-align:left;background:rgba(26,20,16,0.92);border:0.5px solid #3a2e22;border-radius:10px;padding:14px 16px;color:var(--cream);font-size:14px;cursor:pointer;font-family:inherit;transition:border-color 0.15s,background 0.15s;" onmouseover="this.style.borderColor='#c9952a';this.style.background='rgba(201,149,42,0.06)'" onmouseout="this.style.borderColor='#3a2e22';this.style.background='rgba(26,20,16,0.92)'">Voglio accompagnare canzoni subito</button>
+        <button onclick="location.href='pagode.html#s3'" style="text-align:left;background:rgba(26,20,16,0.92);border:0.5px solid #3a2e22;border-radius:10px;padding:14px 16px;color:var(--cream);font-size:14px;cursor:pointer;font-family:inherit;transition:border-color 0.15s,background 0.15s;" onmouseover="this.style.borderColor='#c9952a';this.style.background='rgba(201,149,42,0.06)'" onmouseout="this.style.borderColor='#3a2e22';this.style.background='rgba(26,20,16,0.92)'">Voglio sostenere voce e percussione in gruppo</button>
+        <button onclick="location.href='choro.html#s2'" style="text-align:left;background:rgba(26,20,16,0.92);border:0.5px solid #3a2e22;border-radius:10px;padding:14px 16px;color:var(--cream);font-size:14px;cursor:pointer;font-family:inherit;transition:border-color 0.15s,background 0.15s;" onmouseover="this.style.borderColor='#c9952a';this.style.background='rgba(201,149,42,0.06)'" onmouseout="this.style.borderColor='#3a2e22';this.style.background='rgba(26,20,16,0.92)'">Non so ancora da dove partire</button>
+      </div>
+    </div>
 
     <section class="overview" aria-label="Panoramica dei tre percorsi">
       <article class="panel">
@@ -476,6 +489,22 @@
       });
       window.CavaquinhoI18n.setupMobilePreferenceSheet(result.lang);
       window.CavaquinhoI18n.decorateLocalLinks(document, result.lang);
+
+      // Show progress summary on pathway cards
+      (function showReturnProgress() {
+        const pages = ['choro','forro','pagode'];
+        pages.forEach(function(page) {
+          const key = 'rdb-progress-/' + page + '.html';
+          let data = {};
+          try { data = JSON.parse(localStorage.getItem(key) || '{}'); } catch(e) {}
+          const done = Object.values(data).filter(Boolean).length;
+          const el = document.querySelector('[data-path-card="' + page + '"] .path-progress');
+          if (el && done > 0) {
+            el.textContent = done + ' moduli completati';
+            el.style.cssText = 'display:block;margin-top:8px;font-size:12px;color:#52B788;';
+          }
+        });
+      })();
     })();
   </script>
 </body>
