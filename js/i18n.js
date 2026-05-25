@@ -174,6 +174,15 @@
       // Ignore storage failures.
     }
 
+    try {
+      const sessionStored = window.sessionStorage.getItem(STORAGE_KEY);
+      if (SUPPORTED.includes(sessionStored)) {
+        return sessionStored;
+      }
+    } catch (error) {
+      // Ignore storage failures.
+    }
+
     const navigatorLang = (window.navigator.language || 'it').slice(0, 2).toLowerCase();
     return SUPPORTED.includes(navigatorLang) ? navigatorLang : 'it';
   };
@@ -184,6 +193,11 @@
     }
     try {
       window.localStorage.setItem(STORAGE_KEY, lang);
+    } catch (error) {
+      // Ignore persistence failures.
+    }
+    try {
+      window.sessionStorage.setItem(STORAGE_KEY, lang);
     } catch (error) {
       // Ignore persistence failures.
     }
