@@ -44,21 +44,6 @@
     return nav;
   };
 
-  const PAGE_DEFAULTS = {
-    choro:  {
-      title: 'Choro',
-      subtitle: 'Un percorso pratico tra ritmo, armonia e repertorio per il cavaquinho nel choro.'
-    },
-    forro:  {
-      title: 'Forró',
-      subtitle: 'Levada, giri armonici e repertorio per il cavaquinho nel forró.'
-    },
-    pagode: {
-      title: 'Pagode',
-      subtitle: 'Levada, accompagnamento e repertorio per il cavaquinho nel pagode.'
-    }
-  };
-
   const renderPageHero = function (pageId) {
     const header = document.getElementById('top');
     if (!header) return;
@@ -68,16 +53,12 @@
     flagStripe.setAttribute('aria-hidden', 'true');
     flagStripe.innerHTML = '<span></span><span></span><span></span>';
 
-    const defaults = PAGE_DEFAULTS[pageId] || {};
-
     const h1 = document.createElement('h1');
     h1.id = 'page-title';
-    h1.textContent = defaults.title || '';
 
     const subtitle = document.createElement('p');
     subtitle.className = 'subtitle';
     subtitle.id = 'page-subtitle';
-    subtitle.textContent = defaults.subtitle || '';
 
     header.replaceChildren(flagStripe, h1, subtitle);
   };

@@ -355,5 +355,10 @@ Em G: | G | B7 | Em7 | E7 | Am7 | D7 | G |</pre>
           </ul>
         </section>
       `
+    },
+    it: {
+      metaTitle: 'Ritmos do Brasil — Pagode',
+      title: 'Ritmos do Brasil — Pagode',
+      subtitle: 'Un percorso pratico per l\'accompagnamento nel pagode con il cavaquinho: levada, preparazione del ritornello, giri armonici e famiglie di brani che funzionano in roda, in sala prove e in banda.'
     }
 };

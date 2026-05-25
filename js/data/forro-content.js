@@ -483,5 +483,10 @@ Tom D — Subida 2: | Am  | D7 | G  | Gm |</pre>
           </ul>
         </section>
       `
+    },
+    it: {
+      metaTitle: 'Ritmos do Brasil — Forró',
+      title: 'Ritmos do Brasil — Forró',
+      subtitle: 'Un sistema progressivo per xote, baião e accompagnamento dal vivo, costruito con lo stesso spirito del percorso Choro ma orientato al repertorio popolare vicino a Falamansa.'
     }
 };

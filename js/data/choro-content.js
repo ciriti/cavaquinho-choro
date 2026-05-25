@@ -431,5 +431,10 @@ Trio: | C | G7 | C | F | G7 | C |</pre>
           </ul>
         </section>
       `
+    },
+    it: {
+      metaTitle: 'Ritmos do Brasil — Choro',
+      title: 'Ritmos do Brasil — Choro',
+      subtitle: 'Un percorso pratico tra ritmo, armonia, diteggiature e repertorio per accompagnare il choro con il cavaquinho brasiliano.'
     }
 };
