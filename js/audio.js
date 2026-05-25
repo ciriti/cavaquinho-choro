@@ -16,6 +16,8 @@
     Bm7:"B3,D4,F#4,A4", "F#m7":"F#3,A3,C#4,E4",
     Cmaj7:"C4,E4,G4,B4", Gmaj7:"G3,B3,D4,F#4", Fmaj7:"F3,A3,C4,E4",
     Fm:"F3,G#3,C4,F4",
+  Gm:"G3,A#3,D4,G4", Gm7:"G3,A#3,D4,F4",
+  "C#":"C#4,F4,G#4,C#5",
   };
 
   function getNotesFor(chord) {
