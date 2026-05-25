@@ -548,6 +548,10 @@ footer {
     padding: 32px 16px 60px;
   }
 
+  .progress-sidebar {
+    display: none;
+  }
+
   .toc {
     padding: 18px;
   }
