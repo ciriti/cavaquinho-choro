@@ -89,6 +89,116 @@ Handled entirely by `i18n.js`:
 
 Do not add scroll logic outside `i18n.js`.
 
+## Cross-page consistency — IMPORTANT
+
+All three pages (choro, forro, pagode) must stay structurally identical in every part that is not page-specific content. Before touching any of these, verify the same change applies to the other two pages.
+
+### `<head>` order (mandatory)
+
+```html
+<link rel="stylesheet" href="css/shared.css" />
+<link rel="stylesheet" href="css/page.css" />
+<link href="https://fonts.googleapis.com/..." rel="stylesheet" />
+<script src="Tone.js" defer></script>
+<style> ... </style>
+```
+
+### Inline script — shared boilerplate
+
+Every page's inline script must follow this exact pattern (only the page name string changes):
+
+```js
+// 1. applyBasicPageLocalization
+const localization = window.CavaquinhoI18n.applyBasicPageLocalization('PAGE_ID', {
+  titleSelector: '#page-title',
+  subtitleSelector: '#page-subtitle',
+  mainSelector: 'main.content-column',
+  footerSelector: 'footer',
+  backToTopSelector: '#back-to-top'
+});
+const lang = localization.lang;
+window.CavaquinhoInstruments.initInstrumentSwitchers(lang);
+window.CavaquinhoI18n.setupMobilePreferenceSheet(lang);
+
+// 2. syncBackToTop — threshold is always 420
+const backToTop = document.getElementById('back-to-top');
+const syncBackToTop = () => { backToTop.classList.toggle('is-visible', window.scrollY > 420); };
+window.addEventListener('scroll', syncBackToTop, { passive: true });
+syncBackToTop();
+
+// 3. Chord system destructuring — always include createSpriteChordSvg
+const { createGuitarChordSvg, createReferenceChordSvg,
+  createSpriteChordSvg: _createSpriteChordSvg, createHoverCardSystem } = window.CavaquinhoChords;
+const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260523g';
+const createSpriteChordSvg = (chord) => _createSpriteChordSvg(chord, chordSpritePath);
+
+// 4. createHoverCardSystem — always pass getInstrumentOptions
+const { show: showHoverCard, hide: hideHoverCard, position: positionHoverCard } =
+  createHoverCardSystem({ renderDiagram: renderChordDiagram, getInstrumentOptions });
+```
+
+### renderChordDiagram — mandatory structure
+
+All three pages must use the same two-branch pattern:
+
+```js
+const renderChordDiagram = (container, chord) => {
+  container.replaceChildren();
+  const instrument = getSelectedInstrument();
+  const instrumentOptions = getInstrumentOptions(chord);
+  if (instrument === 'guitar') {
+    if (instrumentOptions.length === 0) return;
+    // ... createGuitarChordSvg branch
+    return;
+  }
+  if (instrumentOptions.length === 0) {
+    container.append(createSpriteChordSvg(chord)); // sprite fallback
+    return;
+  }
+  // ... createReferenceChordSvg branch
+};
+```
+
+### chord-token — always `<span>` with tabIndex and mousemove
+
+```js
+const token = document.createElement('span');
+token.className = 'chord-token';
+token.textContent = chordName;
+token.tabIndex = 0;
+token.dataset.chordName = chord.name;
+token.addEventListener('mouseenter', (event) => {
+  showHoverCard(token, chord, { x: event.clientX, y: event.clientY });
+});
+token.addEventListener('mousemove', (event) => { positionHoverCard(event.clientX, event.clientY); });
+token.addEventListener('mouseleave', hideHoverCard);
+token.addEventListener('focus', () => { showHoverCard(token, chord); });
+token.addEventListener('blur', hideHoverCard);
+```
+
+Never use `<button>` for chord tokens (different browser behavior, breaks hover card positioning).
+
+### enhanceChordText scope
+
+Always apply per section, not on the whole `main`:
+
+```js
+document.querySelectorAll('main section').forEach((section) => {
+  enhanceChordText(section);
+});
+```
+
+### chordPattern regex escaping
+
+```js
+const chordPattern = new RegExp(
+  `(^|[^A-Za-z0-9#/])(${hoverableChordNames
+    .map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('|')})(?=$|[^A-Za-z0-9#/])`, 'g');
+```
+
+Use `'\\$&'` (single escape in the replacement string). Double-escaping (`'\\\\$&'`) breaks matching for chord names containing special characters.
+
 ## What not to do
 
 - Do not add `<nav>` or title elements directly to the HTML — `layout.js` generates them.
@@ -97,3 +207,4 @@ Do not add scroll logic outside `i18n.js`.
 - Do not call `buildSidebar()` or `buildChordStrips()` inside `applyBasicPageLocalization` — the existing DOMContentLoaded path already handles it.
 - Do not add content (text, sections, exercises) that is not derived from existing material in the page.
 - Do not skip updating all three language entries when adding a translatable field.
+- Do not apply a structural change (head order, chord-token, regex, renderChordDiagram, syncBackToTop) to only one page — always check all three.
