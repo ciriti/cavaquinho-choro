@@ -9,7 +9,7 @@ window.CavaquinhoSiteContent.index = {
       `,
       mainHtml: `
         <section class="chooser" aria-label="Choose your musical path">
-          <article class="genre-card choro">
+          <article class="genre-card choro" data-path-card="choro">
             <span class="genre-badge">Path 1</span>
             <h2>Choro</h2>
             <p>The path for precision, anticipation and roda language: from garfinho and 2/4 pulse to cadences, trio sections, inversions and classic repertoire.</p>
@@ -21,9 +21,10 @@ window.CavaquinhoSiteContent.index = {
             <div class="card-actions">
               <a class="button" href="choro.html">Open the Choro path</a>
             </div>
+            <span class="path-progress"></span>
           </article>
 
-          <article class="genre-card forro">
+          <article class="genre-card forro" data-path-card="forro">
             <span class="genre-badge">Path 2</span>
             <h2>Forró</h2>
             <p>The path for groove, xote, baião and stage-ready repertoire: practical loops, common keys, chorus openings and accompaniment that feels natural from day one.</p>
@@ -35,9 +36,10 @@ window.CavaquinhoSiteContent.index = {
             <div class="card-actions">
               <a class="button" href="forro.html">Open the Forró path</a>
             </div>
+            <span class="path-progress"></span>
           </article>
 
-          <article class="genre-card pagode">
+          <article class="genre-card pagode" data-path-card="pagode">
             <span class="genre-badge">Path 3</span>
             <h2>Pagode</h2>
             <p>The path for group accompaniment, levada, partido-alto feel and pop-pagode harmony: compact right hand, singable cadences and repertoire that works in roda and band settings.</p>
@@ -49,6 +51,22 @@ window.CavaquinhoSiteContent.index = {
             <div class="card-actions">
               <a class="button" href="pagode.html">Open the Pagode path</a>
             </div>
+            <span class="path-progress"></span>
+          </article>
+
+          <article class="genre-card armonia" data-path-card="armonia">
+            <span class="genre-badge">Theory Module</span>
+            <h2>Harmony</h2>
+            <p>Harmonic progressions in G major from basic cadence to advanced reharmonization: five progressive levels with audio player, functional analysis and stylistic context.</p>
+            <ul class="card-points">
+              <li>Fundamental cadences, four-chord loops, secondary dominants.</li>
+              <li>Borrowed chords from the parallel minor: iv, ♭VII, descending chromaticism.</li>
+              <li>Passing diminished chords and complete dominant chains — the language of choro masters.</li>
+            </ul>
+            <div class="card-actions">
+              <a class="button" href="armonia.html">Open the Harmony module</a>
+            </div>
+            <span class="path-progress"></span>
           </article>
         </section>
 
@@ -80,6 +98,11 @@ window.CavaquinhoSiteContent.index = {
                   <td>Levada, compact accompaniment, chorus lifts, roda and pop-pagode turnarounds.</td>
                   <td>Stronger song accompaniment, cleaner section changes and more confidence inside a band or roda.</td>
                 </tr>
+                <tr>
+                  <td><strong>Harmony</strong></td>
+                  <td>Harmonic progressions by level, functional analysis, borrowed chords and chromaticism.</td>
+                  <td>A clear mental map of how chords move and relate across all Brazilian styles.</td>
+                </tr>
               </tbody>
             </table>
           </article>
@@ -100,8 +123,8 @@ window.CavaquinhoSiteContent.index = {
                 Enter Pagode and train levada, harmonic turnarounds and chorus preparation.
               </li>
               <li>
-                <strong>If you want the full picture</strong>
-                Use Choro for discipline, Forró for groove and Pagode for accompaniment language.
+                <strong>If you want to understand Brazilian harmony</strong>
+                Open Harmony and work through the 5 levels from basic cadence to the complete dominant chain.
               </li>
             </ul>
           </aside>
@@ -118,7 +141,7 @@ window.CavaquinhoSiteContent.index = {
       `,
       mainHtml: `
         <section class="chooser" aria-label="Escolha seu caminho musical">
-          <article class="genre-card choro">
+          <article class="genre-card choro" data-path-card="choro">
             <span class="genre-badge">Percurso 1</span>
             <h2>Choro</h2>
             <p>O percurso da precisão, da antecipação e da linguagem de roda: do garfinho e do pulso em 2/4 até cadências, trio, inversões e repertório clássico.</p>
@@ -130,9 +153,10 @@ window.CavaquinhoSiteContent.index = {
             <div class="card-actions">
               <a class="button" href="choro.html">Abrir o percurso de Choro</a>
             </div>
+            <span class="path-progress"></span>
           </article>
 
-          <article class="genre-card forro">
+          <article class="genre-card forro" data-path-card="forro">
             <span class="genre-badge">Percurso 2</span>
             <h2>Forró</h2>
             <p>O percurso da levada, do xote, do baião e do repertório de palco: giros práticos, tonalidades comuns, aberturas de refrão e acompanhamento que funciona desde o começo.</p>
@@ -144,9 +168,10 @@ window.CavaquinhoSiteContent.index = {
             <div class="card-actions">
               <a class="button" href="forro.html">Abrir o percurso de Forró</a>
             </div>
+            <span class="path-progress"></span>
           </article>
 
-          <article class="genre-card pagode">
+          <article class="genre-card pagode" data-path-card="pagode">
             <span class="genre-badge">Percurso 3</span>
             <h2>Pagode</h2>
             <p>O percurso do acompanhamento em grupo, da levada, do partido-alto e da harmonia do pagode/pop pagode: mão compacta, cadências cantáveis e repertório que encaixa em roda e banda.</p>
@@ -158,6 +183,22 @@ window.CavaquinhoSiteContent.index = {
             <div class="card-actions">
               <a class="button" href="pagode.html">Abrir o percurso de Pagode</a>
             </div>
+            <span class="path-progress"></span>
+          </article>
+
+          <article class="genre-card armonia" data-path-card="armonia">
+            <span class="genre-badge">Módulo Teórico</span>
+            <h2>Harmonia</h2>
+            <p>Progressões harmônicas em Sol maior da cadência básica à rearmonização avançada: cinco níveis progressivos com player de áudio, análise funcional e contexto estilístico.</p>
+            <ul class="card-points">
+              <li>Cadências fundamentais, giro de quatro, dominantes secundárias.</li>
+              <li>Acordes emprestados do menor paralelo: iv, ♭VII, cromatismo descendente.</li>
+              <li>Diminutos de passagem e cadeia completa de dominantes — a linguagem dos mestres do choro.</li>
+            </ul>
+            <div class="card-actions">
+              <a class="button" href="armonia.html">Abrir o módulo de Harmonia</a>
+            </div>
+            <span class="path-progress"></span>
           </article>
         </section>
 
@@ -189,6 +230,11 @@ window.CavaquinhoSiteContent.index = {
                   <td>Levada, acompanhamento compacto, preparação de refrão, roda e giros do pop pagode.</td>
                   <td>Mais segurança para acompanhar canções, marcar seções e tocar com voz e percussão.</td>
                 </tr>
+                <tr>
+                  <td><strong>Harmonia</strong></td>
+                  <td>Progressões harmônicas por nível, análise funcional, acordes emprestados e cromatismo.</td>
+                  <td>Um mapa mental claro de como os acordes se movem e se relacionam em todos os estilos brasileiros.</td>
+                </tr>
               </tbody>
             </table>
           </article>
@@ -209,8 +255,8 @@ window.CavaquinhoSiteContent.index = {
                 Entre em Pagode e trabalhe levada, giros harmônicos e preparação de refrão.
               </li>
               <li>
-                <strong>Se você quer o quadro completo</strong>
-                Use Choro para disciplina, Forró para balanço e Pagode para linguagem de acompanhamento.
+                <strong>Se você quer entender a harmonia brasileira</strong>
+                Abra Harmonia e percorra os 5 níveis da cadência básica até a cadeia completa de dominantes.
               </li>
             </ul>
           </aside>

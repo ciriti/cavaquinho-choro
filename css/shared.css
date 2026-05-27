@@ -1,6 +1,7 @@
 /* ── SHARED CHROME — loaded by all pages ── */
 
 :root {
+  /* ── GLOBAL PALETTE ── */
   --bg:      #0f0b08;
   --border:  #3a2e22;
   --gold:    #c9952a;
@@ -11,6 +12,17 @@
   --green:     #2D6A4F;
   --green-lt:  #52B788;
   --text:      #F0EAD6;
+
+  /* ── CONTENT PAGE TOKENS ── */
+  --text-body: #d4c8b4;            /* paragraph / list-item text */
+  --code-text: #c8b99a;            /* pre / inline code text */
+
+  /* ── GENRE ACCENT (overridden per page) ── */
+  --genre-accent-rgb:    201, 149, 42;   /* default: gold (choro) */
+  --section-grad-start:  34, 28, 22;     /* section card gradient start (warm dark) */
+  --section-grad-end:    24, 18, 14;
+
+  /* ── TYPOGRAPHY ── */
   --radius:    10px;
   --font-body: 'DM Sans', sans-serif;
   --font-display: 'Playfair Display', serif;

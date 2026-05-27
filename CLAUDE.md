@@ -46,11 +46,85 @@ Every change to visible text must be applied to **all three languages**.
 - When adding a new translatable string, add it to all three language entries (`it`, `en`, `pt`) in the same commit.
 - `ui.*` fields (tocTitle, open, close, backToTop) have inline IT fallbacks in each page's inline script — only add them to the data file if the fallback is wrong.
 
-## CSS conventions
+## Design system
+
+This project uses a token-based design system. **Before writing any new CSS, check whether a token, class or component already exists.**
+
+### Design tokens — `shared.css :root`
+
+| Token | Value | Purpose |
+|---|---|---|
+| `--text-body` | `#d4c8b4` | Paragraph and list-item text |
+| `--code-text` | `#c8b99a` | `<pre>` and inline `<code>` text |
+| `--genre-accent-rgb` | `201,149,42` (default) | Page accent colour as an RGB triple for `rgba()` — **overridden per page** |
+| `--section-grad-start` | `34,28,22` (default) | Section card gradient start (warm dark, used by all pages) |
+| `--section-grad-end` | `24,18,14` (default) | Section card gradient end (warm dark, used by all pages) |
+
+Never hardcode a hex value that matches an existing token. If a new colour is needed across more than one page, add it as a token first.
+
+### What lives in `page.css` (shared across all content pages)
+
+These rules are already defined and must **not** be duplicated in per-page inline styles:
+
+- `section` — card style (border, border-radius, gradient background via `--section-grad-*` and `--genre-accent-rgb`, box-shadow, animation)
+- `@keyframes fadeUp` and `section:nth-child(N)` animation delays
+- `h3`, `h4` — typography (Playfair Display for h3, gold uppercase for h4)
+- `p`, `li` — colour via `--text-body`
+- `pre`, `code`, `pre code` — monospace blocks using `--code-text`
+- `blockquote`, `blockquote strong`
+- `th`, `td`, `tr:hover td`, `tr:last-child td`
+- `header::after` — single radial-gradient using `--genre-accent-rgb`
+- `.genre-link.is-active` — active nav state using `--genre-accent-rgb`
+- `.back-to-top` — position, size, z-index
+- `@media (min-width: 901px)` — two-column `.page-layout` grid
+
+### What must stay in each page's inline `<style>`
+
+Each content page inline style must contain **only**:
+
+1. `:root { }` — the genre accent token **plus** the warm-dark background palette:
+   ```css
+   /* ONLY this changes per page — all other :root values must match the table below */
+   --genre-accent-rgb: R, G, B;   /* choro: 201,149,42 | forro: 92,134,89 | pagode: 90,127,168 | armonia: 123,90,184 */
+
+   /* Warm-dark palette — identical on every page */
+   --surface:  #1a1410;
+   --card:     #221c16;
+   --muted:    #9d8b75;
+   --code-bg:  #130f0b;
+   ```
+   **Critical rule: `--surface`, `--card`, `--muted`, `--code-bg` must always be the warm-dark values above. Never tint them with the genre accent colour.** The genre accent belongs only in `--genre-accent-rgb`.
+
+   All pages share the same warm dark section gradient (`--section-grad-start/end` defaults in `shared.css`). Do not override them per page.
+
+2. `body::before` z-index/opacity tweak (choro, armonia only — makes the noise overlay more visible).
+
+3. **Dual `header::after`** (forro, pagode only) — these pages use two stacked radial gradients (gold + genre colour). This cannot be expressed with a single `--genre-accent-rgb` token, so it stays inline. Do not try to generalise it.
+
+4. **Page-specific component styles** only: `.level-intro`, `.prog-info`, `.inversion-*`, `.study-week`, `.glossary`, `.checklist`, `.song-card` variants, `.chord-gallery` column override, `.diagram-*` SVG classes, `footer` padding overrides, etc.
+
+### Component background rule — IMPORTANT
+
+Page-specific components (`.level-intro`, `.prog-info`, `.study-week`, callout boxes, etc.) must use **neutral dark backgrounds**, never the genre accent colour as a tint:
+
+```css
+/* Correct */
+background: rgba(0, 0, 0, 0.14);
+border: 1px solid var(--border);
+
+/* Wrong — do not do this */
+background: rgba(var(--genre-accent-rgb), 0.07);   /* visible colour tint */
+border: 1px solid rgba(123, 90, 184, 0.28);        /* hardcoded accent */
+```
+
+The genre accent (`--genre-accent-rgb`) is for: the active nav link, the `header::after` glow, and the section card radial accent (8% opacity). Nowhere else.
+
+### CSS conventions
 
 - Add **cross-page** styles to `shared.css`; add **content-page** styles to `page.css`.
 - Never add `position: fixed` or `z-index` to `.language-switcher` or `.instrument-switcher` — they live inside `.site-nav .nav-controls` and must be `position: static`.
 - CSS custom properties are defined in `shared.css :root`. Use them; don't hardcode hex values in page-specific rules.
+- When adding a new content-page component that will appear on more than one page, define it in `page.css` first, not in an inline `<style>`.
 
 ## Content zone blocks
 
@@ -200,6 +274,27 @@ const chordPattern = new RegExp(
 Use `'\\$&'` (single escape in the replacement string). Double-escaping (`'\\\\$&'`) breaks matching for chord names containing special characters.
 
 ## Known bugs — rules derived from past fixes
+
+### Never tint `--surface`, `--card`, `--muted`, `--code-bg` with the genre accent
+
+When creating a new page, these four tokens must always be the warm-dark values — **never** derived from the genre accent colour. This mistake was made on `armonia.html`: the violet `--genre-accent-rgb` was used to tint the background tokens, making the entire page purple.
+
+Wrong:
+```css
+--surface: #13101b;  /* violet-dark */
+--card:    #1c1728;  /* violet-dark */
+--muted:   #9080ae;  /* violet */
+```
+
+Correct (warm-dark, same on every page):
+```css
+--surface: #1a1410;
+--card:    #221c16;
+--muted:   #9d8b75;
+--code-bg: #130f0b;
+```
+
+The genre accent shows only in `--genre-accent-rgb`, which drives the nav active state, header glow, and section card radial accent (8% opacity). Not in backgrounds or text.
 
 ### `<header id="top">` must come before `.bpm-bar`
 

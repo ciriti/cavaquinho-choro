@@ -2,9 +2,10 @@
   'use strict';
 
   const NAV_PAGES = [
-    { id: 'choro',  href: 'choro.html',  label: 'Choro' },
-    { id: 'forro',  href: 'forro.html',  label: 'Forró' },
-    { id: 'pagode', href: 'pagode.html', label: 'Pagode' }
+    { id: 'choro',   href: 'choro.html',   label: 'Choro' },
+    { id: 'forro',   href: 'forro.html',   label: 'Forró' },
+    { id: 'pagode',  href: 'pagode.html',  label: 'Pagode' },
+    { id: 'armonia', href: 'armonia.html', label: 'Armonia' }
   ];
 
   const renderSiteNav = function (pageId) {

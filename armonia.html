@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ritmos do Brasil — Armonia</title>
+  <script>
+    document.documentElement.classList.add('js-enabled');
+  </script>
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/page.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Source+Serif+4:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" defer></script>
+  <style>
+    :root {
+      --surface:          #1a1410;
+      --card:             #221c16;
+      --muted:            #9d8b75;
+      --code-bg:          #130f0b;
+      --genre-accent-rgb: 123, 90, 184;
+    }
+
+    body::before { z-index: 999; opacity: .5; }
+    .flag-stripe { margin-bottom: 32px; }
+
+    .level-intro {
+      margin-bottom: 28px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.14);
+    }
+
+    .level-intro p { margin: 0; }
+    .level-intro strong { color: var(--gold-lt); }
+
+    .prog-info {
+      margin: 8px 0 24px;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    .prog-info ul { margin: 0; padding-left: 0; list-style: none; }
+    .prog-info li { margin: 6px 0; color: var(--muted); font-size: .88rem; }
+    .prog-info strong { color: var(--cream); }
+  </style>
+</head>
+
+<body>
+  <header id="top" data-page="armonia"></header>
+
+  <div class="bpm-bar">
+    <button class="metro-play-btn" id="metronome-btn" onclick="window.RitmosAudio && window.RitmosAudio.toggleMetronome()">▶</button>
+    <label class="bpm-label" for="bpm-slider">Tempo</label>
+    <input type="range" id="bpm-slider" min="50" max="160" value="80"
+           oninput="window.RitmosAudio && window.RitmosAudio.updateBpm(this.value)">
+    <span class="bpm-value" id="bpm-value">80 BPM</span>
+    <button class="stop-all-btn" onclick="window.RitmosAudio && window.RitmosAudio.stopActive()">■ Stop</button>
+  </div>
+
+  <div class="wrapper">
+    <div class="page-layout">
+      <aside class="progress-sidebar" id="progress-sidebar" aria-label="Progresso dei moduli">
+      </aside>
+
+      <main class="content-column">
+
+        <section id="s1" data-toc-description="V7–I, I–V7–I, I–IV–V7–I: le tre funzioni tonali fondamentali">
+          <span class="section-num">Livello 1</span>
+          <h2 class="section-title">Le Fondamenta</h2>
+
+          <div class="level-intro">
+            <p>Una progressione armonica è una sequenza di accordi con una logica interna. Ogni accordo ricopre una funzione: <strong>tonica (casa)</strong>, <strong>sottodominante (espansione)</strong>, <strong>dominante (tensione)</strong>. In Sol maggiore queste funzioni sono: G = tonica (I), C = sottodominante (IV), D7 = dominante (V7). Prima di aggiungere complessità, queste tre funzioni devono diventare automatiche.</p>
+          </div>
+
+          <h3>Le tre funzioni di base in Sol maggiore</h3>
+          <pre>
+Tonica (I)          = G   — stabilità, casa, punto di arrivo
+Sottodominante (IV) = C   — espansione, forza verso il basso
+Dominante (V7)      = D7  — tensione, attrazione magnetica verso la tonica</pre>
+
+          <h4>Progressione 1 · V7 – I</h4>
+          <div class="prog-card" data-chords="D7,G,D7,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">V7 – I</span>
+                <span class="prog-sub">la cadenza autentica · il gesto di chiusura universale</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Risoluzione pura — "tornare a casa" dopo la tensione</li>
+              <li><strong>Quando si usa:</strong> Fine di ogni frase musicale, di sezione, di brano. Ovunque, sempre.</li>
+              <li><strong>Perché funziona:</strong> Il D7 contiene un tritono (F#–C) che si espande verso B e G. La tensione interna dell'accordo di settima si scioglie nel passo più naturale della tonalità.</li>
+            </ul>
+          </div>
+
+          <h4>Progressione 2 · I – V7 – I</h4>
+          <div class="prog-card" data-chords="G,D7,G,D7,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – V7 – I</span>
+                <span class="prog-sub">il giro binario · tensione e risoluzione</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Un passo fuori e un ritorno — la forma più piccola di racconto musicale</li>
+              <li><strong>Quando si usa:</strong> Prime esercitazioni, accompagnamento minimalista, domande e risposte</li>
+              <li><strong>Perché funziona:</strong> La tonica stabilisce il centro, la dominante crea l'uscita, la tonica richiama. È il respiro della musica tonale.</li>
+            </ul>
+          </div>
+
+          <h4>Progressione 3 · I – IV – V7 – I</h4>
+          <div class="prog-card" data-chords="G,C,D7,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – IV – V7 – I</span>
+                <span class="prog-sub">il giro dei tre accordi · folk, MPB, rock, tutto</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Viaggio in tre tappe con ritorno — completo e soddisfacente</li>
+              <li><strong>Quando si usa:</strong> Il 90% delle canzoni folk e pop mondiali — dalla sertaneja al rock, dalla MPB al blues</li>
+              <li><strong>Perché funziona:</strong> Il IV aggiunge una forza verso il basso (sottodominante), completando l'arco tonale I→IV→V→I attraverso tutte le funzioni principali.</li>
+            </ul>
+          </div>
+
+          <pre>
+Esercizio: suona ogni progressione a loop a 70 BPM col metronomio.
+Accordi di questo livello: G  C  D7</pre>
+        </section>
+
+        <section id="s2" data-toc-description="I–vi–IV–V7, I–IV–I–V7, I–vi–ii–V7: quattro accordi, gamma emotiva completa">
+          <span class="section-num">Livello 2</span>
+          <h2 class="section-title">Il Giro di Quattro</h2>
+
+          <div class="level-intro">
+            <p>Aggiungere il vi (Em) — il relativo minore — introduce una sfumatura emotiva più scura usando le stesse note di Sol maggiore. <strong>Quattro accordi coprono circa il 70% delle canzoni brasiliane popolari.</strong> Con loro si esprimono gioia (I), nostalgia dolce (vi), direzione (IV) e tensione (V7).</p>
+          </div>
+
+          <h4>Progressione 4 · I – vi – IV – V7</h4>
+          <div class="prog-card" data-chords="G,Em,C,D7">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – vi – IV – V7</span>
+                <span class="prog-sub">la progressione della nostalgia · ballate, bolero, bossa</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Nostalgia dolce, romanticismo, ricordo — il vi porta ombra senza dramma</li>
+              <li><strong>Quando si usa:</strong> Ballate romantiche, bolero, canzoni lente, bossa nova</li>
+              <li><strong>Perché funziona:</strong> I→vi è una discesa di terza (stessa armonia, colore diverso). Il "scivolamento" da maggiore a minore crea una tensione emotiva sottile prima di IV e V7.</li>
+            </ul>
+          </div>
+
+          <h4>Progressione 5 · I – IV – I – V7</h4>
+          <div class="prog-card" data-chords="G,C,G,D7">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – IV – I – V7</span>
+                <span class="prog-sub">il polso del samba · oscillazione naturale</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Circolare, oscillante, energia senza sforzo — naturale da ballare</li>
+              <li><strong>Quando si usa:</strong> Accompagnamento samba, baião base, canzoni veloci in 2/4 o 4/4</li>
+              <li><strong>Perché funziona:</strong> L'oscillazione I–IV crea un "respiro" armonico interno prima dell'uscita verso V7. È il movimento di spalla della musica brasiliana.</li>
+            </ul>
+          </div>
+
+          <h4>Progressione 6 · I – vi – ii – V7</h4>
+          <div class="prog-card" data-chords="G,Em,Am,D7">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – vi – ii – V7</span>
+                <span class="prog-sub">il turnaround jazz · bossa nova, jazz standards</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Fluido, circolare, sofisticato — ogni accordo prepara il successivo in modo naturale</li>
+              <li><strong>Quando si usa:</strong> Jazz standards, bossa nova, coda di frase (turnaround) che ricomincia la forma</li>
+              <li><strong>Perché funziona:</strong> I→vi→ii→V7→I è un movimento per quarte (G→Em→Am→D7→G). Il basso discende per terze: Sol–Mi–La–Re–Sol. Massima fluidità armonica con quattro accordi diatonici.</li>
+            </ul>
+          </div>
+
+          <pre>
+Nuovi accordi: Em  Am
+Accordi del percorso finora: G  C  D7  Em  Am</pre>
+        </section>
+
+        <section id="s3" data-toc-description="Dominanti secondarie: B7→Em, E7→Am, A7→D7 — il ciclo delle quinte">
+          <span class="section-num">Livello 3</span>
+          <h2 class="section-title">Dominanti Secondarie</h2>
+
+          <div class="level-intro">
+            <p>Una dominante secondaria è un accordo di settima costruito sulla quinta di qualsiasi accordo della tonalità. In Sol maggiore: <strong>B7</strong> prepara Em (III7→vi), <strong>E7</strong> prepara Am (VI7→ii), <strong>A7</strong> prepara D7 (II7→V7). Ogni dominante secondaria "tonicizza" il suo accordo di arrivo — lo tratta temporaneamente come una mini-tonica — creando tensione localizzata che arricchisce l'armonia senza cambiare tonalità.</p>
+          </div>
+
+          <h4>Progressione 7 · I – III7 – vi – V7 – I</h4>
+          <div class="prog-card" data-chords="G,B7,Em,D7,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – III7 – vi – V7 – I</span>
+                <span class="prog-sub">verso il relativo minore · choro, bossa nova, MPB drammatica</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Bittersweet, toccante — il B7 carica una tensione emozionale intensa verso Em</li>
+              <li><strong>Quando si usa:</strong> Passaggi drammatici verso la sezione in minore, bridge, aperture melanconiche</li>
+              <li><strong>Perché funziona:</strong> B7 è la dominante di Em (contiene D# che sale a E con forza magnetica). La progressione tonicizza Em prima di tornare via D7 a G.</li>
+            </ul>
+          </div>
+
+          <h4>Progressione 8 · I – VI7 – II7 – V7 – I</h4>
+          <div class="prog-card" data-chords="G,E7,A7,D7,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – VI7 – II7 – V7 – I</span>
+                <span class="prog-sub">il giro delle quinte · jazz, bossa nova sofisticata</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Fluido, inevitabile, sofisticato — il suono del jazz per eccellenza</li>
+              <li><strong>Quando si usa:</strong> Jazz standards, bossa nova, arrangiamenti raffinati di MPB, aperture di brani</li>
+              <li><strong>Perché funziona:</strong> Movimento per quinte discendenti (G→E→A→D→G) — il percorso armonico più potente della musica tonale. Ogni accordo è la dominante del successivo: E7→A, A7→D, D7→G. Dominanti incatenate creano momentum inarrestabile.</li>
+            </ul>
+          </div>
+
+          <h4>Progressione 9 · I – II7 – V7 – I</h4>
+          <div class="prog-card" data-chords="G,A7,D7,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – II7 – V7 – I</span>
+                <span class="prog-sub">la catena dominante breve · finali di chorus, samba, choro</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Spinta, accelerazione — tensione che cresce verso la risoluzione</li>
+              <li><strong>Quando si usa:</strong> Finali di chorus, preparazioni enfatiche della tonica, tag di brano</li>
+              <li><strong>Perché funziona:</strong> A7 (V7 di D7) aggiunge una dominante secondaria prima della dominante principale. Due dominanti consecutive creano un momentum che rende la risoluzione finale ancora più soddisfacente.</li>
+            </ul>
+          </div>
+
+          <pre>
+Nuovi accordi: B7  E7  A7
+Accordi del percorso finora: G  C  D7  Em  Am  B7  E7  A7</pre>
+        </section>
+
+        <section id="s4" data-toc-description="Accordi prestati da Sol minore: iv, bVII, cromatismo discendente">
+          <span class="section-num">Livello 4</span>
+          <h2 class="section-title">Accordi Prestati</h2>
+
+          <div class="level-intro">
+            <p>In Sol minore gli accordi disponibili includono Cm (iv), F (bVII) ed Eb (bVI). Questi possono essere "prestati" alla tonalità di Sol maggiore per aggiungere colore cromatico e profondità emotiva senza abbandonare il centro tonale di Sol. Questo è uno dei meccanismi stilistici più caratteristici del choro, della bossa nova e del samba canção.</p>
+          </div>
+
+          <h4>Progressione 10 · I – IV – iv – I</h4>
+          <div class="prog-card" data-chords="G,C,Cm,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – IV – iv – I</span>
+                <span class="prog-sub">la subdominante minore · firma del choro e della bossa nova</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Un'ombra improvvisa, profondità emotiva, poi ritorno alla luce — come una nuvola che passa sul sole</li>
+              <li><strong>Quando si usa:</strong> Passaggi emotivi intensi, sezioni lente di bossa nova, samba canção</li>
+              <li><strong>Perché funziona:</strong> C→Cm abbassa cromaticamente la terza (E→E♭) in una voce interna. Cromatismo sottile ma di impatto immediato. Firma di Jobim, Pixinguinha, Garoto.</li>
+            </ul>
+          </div>
+
+          <h4>Progressione 11 · I – ♭VII – IV – I</h4>
+          <div class="prog-card" data-chords="G,F,C,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – ♭VII – IV – I</span>
+                <span class="prog-sub">il sapore mixolydio · forró, baião, rock brasiliano</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Terroso, rustico, "nordestino" — spazio aperto, nessuna cadenza di chiusura</li>
+              <li><strong>Quando si usa:</strong> Forró, baião, rock brasiliano, musica nordestina — brani che non devono mai "chiudersi"</li>
+              <li><strong>Perché funziona:</strong> F è il ♭VII — preso dalla scala mixolydia di Sol (Sol maggiore con settima minore). L'assenza del F# (la sensibile) elimina la gravità verso la tonica. Il giro non vuole risolvere: galleggia.</li>
+            </ul>
+          </div>
+
+          <h4>Progressione 12 · I – Imaj7 – I7 – IV</h4>
+          <div class="prog-card" data-chords="G,Gmaj7,G7,C">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – Imaj7 – I7 – IV</span>
+                <span class="prog-sub">cromatismo discendente · intro di ballad, bossa nova, jazz</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Elegante, fluido, cinematografico — una scala cromatica nascosta nell'armonia</li>
+              <li><strong>Quando si usa:</strong> Intro di ballad, apertura di brani lenti, passaggi verso il IV</li>
+              <li><strong>Perché funziona:</strong> Il basso rimane su G ma la nota caratteristica scende cromaticamente: B (Gmaj7) → B♭ (G7) → A (in C). Classico cromatismo di voce interna del jazz e della bossa nova.</li>
+            </ul>
+          </div>
+
+          <pre>
+Nuovi accordi: Cm  F  Gmaj7  G7</pre>
+        </section>
+
+        <section id="s5" data-toc-description="Diminuito di passaggio, partenza dal vi, catena completa di dominanti">
+          <span class="section-num">Livello 5</span>
+          <h2 class="section-title">Cromatismo e Riarmonia</h2>
+
+          <div class="level-intro">
+            <p>Questo livello entra nel territorio dei maestri del choro e della bossa nova. Il diminuito di passaggio, la catena di dominanti secondarie e la partenza dal vi sono strumenti che permettono di costruire frasi armoniche con tensione e sorpresa controllata. Queste sono le tecniche dietro Chiquinha Gonzaga, Ernesto Nazareth e Tom Jobim.</p>
+          </div>
+
+          <h4>Progressione 13 · I – ♯IVdim7 – V7 – I</h4>
+          <div class="prog-card" data-chords="G,C#dim7,D7,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – ♯IVdim7 – V7 – I</span>
+                <span class="prog-sub">il passaggio cromatico · firma del choro da Chiquinha Gonzaga in poi</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Tensione cromatica, una "salita" verso la dominante — colore armonico ricco e sofisticato</li>
+              <li><strong>Quando si usa:</strong> Choro, samba, accompagnamento in stile antico — transizioni tra I e V7</li>
+              <li><strong>Perché funziona:</strong> C♯dim7 ha quattro note (C♯, E, G, B♭) ciascuna a distanza di semitono da almeno una nota del D7. Il basso C♯ sale cromaticamente a D. Simmetria totale: il diminuito settima è costruito su terze minori impilate e risolve in qualsiasi direzione.</li>
+            </ul>
+          </div>
+
+          <h4>Progressione 14 · vi – II7 – V7 – I</h4>
+          <div class="prog-card" data-chords="Em,A7,D7,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">vi – II7 – V7 – I</span>
+                <span class="prog-sub">partenza dal minore · samba canção, MPB sofisticata</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Inizio in ombra, grande risoluzione finale in luce — come il sole dopo la pioggia</li>
+              <li><strong>Quando si usa:</strong> Canzoni che aprono in clima "minore" per creare suspense, poi risolvono con soddisfazione</li>
+              <li><strong>Perché funziona:</strong> Em crea ambiguità tonale (siamo in Sol maggiore o Mi minore?). A7 rompe l'ambiguità verso D7, che risolve definitivamente a G. La risposta arriva dopo due passi di tensione.</li>
+            </ul>
+          </div>
+
+          <h4>Progressione 15 · I – III7 – vi – II7 – V7 – I</h4>
+          <div class="prog-card" data-chords="G,B7,Em,A7,D7,G">
+            <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+              <button class="play-btn" aria-label="Suona questa progressione">
+                <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path d="M2 1l9 6-9 6V1z" fill="currentColor"/>
+                </svg>
+                <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                  <rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/>
+                </svg>
+              </button>
+              <div class="prog-meta">
+                <span class="prog-name">I – III7 – vi – II7 – V7 – I</span>
+                <span class="prog-sub">la catena completa · choro avanzato, bossa nova elaborata</span>
+              </div>
+              <span class="pulse-dot"></span>
+            </div>
+            <div class="chord-strip"></div>
+          </div>
+          <div class="prog-info">
+            <ul>
+              <li><strong>Sensazione:</strong> Il massimo del movimento armonico tonale — ogni accordo prepara il successivo perfettamente</li>
+              <li><strong>Quando si usa:</strong> Chorus elaborati, dimostrazioni armoniche, choro avanzato, jazz</li>
+              <li><strong>Perché funziona:</strong> Tre dominanti secondarie consecutive: B7→Em, A7→D7, D7→G. Ogni accordo è preparato dalla propria dominante. La catena scende per quinte e risolve con forza massima sulla tonica.</li>
+            </ul>
+          </div>
+
+          <pre>
+Nuovo accordo: C#dim7
+Vocabolario armonico completo in Sol: G  C  D7  Em  Am  B7  E7  A7  F  G7  Gmaj7  Cm  C#dim7</pre>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <footer>
+    <span class="flag">🇧🇷</span>
+    Studia l'armonia con metodo. — <em>A harmonia é a base de tudo.</em>
+  </footer>
+
+  <a class="back-to-top" id="back-to-top" href="#top" aria-label="Torna all'inizio">↑</a>
+
+  <script src="js/layout.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/instruments.js"></script>
+  <script src="js/chords.js"></script>
+  <script src="js/data/armonia-content.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/audio.js"></script>
+  <script>
+    if (window.RitmosProgress) {
+      window.RitmosProgress.buildSidebar();
+      window.RitmosProgress.initScrollSpy();
+    }
+  </script>
+  <script>
+    (() => {
+      const localization = window.CavaquinhoI18n.applyBasicPageLocalization('armonia', {
+        titleSelector: '#page-title',
+        subtitleSelector: '#page-subtitle',
+        mainSelector: 'main.content-column',
+        footerSelector: 'footer',
+        backToTopSelector: '#back-to-top'
+      });
+      const lang = localization.lang;
+      window.CavaquinhoInstruments.initInstrumentSwitchers(lang);
+      window.CavaquinhoI18n.setupMobilePreferenceSheet(lang);
+
+      const backToTop = document.getElementById('back-to-top');
+      const syncBackToTop = () => {
+        backToTop.classList.toggle('is-visible', window.scrollY > 420);
+      };
+      window.addEventListener('scroll', syncBackToTop, { passive: true });
+      syncBackToTop();
+
+      const { createGuitarChordSvg, createReferenceChordSvg,
+        createSpriteChordSvg: _createSpriteChordSvg, createHoverCardSystem } = window.CavaquinhoChords;
+
+      const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260523g';
+      const createSpriteChordSvg = (chord) => _createSpriteChordSvg(chord, chordSpritePath);
+      const chordCaption = (chordName) => window.CavaquinhoI18n.describeChord(chordName, lang);
+
+      const optionLabelMap = {
+        it: { open: 'Forma aperta', barre: 'Forma barré' },
+        en: { open: 'Open shape', barre: 'Barre shape' },
+        pt: { open: 'Forma aberta', barre: 'Forma com pestana' }
+      }[lang] || { open: 'Open shape', barre: 'Barre shape' };
+
+      const chordOptions = {
+        B7:    [{ frets: [7, 8, 7, 9], fingers: [2, 3, 1, 4], baseFret: 7 }],
+        Gmaj7: [{ frets: [5, 4, 3, 4], fingers: [4, 3, 1, 2], baseFret: 3, hideBaseFretLabel: true }],
+        Cm:    [{ frets: [5, 5, 4, 5], fingers: [2, 3, 1, 4], baseFret: 4 }]
+      };
+
+      const chordSet = [
+        { name: 'G',      symbolId: 'chord-g',           caption: 'Sol maggiore' },
+        { name: 'C',      symbolId: 'chord-c',           caption: 'Do maggiore' },
+        { name: 'D',      symbolId: 'chord-d',           caption: 'Re maggiore' },
+        { name: 'D7',     symbolId: 'chord-d7',          caption: 'Re settima' },
+        { name: 'Em',     symbolId: 'chord-em',          caption: 'Mi minore' },
+        { name: 'Am',     symbolId: 'chord-am',          caption: 'La minore' },
+        { name: 'Am7',    symbolId: 'chord-am7',         caption: 'La minore settima' },
+        { name: 'Em7',    symbolId: 'chord-em7',         caption: 'Mi minore settima' },
+        { name: 'B7',     symbolId: 'chord-b',           caption: 'Si settima' },
+        { name: 'E7',     symbolId: 'chord-e7',          caption: 'Mi settima' },
+        { name: 'A7',     symbolId: 'chord-a7',          caption: 'La settima' },
+        { name: 'F',      symbolId: 'chord-f',           caption: 'Fa maggiore' },
+        { name: 'G7',     symbolId: 'chord-g7',          caption: 'Sol settima' },
+        { name: 'Gmaj7',  symbolId: 'chord-g',           caption: 'Sol maggiore settima' },
+        { name: 'Cm',     symbolId: 'chord-gm',          caption: 'Do minore' },
+        { name: 'C#dim7', symbolId: 'chord-c-sharp-dim7', caption: 'Do diesis diminuito settima' }
+      ];
+
+      chordSet.forEach((chord) => {
+        chord.caption = chordCaption(chord.name);
+        if (chordOptions[chord.name]) {
+          chord.options = chordOptions[chord.name];
+        }
+      });
+
+      const chordLookup = new Map(chordSet.map((chord) => [chord.name, chord]));
+      const hoverableChordNames = Array.from(chordLookup.keys()).sort((a, b) => b.length - a.length);
+      const chordPattern = new RegExp(
+        `(^|[^A-Za-z0-9#/])(${hoverableChordNames
+          .map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+          .join('|')})(?=$|[^A-Za-z0-9#/])`, 'g');
+
+      const getSelectedInstrument = () => window.CavaquinhoInstruments.getCurrentInstrument();
+
+      const getInstrumentOptions = (chord) => {
+        if (getSelectedInstrument() === 'guitar') {
+          return window.CavaquinhoInstruments.getChordOptionsForInstrument(chord.name, 'guitar') || [];
+        }
+        return chord.options || [];
+      };
+
+      const renderChordDiagram = (container, chord) => {
+        container.replaceChildren();
+        const instrument = getSelectedInstrument();
+        const instrumentOptions = getInstrumentOptions(chord);
+        if (instrument === 'guitar') {
+          if (instrumentOptions.length === 0) return;
+          const stack = document.createElement('div');
+          stack.className = 'chord-diagram-stack';
+          instrumentOptions.forEach((option, index) => {
+            const variant = document.createElement('div');
+            const diagram = createGuitarChordSvg(option, chord.name);
+            variant.className = 'chord-diagram-variant';
+            if (instrumentOptions.length > 1) {
+              const variantLabel = document.createElement('span');
+              variantLabel.className = 'chord-diagram-variant-label';
+              variantLabel.textContent = optionLabelMap[option.label] || option.label || `Opzione ${index + 1}`;
+              variant.append(variantLabel);
+            }
+            variant.append(diagram);
+            stack.append(variant);
+          });
+          container.append(stack);
+          return;
+        }
+        if (instrumentOptions.length === 0) {
+          container.append(createSpriteChordSvg(chord));
+          return;
+        }
+        const stack = document.createElement('div');
+        stack.className = 'chord-diagram-stack';
+        instrumentOptions.forEach((option, index) => {
+          const variant = document.createElement('div');
+          const diagram = createReferenceChordSvg(option, chord.name);
+          variant.className = 'chord-diagram-variant';
+          if (instrumentOptions.length > 1) {
+            const variantLabel = document.createElement('span');
+            variantLabel.className = 'chord-diagram-variant-label';
+            variantLabel.textContent = option.label || `Opzione ${index + 1}`;
+            variant.append(variantLabel);
+          }
+          variant.append(diagram);
+          stack.append(variant);
+        });
+        container.append(stack);
+      };
+
+      const { show: showHoverCard, hide: hideHoverCard, position: positionHoverCard } =
+        createHoverCardSystem({ renderDiagram: renderChordDiagram, getInstrumentOptions });
+
+      const enhanceChordText = (root) => {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node) {
+            if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+            if (!node.parentElement || node.parentElement.closest('.chord-hover-card')) return NodeFilter.FILTER_REJECT;
+            return node.parentElement.closest('pre') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+          }
+        });
+        const textNodes = [];
+        while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+        textNodes.forEach((node) => {
+          const source = node.textContent;
+          const matches = Array.from(source.matchAll(chordPattern));
+          if (matches.length === 0) return;
+          const fragment = document.createDocumentFragment();
+          let lastIndex = 0;
+          matches.forEach((match) => {
+            const boundary = match[1] || '';
+            const chordName = match[2];
+            const chordStart = match.index + boundary.length;
+            const chord = chordLookup.get(chordName);
+            fragment.append(source.slice(lastIndex, chordStart));
+            if (!chord) {
+              fragment.append(chordName);
+            } else {
+              const token = document.createElement('span');
+              token.className = 'chord-token';
+              token.textContent = chordName;
+              token.tabIndex = 0;
+              token.dataset.chordName = chord.name;
+              token.addEventListener('mouseenter', (event) => {
+                showHoverCard(token, chord, { x: event.clientX, y: event.clientY });
+              });
+              token.addEventListener('mousemove', (event) => {
+                positionHoverCard(event.clientX, event.clientY);
+              });
+              token.addEventListener('mouseleave', hideHoverCard);
+              token.addEventListener('focus', () => { showHoverCard(token, chord); });
+              token.addEventListener('blur', hideHoverCard);
+              fragment.append(token);
+            }
+            lastIndex = chordStart + chordName.length;
+          });
+          fragment.append(source.slice(lastIndex));
+          node.parentNode.replaceChild(fragment, node);
+        });
+      };
+
+      document.querySelectorAll('main section').forEach((section) => {
+        enhanceChordText(section);
+      });
+
+      window.addEventListener(window.CavaquinhoInstruments.eventName, () => {
+        hideHoverCard();
+      });
+    })();
+  </script>
+</body>
+</html>
