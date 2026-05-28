@@ -337,6 +337,16 @@ Brave and some privacy browsers strip `?lang=` URL parameters before the page lo
 
 `getCurrentViewportAnchor()` in `i18n.js` reads `.sidebar-item.active[data-target]` (the progress sidebar). The old `.toc-link[aria-current="true"]` selector referred to a TOC component that was removed. Never reference `.toc-link` anywhere in the codebase.
 
+### Sidebar anchors must use parent `<section id>`, not auto-generated h2 IDs
+
+`buildSidebar()` in `progress.js` reads each `h2.section-title` and uses its parent `section[id]` as the anchor target (`data-target`, `href`, `check-btn data-id`). `initScrollSpy()` observes those `section[id]` elements too.
+
+**Do not** revert this to assigning auto-generated `mod-N` IDs to the h2 elements. When a language switch replaces `main.content-column` innerHTML, the old h2 elements (with `mod-N` IDs) are destroyed. `restoreScrollPosition()` fires immediately after the replacement; at 0 ms, `getElementById('mod-2')` returns `null` because the new h2s have no IDs until DOMContentLoaded re-runs `buildSidebar()`. This race causes the page to scroll to the top instead of restoring position.
+
+Section IDs (`s1`, `s2`, … `s6`) are declared in the static HTML **and** in the EN/PT `mainHtml` strings in `js/data/*-content.js`, so `getElementById('s1')` resolves correctly at 0 ms delay, eliminating the race.
+
+When adding a new section to any page, give its `<section>` a stable `id` (e.g. `id="s7"`) and use the same id in all three language versions of `mainHtml`.
+
 ### `buildSidebar()` and `initScrollSpy()` must be called explicitly before `applyBasicPageLocalization`
 
 Each page needs an explicit inline script block before the `applyBasicPageLocalization` call:
