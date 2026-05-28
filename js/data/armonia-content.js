@@ -3,12 +3,12 @@ window.CavaquinhoSiteContent.armonia = {
   it: {
     metaTitle: 'Ritmos do Brasil — Armonia',
     title: 'Ritmos do Brasil — Armonia',
-    subtitle: 'Progressioni armoniche in Sol maggiore · cinque livelli dal giro base alla riarmonia avanzata'
+    subtitle: 'Progressioni armoniche in Sol maggiore · sei livelli dal giro base alle progressioni del cinema'
   },
   en: {
     metaTitle: 'Ritmos do Brasil — Harmony',
     title: 'Ritmos do Brasil — Harmony',
-    subtitle: 'Harmonic progressions in G major · five levels from basic cadences to advanced reharmonization',
+    subtitle: 'Harmonic progressions in G major · six levels from basic cadences to cinematic progressions',
     footer: 'Study harmony with method. Each progression is a musical sentence — learn to hear where it wants to go.',
     mainHtml: `
       <section id="s1" data-toc-description="V7–I, I–V7–I, I–IV–V7–I: the three fundamental tonal functions">
@@ -426,12 +426,239 @@ New chords: C#dim7
 Complete G major harmonic vocabulary: G  C  D7  Em  Am  B7  E7  A7  F  G7  Gmaj7  Cm  C#dim7
         </pre>
       </section>
+
+      <section id="s6" data-toc-description="Wonder, suspense, heroic hope, noble tragedy, heroism: modal mixture and chromatic mediants">
+        <span class="section-num">Level 6</span>
+        <h2 class="section-title">Cinematic Progressions</h2>
+        <div class="level-intro">
+          <p>Film scoring developed its own harmonic language built on two techniques: <strong>modal mixture</strong> (chords borrowed from the parallel key) and <strong>chromatic mediants</strong> (third-based leaps without preparation). These chords bypass the V→I logic — they create instant shifts in emotional color. Each progression here carries a precise emotion and comes in two versions: original key + G transposition.</p>
+        </div>
+
+        <h3>Wonder · I – ♭VI – ♭III – ♭VII</h3>
+        <pre>
+I – ♭VI – ♭III – ♭VII: G minor chords used over a G major center
+In D:  D  Bb  F  C    ← "epic sound" of film scores and trailers
+In G:  G  Eb  Bb  F   ← same structure, a fourth higher</pre>
+
+        <h4>Progression 16 · Epic Wonder</h4>
+        <div class="prog-card" data-chords="D,Bb,F,C">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Play this progression">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">I – ♭VI – ♭III – ♭VII</span>
+              <span class="prog-sub">in D · Howard Shore, Hans Zimmer, epic trailers</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-card" data-chords="G,Eb,Bb,F">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Play this progression">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">I – ♭VI – ♭III – ♭VII</span>
+              <span class="prog-sub">in G · cavaquinho transposition</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-info">
+          <ul>
+            <li><strong>Feeling:</strong> Wonder, vastness, awe — the door swinging open onto the infinite</li>
+            <li><strong>Where it's heard:</strong> The Lord of the Rings (Shore), Gladiator (Zimmer), epic film trailers of every genre</li>
+            <li><strong>Why it works:</strong> All four chords belong to G minor — using them over a G major center creates an instant modal shift. No V→I cadence: the sound floats unresolved, evoking something vast and open-ended.</li>
+          </ul>
+        </div>
+
+        <h3>Suspense · i – ♭VI – ♭VII – i</h3>
+        <pre>
+i – ♭VI – ♭VII – i: circular, returns to tonic without passing through V7
+In A minor: Am  F  G  Am   ← no cadence = no peace
+In G minor: Gm  Eb  F  Gm</pre>
+
+        <h4>Progression 17 · Suspended Mystery</h4>
+        <div class="prog-card" data-chords="Am,F,G,Am">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Play this progression">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – ♭VI – ♭VII – i</span>
+              <span class="prog-sub">in A minor · John Carpenter, Bernard Herrmann</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-card" data-chords="Gm,Eb,F,Gm">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Play this progression">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – ♭VI – ♭VII – i</span>
+              <span class="prog-sub">in G minor · cavaquinho transposition</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-info">
+          <ul>
+            <li><strong>Feeling:</strong> Mystery, unease, anticipation — a door always slightly ajar</li>
+            <li><strong>Where it's heard:</strong> Horror and thriller (Carpenter, Hitchcock), night scenes, ambiguous atmospheres</li>
+            <li><strong>Why it works:</strong> The progression returns to i without passing through V7. Without an authentic cadence the listener never gets resolution — they stay in a state of permanent alertness. ♭VI and ♭VII are modal chords that create no resolving tension toward the tonic.</li>
+          </ul>
+        </div>
+
+        <h3>Heroic Hope · i – v – ♭VII – IV (Dorian mode)</h3>
+        <pre>
+i – v – ♭VII – IV: minor with major sixth — Dorian sounds more open
+In A Dorian: Am  Em  G  D   ← "Time" by Zimmer (Inception, 2010)
+In G Dorian: Gm  Dm  F  C   ← the major sixth (E♮) makes IV a major chord</pre>
+
+        <h4>Progression 18 · Rising Hope</h4>
+        <div class="prog-card" data-chords="Am,Em,G,D">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Play this progression">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – v – ♭VII – IV</span>
+              <span class="prog-sub">in A Dorian · Hans Zimmer "Time" (Inception, 2010)</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-card" data-chords="Gm,Dm,F,C">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Play this progression">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – v – ♭VII – IV</span>
+              <span class="prog-sub">in G Dorian · cavaquinho transposition</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-info">
+          <ul>
+            <li><strong>Feeling:</strong> Tension rising toward hope — like a weight slowly lifting</li>
+            <li><strong>Where it's heard:</strong> Emotional climaxes, scenes of determination, soundtracks building toward a decisive moment</li>
+            <li><strong>Why it works:</strong> Dorian mode has a major sixth (in G minor: E♮) that makes IV a major chord (F) instead of minor — brighter than natural minor. The progression i→v→♭VII→IV never resolves to I, accumulating continuously — ideal for building toward a climax without releasing.</li>
+          </ul>
+        </div>
+
+        <h3>Noble Tragedy · i – iv – ♭VII – ♭VI (Aeolian mode)</h3>
+        <pre>
+i – iv – ♭VII – ♭VI: circular harmonic descent, no resolution
+In A minor: Am  Dm  G  F   ← "Honor Him" Zimmer (Gladiator, 2000)
+In G minor: Gm  Cm  F  Eb</pre>
+
+        <h4>Progression 19 · Pathos and Grandeur</h4>
+        <div class="prog-card" data-chords="Am,Dm,G,F">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Play this progression">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – iv – ♭VII – ♭VI</span>
+              <span class="prog-sub">in A minor · Hans Zimmer "Honor Him" (Gladiator, 2000)</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-card" data-chords="Gm,Cm,F,Eb">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Play this progression">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – iv – ♭VII – ♭VI</span>
+              <span class="prog-sub">in G minor · cavaquinho transposition</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-info">
+          <ul>
+            <li><strong>Feeling:</strong> Dignified grief, grandeur in sorrow — mourning without despair</li>
+            <li><strong>Where it's heard:</strong> War films, sacrifice scenes, historical epics, cinematic requiems</li>
+            <li><strong>Why it works:</strong> Aeolian (natural minor) descends: iv adds downward weight, ♭VII moves away from the tonic, ♭VI brings a major chord's brightness into the darkness. The progression cycles without V7→i resolution — like a spirit that finds no peace but does not break.</li>
+          </ul>
+        </div>
+
+        <h3>Heroism · i – ♭VI – ♭III – iv</h3>
+        <pre>
+i – ♭VI – ♭III – iv: energy without resolution — the trailer sound
+In A minor: Am  F  C  Dm   ← common trailer scoring structure
+In G minor: Gm  Eb  Bb  Dm   ← Two Steps from Hell, Audiomachine</pre>
+
+        <h4>Progression 20 · Triumphant Heroism</h4>
+        <div class="prog-card" data-chords="Am,F,C,Dm">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Play this progression">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – ♭VI – ♭III – iv</span>
+              <span class="prog-sub">in A minor · Two Steps from Hell, trailer scoring</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-card" data-chords="Gm,Eb,Bb,Dm">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Play this progression">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – ♭VI – ♭III – iv</span>
+              <span class="prog-sub">in G minor · "Protectors of the Earth" (Two Steps from Hell, 2008)</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-info">
+          <ul>
+            <li><strong>Feeling:</strong> Heroism, strength, determination — courage advancing without looking back</li>
+            <li><strong>Where it's heard:</strong> Film trailers, action sequences, sports music, high-impact advertising</li>
+            <li><strong>Why it works:</strong> i→♭VI is a chromatic mediant leap (major third). ♭III moves into the relative major. iv pulls back into minor without an authentic cadence. The constant motion without V7→i creates unstoppable energy — the progression always pushes forward.</li>
+          </ul>
+        </div>
+
+        <pre>
+New chords: Gm  Dm  Bb  Eb
+Key technique: modal mixture · chromatic mediants · absence of authentic cadence</pre>
+      </section>
     `
   },
   pt: {
     metaTitle: 'Ritmos do Brasil — Harmonia',
     title: 'Ritmos do Brasil — Harmonia',
-    subtitle: 'Progressões harmônicas em Sol maior · cinco níveis da cadência básica à rearmonização avançada',
+    subtitle: 'Progressões harmônicas em Sol maior · seis níveis da cadência básica às progressões do cinema',
     footer: 'Estude a harmonia com método. Cada progressão é uma frase musical — aprenda a ouvir para onde ela quer ir.',
     mainHtml: `
       <section id="s1" data-toc-description="V7–I, I–V7–I, I–IV–V7–I: as três funções tonais fundamentais">
@@ -848,6 +1075,233 @@ Novos acordes: Cm  F  Gmaj7  G7
 Novo acorde: C#dim7
 Vocabulário harmônico completo em Sol maior: G  C  D7  Em  Am  B7  E7  A7  F  G7  Gmaj7  Cm  C#dim7
         </pre>
+      </section>
+
+      <section id="s6" data-toc-description="Maravilha, suspense, esperança heroica, tragédia nobre, heroísmo: modal mixture e mediante cromático">
+        <span class="section-num">Nível 6</span>
+        <h2 class="section-title">Progressões do Cinema</h2>
+        <div class="level-intro">
+          <p>O cinema desenvolveu uma linguagem harmônica própria baseada em duas técnicas: o <strong>modal mixture</strong> (acordes emprestados da tonalidade paralela) e os <strong>mediante cromáticos</strong> (saltos de terça sem preparação). Esses acordes ignoram a lógica V→I — criam em vez disso mudanças instantâneas de cor emocional. Cada progressão aqui tem uma emoção precisa e vem em duas versões: tonalidade original + transposição para Sol.</p>
+        </div>
+
+        <h3>Maravilha · I – ♭VI – ♭III – ♭VII</h3>
+        <pre>
+I – ♭VI – ♭III – ♭VII: acordes de Sol menor sobre um centro de Sol maior
+Em Ré:  D  Bb  F  C    ← "epic sound" de trilhas e trailers
+Em Sol: G  Eb  Bb  F   ← mesma estrutura, uma quarta acima</pre>
+
+        <h4>Progressão 16 · Maravilha épica</h4>
+        <div class="prog-card" data-chords="D,Bb,F,C">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Tocar esta progressão">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">I – ♭VI – ♭III – ♭VII</span>
+              <span class="prog-sub">em Ré · Howard Shore, Hans Zimmer, trailers épicos</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-card" data-chords="G,Eb,Bb,F">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Tocar esta progressão">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">I – ♭VI – ♭III – ♭VII</span>
+              <span class="prog-sub">em Sol · transposição para cavaquinho</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-info">
+          <ul>
+            <li><strong>Sensação:</strong> Maravilha, vastidão, grandiosidade — a porta que se abre para o imenso</li>
+            <li><strong>Onde se ouve:</strong> O Senhor dos Anéis (Shore), Gladiador (Zimmer), trailers épicos de todo gênero</li>
+            <li><strong>Por que funciona:</strong> Os quatro acordes pertencem a Sol menor — usá-los sobre um centro de Sol maior cria uma mudança modal instantânea. Sem cadência V→I: o som flutua sem resolver, evocando algo vasto e em aberto.</li>
+          </ul>
+        </div>
+
+        <h3>Suspense · i – ♭VI – ♭VII – i</h3>
+        <pre>
+i – ♭VI – ♭VII – i: circular, volta à tônica sem passar pelo V7
+Em Lá menor: Am  F  G  Am   ← sem cadência = sem paz
+Em Sol menor: Gm  Eb  F  Gm</pre>
+
+        <h4>Progressão 17 · Mistério suspenso</h4>
+        <div class="prog-card" data-chords="Am,F,G,Am">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Tocar esta progressão">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – ♭VI – ♭VII – i</span>
+              <span class="prog-sub">em Lá menor · John Carpenter, Bernard Herrmann</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-card" data-chords="Gm,Eb,F,Gm">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Tocar esta progressão">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – ♭VI – ♭VII – i</span>
+              <span class="prog-sub">em Sol menor · transposição para cavaquinho</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-info">
+          <ul>
+            <li><strong>Sensação:</strong> Mistério, inquietação, espera — uma porta sempre entreaberta</li>
+            <li><strong>Onde se ouve:</strong> Horror e suspense (Carpenter, Hitchcock), cenas noturnas, atmosferas ambíguas</li>
+            <li><strong>Por que funciona:</strong> A progressão volta a i sem passar pelo V7. Sem cadência autêntica o ouvinte nunca obtém resolução — fica em estado de alerta permanente. ♭VI e ♭VII são acordes modais que não criam tensão resolutiva em direção à tônica.</li>
+          </ul>
+        </div>
+
+        <h3>Esperança heroica · i – v – ♭VII – IV (modo Dórico)</h3>
+        <pre>
+i – v – ♭VII – IV: menor com sexta maior — o Dórico soa mais aberto
+Em Lá Dórico: Am  Em  G  D   ← "Time" de Zimmer (A Origem, 2010)
+Em Sol Dórico: Gm  Dm  F  C   ← a sexta maior (E♮) torna o IV maior</pre>
+
+        <h4>Progressão 18 · Esperança que cresce</h4>
+        <div class="prog-card" data-chords="Am,Em,G,D">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Tocar esta progressão">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – v – ♭VII – IV</span>
+              <span class="prog-sub">em Lá Dórico · Hans Zimmer "Time" (A Origem, 2010)</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-card" data-chords="Gm,Dm,F,C">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Tocar esta progressão">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – v – ♭VII – IV</span>
+              <span class="prog-sub">em Sol Dórico · transposição para cavaquinho</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-info">
+          <ul>
+            <li><strong>Sensação:</strong> Tensão que sobe em direção à esperança — como um peso que se levanta lentamente</li>
+            <li><strong>Onde se ouve:</strong> Clímax emocionais, cenas de determinação, trilhas que constroem em direção a um momento decisivo</li>
+            <li><strong>Por que funciona:</strong> O modo Dórico tem a sexta maior (em Sol menor: E♮) que torna o IV um acorde maior (F) em vez de menor — mais brilhante que o menor natural. A progressão i→v→♭VII→IV nunca resolve sobre I, acumulando continuamente — ideal para construir em direção a um clímax.</li>
+          </ul>
+        </div>
+
+        <h3>Tragédia nobre · i – iv – ♭VII – ♭VI (modo Eólio)</h3>
+        <pre>
+i – iv – ♭VII – ♭VI: descida harmônica circular, sem resolução
+Em Lá menor: Am  Dm  G  F   ← "Honor Him" Zimmer (Gladiador, 2000)
+Em Sol menor: Gm  Cm  F  Eb</pre>
+
+        <h4>Progressão 19 · Pathos e grandeza</h4>
+        <div class="prog-card" data-chords="Am,Dm,G,F">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Tocar esta progressão">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – iv – ♭VII – ♭VI</span>
+              <span class="prog-sub">em Lá menor · Hans Zimmer "Honor Him" (Gladiador, 2000)</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-card" data-chords="Gm,Cm,F,Eb">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Tocar esta progressão">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – iv – ♭VII – ♭VI</span>
+              <span class="prog-sub">em Sol menor · transposição para cavaquinho</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-info">
+          <ul>
+            <li><strong>Sensação:</strong> Tristeza digna, grandeza na dor — luto sem desespero</li>
+            <li><strong>Onde se ouve:</strong> Filmes de guerra, cenas de sacrifício, épicos históricos, requiems cinematográficos</li>
+            <li><strong>Por que funciona:</strong> O modo Eólio (menor natural) desce: iv adiciona peso, ♭VII afasta da tônica, ♭VI traz brilho maior no escuro. A progressão gira sem V7→i — como uma alma que não encontra paz mas não se quebra.</li>
+          </ul>
+        </div>
+
+        <h3>Heroísmo · i – ♭VI – ♭III – iv</h3>
+        <pre>
+i – ♭VI – ♭III – iv: energia sem resolução — o som dos trailers
+Em Lá menor: Am  F  C  Dm   ← estrutura base do trailer scoring
+Em Sol menor: Gm  Eb  Bb  Dm   ← Two Steps from Hell, Audiomachine</pre>
+
+        <h4>Progressão 20 · Heroísmo triunfante</h4>
+        <div class="prog-card" data-chords="Am,F,C,Dm">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Tocar esta progressão">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – ♭VI – ♭III – iv</span>
+              <span class="prog-sub">em Lá menor · Two Steps from Hell, trailer scoring</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-card" data-chords="Gm,Eb,Bb,Dm">
+          <div class="prog-header" onclick="window.RitmosAudio && window.RitmosAudio.toggleProg(this)">
+            <button class="play-btn" aria-label="Tocar esta progressão">
+              <svg class="icon-play" width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2 1l9 6-9 6V1z" fill="currentColor"/></svg>
+              <svg class="icon-stop" width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="6" y="1" width="3" height="10" rx="1" fill="currentColor"/></svg>
+            </button>
+            <div class="prog-meta">
+              <span class="prog-name">i – ♭VI – ♭III – iv</span>
+              <span class="prog-sub">em Sol menor · "Protectors of the Earth" (Two Steps from Hell, 2008)</span>
+            </div>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="chord-strip"></div>
+        </div>
+        <div class="prog-info">
+          <ul>
+            <li><strong>Sensação:</strong> Heroísmo, força, determinação — a coragem que avança sem olhar para trás</li>
+            <li><strong>Onde se ouve:</strong> Trailers cinematográficos, sequências de ação, música esportiva, comerciais de grande impacto</li>
+            <li><strong>Por que funciona:</strong> i→♭VI é um salto de mediante cromático (terça maior). ♭III leva ao relativo maior. iv volta ao menor sem cadência autêntica. O movimento constante sem V7→i cria energia imparável — a progressão sempre empurra para frente.</li>
+          </ul>
+        </div>
+
+        <pre>
+Novos acordes: Gm  Dm  Bb  Eb
+Técnica: modal mixture · mediante cromático · ausência de cadência autêntica</pre>
       </section>
     `
   }
