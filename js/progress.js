@@ -39,13 +39,14 @@
       '<p class="sidebar-title">Moduli</p>';
 
     headings.forEach(function(h, i) {
-      if (!h.id) h.id = 'mod-' + i;
-      const done = !!progress[h.id];
-      html += '<div class="sidebar-item' + (done ? ' done' : '') + '" data-target="' + h.id + '">' +
-        '<button class="check-btn" data-id="' + h.id + '" aria-label="Segna come completato">' +
+      const section = h.closest('section[id]');
+      const anchorId = section ? section.id : (h.id || (h.id = 'mod-' + i));
+      const done = !!progress[anchorId];
+      html += '<div class="sidebar-item' + (done ? ' done' : '') + '" data-target="' + anchorId + '">' +
+        '<button class="check-btn" data-id="' + anchorId + '" aria-label="Segna come completato">' +
         (done ? checkIcon() : circleIcon()) +
         '</button>' +
-        '<a class="sidebar-label" href="#' + h.id + '">' + h.textContent.trim() + '</a>' +
+        '<a class="sidebar-label" href="#' + anchorId + '">' + h.textContent.trim() + '</a>' +
         '</div>';
     });
 
@@ -72,8 +73,8 @@
       });
     }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
 
-    document.querySelectorAll('.content-column h2.section-title[id]').forEach(function(h) {
-      observer.observe(h);
+    document.querySelectorAll('.content-column section[id]').forEach(function(s) {
+      observer.observe(s);
     });
   }
 
