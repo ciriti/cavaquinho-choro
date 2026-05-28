@@ -715,8 +715,10 @@ Vocabolario armonico completo in Sol: G  C  D7  Em  Am  B7  E7  A7  F  G7  Gmaj7
         const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
           acceptNode(node) {
             if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
-            if (!node.parentElement || node.parentElement.closest('.chord-hover-card')) return NodeFilter.FILTER_REJECT;
-            return node.parentElement.closest('pre') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+            const el = node.parentElement;
+            if (!el || el.closest('.chord-hover-card, .prog-header, .bpm-bar, .site-nav')) return NodeFilter.FILTER_REJECT;
+            if (el.closest('pre, p, li')) return NodeFilter.FILTER_ACCEPT;
+            return NodeFilter.FILTER_REJECT;
           }
         });
         const textNodes = [];
@@ -762,6 +764,18 @@ Vocabolario armonico completo in Sol: G  C  D7  Em  Am  B7  E7  A7  F  G7  Gmaj7
 
       document.querySelectorAll('main section').forEach((section) => {
         enhanceChordText(section);
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.chord-strip .chord-pill').forEach((pill) => {
+          const chord = chordLookup.get(pill.textContent.trim());
+          if (!chord) return;
+          pill.addEventListener('mouseenter', (event) => {
+            showHoverCard(pill, chord, { x: event.clientX, y: event.clientY });
+          });
+          pill.addEventListener('mousemove', (event) => { positionHoverCard(event.clientX, event.clientY); });
+          pill.addEventListener('mouseleave', hideHoverCard);
+        });
       });
 
       window.addEventListener(window.CavaquinhoInstruments.eventName, () => {
