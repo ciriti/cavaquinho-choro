@@ -709,10 +709,10 @@ Più fitto, ma sempre con il battere chiaro.</pre>
             if (!node.textContent || !node.textContent.trim()) {
               return NodeFilter.FILTER_REJECT;
             }
-            if (!node.parentElement || node.parentElement.closest('.chord-hover-card, .chord-gallery')) {
+            if (!node.parentElement || node.parentElement.closest('.chord-hover-card, .chord-gallery, .prog-header, .bpm-bar, .site-nav')) {
               return NodeFilter.FILTER_REJECT;
             }
-            return node.parentElement.closest('pre') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+            return node.parentElement.closest('pre, p, li') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
           }
         });
         const textNodes = [];

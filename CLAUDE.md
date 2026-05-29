@@ -266,6 +266,23 @@ document.querySelectorAll('main section').forEach((section) => {
 });
 ```
 
+### enhanceChordText acceptNode — must accept `pre, p, li`, not just `pre`
+
+The `acceptNode` filter inside `enhanceChordText` must always accept text nodes whose parent is inside `pre`, `p`, **or** `li`. Accepting only `pre` was the original implementation, but when chord progressions were converted from `<pre>` blocks to interactive prog-cards, all `<pre>` content disappeared — leaving hover with nothing to attach to.
+
+Correct pattern (same exclusion list across all pages):
+
+```js
+acceptNode(node) {
+  if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+  const el = node.parentElement;
+  if (!el || el.closest('.chord-hover-card, .prog-header, .bpm-bar, .site-nav')) return NodeFilter.FILTER_REJECT;
+  return el.closest('pre, p, li') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+}
+```
+
+Each page adds its own additional exclusions (e.g. `#project-chords` in choro.html, `.chord-gallery` in forro.html) before the final line — that is fine. What must never change is `'pre, p, li'` as the acceptance selector.
+
 ### chordPattern regex escaping
 
 ```js

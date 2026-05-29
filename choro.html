@@ -1739,10 +1739,10 @@ Barre 17–24: Ritorno sezione A in Do maggiore</pre>
             if (!node.textContent || !node.textContent.trim()) {
               return NodeFilter.FILTER_REJECT;
             }
-            if (!node.parentElement || node.parentElement.closest('#project-chords, .chord-hover-card')) {
+            if (!node.parentElement || node.parentElement.closest('#project-chords, .chord-hover-card, .prog-header, .bpm-bar, .site-nav')) {
               return NodeFilter.FILTER_REJECT;
             }
-            return node.parentElement.closest('pre') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+            return node.parentElement.closest('pre, p, li') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
           }
         });
         const textNodes = [];
