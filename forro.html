@@ -801,6 +801,18 @@ Più fitto, ma sempre con il battere chiaro.</pre>
 
       renderQuickChordGallery();
 
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.chord-strip .chord-pill').forEach((pill) => {
+          const chord = chordLookup.get(pill.textContent.trim());
+          if (!chord) return;
+          pill.addEventListener('mouseenter', (event) => {
+            showHoverCard(pill, chord, { x: event.clientX, y: event.clientY });
+          });
+          pill.addEventListener('mousemove', (event) => { positionHoverCard(event.clientX, event.clientY); });
+          pill.addEventListener('mouseleave', hideHoverCard);
+        });
+      });
+
       window.addEventListener(window.CavaquinhoInstruments.eventName, () => {
         renderQuickChordGallery();
         hideHoverCard();

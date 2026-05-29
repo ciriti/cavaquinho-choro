@@ -296,6 +296,28 @@ Use `'\\$&'` (single escape in the replacement string). Double-escaping (`'\\\\$
 
 ## Known bugs — rules derived from past fixes
 
+### Chord-pill hover must be attached inside a `DOMContentLoaded` listener
+
+`buildChordStrips()` in `audio.js` populates `.chord-strip` pills inside its own `DOMContentLoaded` handler. The inline page IIFE runs synchronously before that fires, so any `querySelectorAll('.chord-strip .chord-pill')` at the top level returns an empty list.
+
+The pill hover attachment must therefore be wrapped in its own `DOMContentLoaded`:
+
+```js
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.chord-strip .chord-pill').forEach((pill) => {
+    const chord = chordLookup.get(pill.textContent.trim());
+    if (!chord) return;
+    pill.addEventListener('mouseenter', (event) => {
+      showHoverCard(pill, chord, { x: event.clientX, y: event.clientY });
+    });
+    pill.addEventListener('mousemove', (event) => { positionHoverCard(event.clientX, event.clientY); });
+    pill.addEventListener('mouseleave', hideHoverCard);
+  });
+});
+```
+
+This block must appear on every content page that has prog-cards.
+
 ### Never tint `--surface`, `--card`, `--muted`, `--code-bg` with the genre accent
 
 When creating a new page, these four tokens must always be the warm-dark values — **never** derived from the genre accent colour. This mistake was made on `armonia.html`: the violet `--genre-accent-rgb` was used to tint the background tokens, making the entire page purple.
