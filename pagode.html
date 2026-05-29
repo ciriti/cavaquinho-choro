@@ -440,7 +440,7 @@ Il colpo spento deve essere corto e asciutto, non pesante.</pre>
 
       const { referenceOpenPitches, getRoleMarkers, appendRoleRing, getFirstPlayedStringIndex,
         createGuitarChordSvg, createReferenceChordSvg,
-        createSpriteChordSvg: _createSpriteChordSvg, createHoverCardSystem } = window.CavaquinhoChords;
+        createSpriteChordSvg: _createSpriteChordSvg, createPianoKeyboardSvg, createHoverCardSystem } = window.CavaquinhoChords;
       const getSelectedInstrument = () => window.CavaquinhoInstruments.getCurrentInstrument();
       const optionLabelMap = {
         it: { open: 'Forma aperta', barre: 'Forma barré' },
@@ -495,6 +495,10 @@ Il colpo spento deve essere corto e asciutto, non pesante.</pre>
       const renderChordDiagram = (container, chord) => {
         container.replaceChildren();
         const instrument = getSelectedInstrument();
+        if (instrument === 'fisarmonica') {
+          container.append(createPianoKeyboardSvg(chord.name));
+          return;
+        }
         const instrumentOptions = getInstrumentOptions(chord);
         if (instrument === 'guitar') {
           if (instrumentOptions.length === 0) {

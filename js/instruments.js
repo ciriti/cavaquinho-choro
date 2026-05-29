@@ -1,7 +1,7 @@
 (function () {
   const STORAGE_KEY = 'cavaquinho-site-instrument';
   const EVENT_NAME = 'cavaquinho:instrument-change';
-  const SUPPORTED = ['cavaquinho', 'guitar'];
+  const SUPPORTED = ['cavaquinho', 'guitar', 'fisarmonica'];
   const OPEN_PITCHES = {
     cavaquinho: [2, 7, 11, 2],
     guitar: [4, 9, 2, 7, 11, 4]
@@ -10,17 +10,20 @@
     it: {
       switcher: 'Selettore strumento',
       cavaquinho: 'Cavaco',
-      guitar: 'Chitarra'
+      guitar: 'Chitarra',
+      fisarmonica: 'Fisarmonica'
     },
     en: {
       switcher: 'Instrument switcher',
       cavaquinho: 'Cavaco',
-      guitar: 'Guitar'
+      guitar: 'Guitar',
+      fisarmonica: 'Accordion'
     },
     pt: {
       switcher: 'Seletor de instrumento',
       cavaquinho: 'Cavaco',
-      guitar: 'Violao'
+      guitar: 'Violao',
+      fisarmonica: 'Acordeão'
     }
   };
   const NOTE_PITCH_CLASSES = {

@@ -200,9 +200,9 @@ const syncBackToTop = () => { backToTop.classList.toggle('is-visible', window.sc
 window.addEventListener('scroll', syncBackToTop, { passive: true });
 syncBackToTop();
 
-// 3. Chord system destructuring — always include createSpriteChordSvg
+// 3. Chord system destructuring — always include createSpriteChordSvg and createPianoKeyboardSvg
 const { createGuitarChordSvg, createReferenceChordSvg,
-  createSpriteChordSvg: _createSpriteChordSvg, createHoverCardSystem } = window.CavaquinhoChords;
+  createSpriteChordSvg: _createSpriteChordSvg, createPianoKeyboardSvg, createHoverCardSystem } = window.CavaquinhoChords;
 const chordSpritePath = 'assets/chords/cavaco-diagrams.svg?v=20260523g';
 const createSpriteChordSvg = (chord) => _createSpriteChordSvg(chord, chordSpritePath);
 
@@ -213,12 +213,16 @@ const { show: showHoverCard, hide: hideHoverCard, position: positionHoverCard } 
 
 ### renderChordDiagram — mandatory structure
 
-All three pages must use the same two-branch pattern:
+All pages must use the same three-branch pattern (fisarmonica first, then guitar, then cavaquinho):
 
 ```js
 const renderChordDiagram = (container, chord) => {
   container.replaceChildren();
   const instrument = getSelectedInstrument();
+  if (instrument === 'fisarmonica') {
+    container.append(createPianoKeyboardSvg(chord.name));
+    return;
+  }
   const instrumentOptions = getInstrumentOptions(chord);
   if (instrument === 'guitar') {
     if (instrumentOptions.length === 0) return;

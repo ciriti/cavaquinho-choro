@@ -9,6 +9,21 @@
     'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11
   };
 
+  // Pitch classes (0–11) for each chord — mirrors CHORD_NOTES in audio.js, deduplicated.
+  const CHORD_PITCH_CLASSES = {
+    C:[0,4,7], G:[7,11,2], F:[5,9,0], D:[2,6,9], E:[4,8,11], A:[9,1,4],
+    Bb:[10,2,5], B:[11,3,6], Am:[9,0,4], Em:[4,7,11], Dm:[2,5,9],
+    Bm:[11,2,6], 'C#m':[1,4,8], 'F#m':[6,9,1], 'G#m':[8,11,3], 'D#m':[3,6,10],
+    G7:[7,11,2,5], D7:[2,6,9,0], A7:[9,1,4,7], E7:[4,8,11,2], B7:[11,3,6,9],
+    C7:[0,4,7,10], F7:[5,9,0,3], 'C#7':[1,5,8,11],
+    Am7:[9,0,4,7], Em7:[4,7,11,2], Dm7:[2,5,9,0], Bm7:[11,2,6,9], 'F#m7':[6,9,1,4],
+    Cmaj7:[0,4,7,11], Gmaj7:[7,11,2,6], Fmaj7:[5,9,0,4],
+    Fm:[5,8,0], Gm:[7,10,2], Gm7:[7,10,2,5], Cm:[0,3,7],
+    'C#':[1,5,8], 'G#':[8,0,3], 'D#7':[3,7,10,1],
+    'F#dim7':[6,9,0,3], 'C#dim7':[1,4,7,10], Eb:[3,7,10],
+    'G#dim7':[8,11,2,5], 'F#m7b5':[6,9,0,4], 'F#':[6,10,1],
+  };
+
   const getChordDescriptor = (chordName) => {
     const match = chordName.match(/^([A-G](?:#|b)?)(.*)$/);
     if (!match) return null;
@@ -351,6 +366,49 @@
     return { hoverCard, hoverTitle, hoverDiagram, hoverCaption, show, hide, position };
   };
 
+  const createPianoKeyboardSvg = (chordName) => {
+    const lit = new Set(CHORD_PITCH_CLASSES[chordName] || []);
+    const PAD = 4, WKW = 13, WKH = 68, BKW = 9, BKH = 43;
+    const svgW = 7 * WKW + 2 * PAD;
+    const svgH = WKH + 2 * PAD;
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${svgW} ${svgH}`);
+    svg.setAttribute('class', 'piano-keyboard-svg');
+
+    // White keys: C D E F G A B → pitch classes 0 2 4 5 7 9 11
+    [0, 2, 4, 5, 7, 9, 11].forEach((pc, i) => {
+      const rect = document.createElementNS(NS, 'rect');
+      rect.setAttribute('x', PAD + i * WKW);
+      rect.setAttribute('y', PAD);
+      rect.setAttribute('width', WKW - 1);
+      rect.setAttribute('height', WKH);
+      rect.setAttribute('rx', '2');
+      rect.setAttribute('stroke', '#666');
+      rect.setAttribute('stroke-width', '0.7');
+      rect.style.fill = lit.has(pc)
+        ? 'rgba(var(--genre-accent-rgb,201,149,42),0.85)'
+        : '#f2ece0';
+      svg.appendChild(rect);
+    });
+
+    // Black keys [afterWhiteIdx, pitchClass]: C#, D#, F#, G#, A#
+    [[0,1],[1,3],[3,6],[4,8],[5,10]].forEach(([wIdx, pc]) => {
+      const rect = document.createElementNS(NS, 'rect');
+      rect.setAttribute('x', Math.round(PAD + (wIdx + 1) * WKW - BKW / 2));
+      rect.setAttribute('y', PAD);
+      rect.setAttribute('width', BKW);
+      rect.setAttribute('height', BKH);
+      rect.setAttribute('rx', '1.5');
+      rect.style.fill = lit.has(pc)
+        ? 'rgba(var(--genre-accent-rgb,201,149,42),1)'
+        : '#1a1410';
+      svg.appendChild(rect);
+    });
+
+    return svg;
+  };
+
   window.CavaquinhoChords = {
     referenceOpenPitches,
     getRoleMarkers,
@@ -359,6 +417,7 @@
     createGuitarChordSvg,
     createReferenceChordSvg,
     createSpriteChordSvg,
+    createPianoKeyboardSvg,
     createHoverCardSystem
   };
 })();

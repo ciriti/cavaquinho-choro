@@ -575,6 +575,11 @@ tr:hover td { background: var(--card); }
   gap: 12px;
 }
 
+.chord-hover-diagram .piano-keyboard-svg {
+  width: 99px;
+  height: 76px;
+}
+
 .chord-hover-diagram .chord-diagram-variant-label {
   font-size: .66rem;
 }
